@@ -66,12 +66,13 @@ class MyRobot(wpilib.TimedRobot):
         
       def turnleft90():
         yaw = self.gyro.getYaw()
-        self.speed = [(1 - ((self.gyro.getYaw() - yaw)/90) ** 4, 1 + ((self.gyro.getYaw() - yaw)/90) ** 4]
+          while abs(self.gyro.getYaw() - yaw) < 0.01:
+          self.speed = [(1 - ((self.gyro.getYaw() - yaw)/90) ** 4, 1 + ((self.gyro.getYaw() - yaw)/90) ** 4]
 
       def turnleft90():
         yaw = self.gyro.getYaw()
-        self.speed = [(1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
+        while abs(self.gyro.getYaw() - yaw) < 0.01:
+          self.speed = [(1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
 
 if __name__ == "__main__":
   wpilib.run(MyRobot)
-  
