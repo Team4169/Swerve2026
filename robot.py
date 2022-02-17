@@ -56,14 +56,14 @@ class MyRobot(wpilib.TimedRobot):
         output('Left Encoder', self.front_left_motor.getSelectedSonsorPosition())
         output('Right Encoder', self.front_right_motor.getSelectedSensorPosition())
         
-        self.speed = [1, 1] if self.controller.getAButton() else self.speed # half speed 
-        self.speed = [1, 1] if self.controller.getBButton() else self.speed # quarter speed
-        self.speed = [1, 1] if self.controller.getYButton() else self.speed # inch speed
+        self.speed = [0.5, 0.5] if self.controller.getAButton() else self.speed # half speed 
+        self.speed = [0.25, 0.25] if self.controller.getBButton() else self.speed # quarter speed
+        self.speed = [0.1, 0.1] if self.controller.getYButton() else self.speed # inch speed
         self.mode = 'straight' if self.controller.getLeftBumperPressed() else self.mode # 
         self.mode = 'backward' if self.controller.getRightBumperPressed() else self.mode # 
         
         self.drive.arcadeDrive(self.controller.getX(self.controller.Hand.kLeftHand) * self.speed[0], self.controller.getY(self.controller.Hand.kLeftHand) * self.speed[1])
-        
+
       def turnleft90():
         yaw = self.gyro.getYaw()
           while abs(self.gyro.getYaw() - yaw) < 0.01:
