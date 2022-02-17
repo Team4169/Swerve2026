@@ -5,9 +5,6 @@ from networktables import NetworkTables
 import navx
 
 '''
-Left bumper: Lock straight
-Right bumper: Lock reverse
-Left and right bumpers: Lock straight backwards
 D-pad left/right: Turn 90 deg left or right
 X: Taunt
 '''
@@ -46,8 +43,19 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         print("Starting teleop...")
-        self.mode = 'individual'
+        self.mode = [False, False] # ['straight', 'backward']
         self.speed =  [1, 1]
+        self.turn = [False, False]
+
+    def turnright90():
+      yaw = self.gyro.getYaw()
+      while abs(self.gyro.getYaw() - yaw) < 0.01:
+          self.speed = [(1 - ((self.gyro.getYaw() - yaw)/90) ** 4, 1 + ((self.gyro.getYaw() - yaw)/90) ** 4]
+
+    def turnright90():
+      yaw = self.gyro.getYaw()
+      while abs(self.gyro.getYaw() - yaw) < 0.01:
+          self.speed = [(1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
   
     def teleopPeriodic(self):
         output('Drive X', self.controller.getX(self.controller.Hand.kLeftHand))
@@ -55,24 +63,20 @@ class MyRobot(wpilib.TimedRobot):
         output('Gyro Yaw', self.gyro.getYaw())
         output('Left Encoder', self.front_left_motor.getSelectedSonsorPosition())
         output('Right Encoder', self.front_right_motor.getSelectedSensorPosition())
+        output('Right DPad', self.turn[0])
+        output('Left DPad', self.turn[1])
         
-        self.speed = [0.5, 0.5] if self.controller.getAButton() else self.speed # half speed 
-        self.speed = [0.25, 0.25] if self.controller.getBButton() else self.speed # quarter speed
-        self.speed = [0.1, 0.1] if self.controller.getYButton() else self.speed # inch speed
-        self.mode = 'straight' if self.controller.getLeftBumperPressed() else self.mode # 
-        self.mode = 'backward' if self.controller.getRightBumperPressed() else self.mode # 
+        self.speed = [0.5, 0.5] if self.controller.getAButton() else [1, 1] # half speed 
+        self.speed = [0.25, 0.25] if self.controller.getBButton() else [1, 1] # quarter speed
+        self.speed = [0.1, 0.1] if self.controller.getYButton() else [1, 1] # inch speed
+
+        self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
+        self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
         
         self.drive.arcadeDrive(self.controller.getX(self.controller.Hand.kLeftHand) * self.speed[0], self.controller.getY(self.controller.Hand.kLeftHand) * self.speed[1])
 
-      def turnleft90():
-        yaw = self.gyro.getYaw()
-          while abs(self.gyro.getYaw() - yaw) < 0.01:
-          self.speed = [(1 - ((self.gyro.getYaw() - yaw)/90) ** 4, 1 + ((self.gyro.getYaw() - yaw)/90) ** 4]
-
-      def turnleft90():
-        yaw = self.gyro.getYaw()
-        while abs(self.gyro.getYaw() - yaw) < 0.01:
-          self.speed = [(1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
+        self.turn[0] = True if self.controller.getPOV() == 90 else False
+        self.turn[1] = True if self.controller.getPOV() == 270 else False
 
 if __name__ == "__main__":
   wpilib.run(MyRobot)
