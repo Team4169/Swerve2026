@@ -63,8 +63,6 @@ class MyRobot(wpilib.TimedRobot):
         self.output(self, 'Gyro Yaw', self.gyro.getYaw())
         self.output(self, 'Left Encoder', self.front_left_motor.getSelectedSonsorPosition())
         self.output(self, 'Right Encoder', self.front_right_motor.getSelectedSensorPosition())
-        
-        self.drive.arcadeDrive(self.controller.getX(self.controller.Hand.kLeftHand) * speed, self.controller.getY(self.controller.Hand.kLeftHand) * speed)
 
         self.turn[0] = True if self.controller.getPOV() == 90 else False
         self.turn[1] = True if self.controller.getPOV() == 270 else False
@@ -75,6 +73,8 @@ class MyRobot(wpilib.TimedRobot):
 
         self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
         self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
+        
+        self.drive.arcadeDrive(self.controller.getX(self.controller.Hand.kLeftHand) * speed, self.controller.getY(self.controller.Hand.kLeftHand) * speed)
 
     def turnleft90(self):
         yaw = self.gyro.getYaw()
