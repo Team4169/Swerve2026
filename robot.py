@@ -20,7 +20,6 @@ class MyRobot(wpilib.TimedRobot):
         self.front_left_motor.setInverted(True)
         self.rear_left_motor.setInverted(True)
         self.left = wpilib.SpeedControllerGroup(self.front_left_motor, self.rear_left_motor)
-
         self.front_right_motor = ctre.WPI_TalonSRX(constants["frontRightPort"])
         self.rear_right_motor = ctre.WPI_TalonSRX(constants["rearRightPort"])
 
@@ -45,8 +44,10 @@ class MyRobot(wpilib.TimedRobot):
     def teleopInit(self):
         print("Starting teleop...")
         self.mode = [False, False] # ['straight', 'backward']
-        self.speed =  [1, 1]
+        self.speed = [1, 1]
         self.turn = [False, False]
+        self.humancontrol = True
+        self.motor = [0, 0]
 
     def teleopPeriodic(self):
         self.output('Drive X', self.controller.getLeftX())
@@ -55,8 +56,8 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Left Encoder', self.front_left_motor.getSelectedSensorPosition())
         self.output('Right Encoder', self.front_right_motor.getSelectedSensorPosition())
 
-        self.turn[0] = self.controller.getPOV() == 90
-        self.turn[1] = self.controller.getPOV() == 270
+        if self.controller.getPOV() == 90:
+            self.turnright90()
 
         if self.controller.getAButton():
             self.speed = [0.5, 0.5]
@@ -64,18 +65,23 @@ class MyRobot(wpilib.TimedRobot):
             self.speed = [0.25, 0.25]
         elif self.controller.getYButton():
             self.speed = [0.1, 0.1]
-        else:
-            self.speed = [0.75, 0.75]
+        elif self.controller.getXButton():
+            self.speed = [1, 1]
 
-        self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
-        self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
-        print(f"Speed is {self.speed}")
-        self.drive.arcadeDrive(self.controller.getLeftY() * self.speed[0], self.controller.getLeftX() * self.speed[1])
+        # self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
+        # self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
+
+        if self.humancontrol:
+            print('human' + str(self.motor[0]) + str(self.motor[1]))
+            self.motor = [self.controller.getLeftY() * self.speed[0], self.controller.getLeftX() * self.speed[1]]
+        else:
+            print('robot' + str(self.motor[0]) + str(self.motor[1]))
+
+        self.drive.arcadeDrive(self.motor[0], self.motor[1])
 
     def turnright90(self):
-        yaw = self.gyro.getYaw()
-        if abs(self.gyro.getYaw() - yaw) < 0.01:
-            self.speed = [1 - ((self.gyro.getYaw() - yaw)/90) ** 4, 1 + ((self.gyro.getYaw() - yaw)/90) ** 4]
+        self.humancontrol = False
+        self.motor = [0, 0.5]
 
     def turnleft90(self):
         yaw = self.gyro.getYaw()
