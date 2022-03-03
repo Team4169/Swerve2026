@@ -15,24 +15,31 @@ class MyRobot(wpilib.TimedRobot):
       self.sd.putValue(text, str(value))
 
     def robotInit(self):
-        self.front_left_motor = ctre.WPI_TalonSRX(constants["frontLeftPort"])
-        self.rear_left_motor = ctre.WPI_TalonSRX(constants["rearLeftPort"])
-        self.front_left_motor.setInverted(True)
-        self.rear_left_motor.setInverted(True)
-        self.left = wpilib.SpeedControllerGroup(self.front_left_motor, self.rear_left_motor)
-        self.front_right_motor = ctre.WPI_TalonSRX(constants["frontRightPort"])
-        self.rear_right_motor = ctre.WPI_TalonSRX(constants["rearRightPort"])
+        self.leftTalon = ctre.WPI_TalonSRX(constants["leftTalon"])
+        self.leftVictor = ctre.WPI_VictorSPX(constants["leftVictor"])
+        self.leftVictor.setInverted(True)
+        self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
 
-        self.right = wpilib.SpeedControllerGroup(self.front_right_motor, self.rear_right_motor)
+        self.rightTalon = ctre.WPI_TalonSRX(constants["rightTalon"])
+        self.rightVictor = ctre.WPI_VictorSPX(constants["rightVictor"])
+        self.rightVictor.setInverted(True)
+        self.right = wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor)
 
         self.drive = wpilib.drive.DifferentialDrive(self.right, self.left)
+
+        self.intake = ctre.WPI_VictorSPX(constants["intake"])
+        self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
+        self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+
+        self.liftArm = wpilib.drive.Vector2d(ctre.Spark(constants["liftArm"]))
+        self.rotateArm = wpilib.drive.Vector2d(ctre.Spark(constants["rotateArm"]))
 
         self.controller = wpilib.XboxController(0)
         self.timer = wpilib.Timer()
         self.sd = NetworkTables.getTable("SmartDashboard")
         self.gyro = navx.AHRS.create_i2c()
-        self.front_left_motor.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-        self.front_right_motor.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
     def autnomousInit(self):
         self.timer.reset()
@@ -53,20 +60,26 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Drive X', self.controller.getLeftX())
         self.output('Drive Y', self.controller.getLeftY())
         self.output('Gyro Yaw', self.gyro.getYaw())
-        self.output('Left Encoder', self.front_left_motor.getSelectedSensorPosition())
-        self.output('Right Encoder', self.front_right_motor.getSelectedSensorPosition())
+        self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
+        self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
 
         if self.controller.getPOV() == 90:
             self.turnright90()
 
         if self.controller.getAButton():
-            self.speed = [0.5, 0.5]
+            # Intake
+            self.snowveyor.arcadeDrive(1, 0)
+            pass
         elif self.controller.getBButton():
-            self.speed = [0.25, 0.25]
+            # Lift arm up
+            pass
         elif self.controller.getYButton():
-            self.speed = [0.1, 0.1]
+            # Outtake
+            self.snowveyor.arcadeDrive(1, 1)
+            pass
         elif self.controller.getXButton():
-            self.speed = [1, 1]
+            # Rotate arm
+            pass
 
         # self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
         # self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
