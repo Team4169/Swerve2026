@@ -13,6 +13,7 @@ from commands.halvedrivespeed import HalveDriveSpeed
 from commands.lucautocommand import LucAutoCommand
 from commands.lucautocommandInverted import LucAutoCommand2
 from commands.newPath import newPath
+from commands.newPathInverted import newPathInverted
 
 from subsystems.drivesubsystem import DriveSubsystem
 
@@ -49,6 +50,7 @@ class RobotContainer:
         self.lucAutoCommand2 = LucAutoCommand2(self.drive)
         #simpler auto routine that drives to the second ball and places 2 into the smaller hub
         self.newPath = newPath(self.drive)
+        self.newPathInverted = newPathInverted(self.drive)
 
         # Chooser
         self.chooser = wpilib.SendableChooser()
@@ -57,9 +59,9 @@ class RobotContainer:
         # self.chooser.setDefaultOption("Complex Auto", self.complexAuto)
         # self.chooser.addOption("Simple Auto", self.simpleAuto)
         self.chooser.addOption("Luc Auto", self.lucAutoCommand)
-        self.chooser.addOption("Luc Auto2", self.lucAutoCommand2)
-        self.chooser.addOption("TestMode", self.newPath)
-
+        self.chooser.addOption("Luc AutoInverted", self.lucAutoCommand2)
+        self.chooser.addOption("SimplePath", self.newPath)
+        self.chooser.addOption("SimplePathInverted", self.newPathInverted)
         # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomous", self.chooser)
 

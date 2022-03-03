@@ -27,7 +27,7 @@ kEncoderDistancePerPulse = 1 / 924 * 12 #in inches
 # Autonomous
 kAutoDriveDistanceInches = 60
 kAutoBackupDistanceInches = 20
-kAutoDriveSpeed = 0.5
+kAutoDriveSpeed = 0.2
 
 # Operator Interface
 kDriverControllerPort = 0
