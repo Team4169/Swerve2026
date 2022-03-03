@@ -1,5 +1,6 @@
 import wpilib.drive
 import ctre
+import rev
 from constants import constants
 from networktables import NetworkTables
 import navx
@@ -31,8 +32,8 @@ class MyRobot(wpilib.TimedRobot):
         self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
-        self.liftArm = wpilib.drive.Vector2d(ctre.Spark(constants["liftArm"]))
-        self.rotateArm = wpilib.drive.Vector2d(ctre.Spark(constants["rotateArm"]))
+        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
 
         self.controller = wpilib.XboxController(0)
         self.timer = wpilib.Timer()
@@ -71,16 +72,29 @@ class MyRobot(wpilib.TimedRobot):
             self.snowveyor.arcadeDrive(1, 0)
             pass
         elif self.controller.getBButton():
-            # Lift arm up
             pass
         elif self.controller.getYButton():
             # Outtake
             self.snowveyor.arcadeDrive(1, 1)
             pass
         elif self.controller.getXButton():
-            # Rotate arm
             pass
 
+
+        if self.controller.getRightTriggerAxis() >= 0.2:
+            self.liftArm.set(0.5)
+        elif self.controller.getLeftTriggerAxis() >= 0.2:
+            self.liftArm.set(-0.5)
+        else:
+            self.liftArm.set(0)
+
+        if self.controller.getRightBumper():
+            self.rotateArm.set(0.5)
+        elif self.controller.getLeftBumper():
+            self.rotateArm.set(-0.5)
+        else:
+            self.rotateArm.set(0)
+          
         # self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
         # self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
 
