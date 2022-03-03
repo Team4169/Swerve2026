@@ -11,7 +11,7 @@ X: Taunt
 
 class MyRobot(wpilib.TimedRobot):
     def output(self, text, value):
-      # print(text + ': ' + str(value))
+      #print(text + ': ' + str(value))
       self.sd.putValue(text, str(value))
 
     def robotInit(self):
@@ -59,6 +59,9 @@ class MyRobot(wpilib.TimedRobot):
         if self.controller.getPOV() == 90:
             self.turnright90()
 
+        if self.controller.getPOV() == 270:
+            self.turnleft90()
+
         if self.controller.getAButton():
             self.speed = [0.5, 0.5]
         elif self.controller.getBButton():
@@ -80,13 +83,18 @@ class MyRobot(wpilib.TimedRobot):
         self.drive.arcadeDrive(self.motor[0], self.motor[1])
 
     def turnright90(self):
+        yaw = self.gyro.getYaw()
         self.humancontrol = False
-        self.motor = [0, 0.5]
+        if self.gyro.getYaw() - yaw < 90:
+            self.motor = [0, 0.5]
+        self.humancontrol = True
 
     def turnleft90(self):
         yaw = self.gyro.getYaw()
-        if abs(self.gyro.getYaw() - yaw) < 0.01:
-            self.speed = [1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
+        self.humancontrol = False
+        if self.gyro.getYaw() - yaw < -90:
+            self.motor = [0.5, 0]
+        self.humancontrol = True
 
 if __name__ == "__main__":
   wpilib.run(MyRobot)
