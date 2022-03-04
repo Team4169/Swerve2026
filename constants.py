@@ -23,6 +23,6 @@ constants = {
      "rightVictor": 6,
      "intake": 10,
      "outtake": 12,
-     "liftArm": 4,
+     "liftArm": 5,
      "rotateArm": 4
 }

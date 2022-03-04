@@ -19,11 +19,12 @@ class MyRobot(wpilib.TimedRobot):
         self.leftTalon = ctre.WPI_TalonSRX(constants["leftTalon"])
         self.leftVictor = ctre.WPI_VictorSPX(constants["leftVictor"])
         self.leftVictor.setInverted(True)
+        self.leftTalon.setInverted(True)
+
         self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
 
         self.rightTalon = ctre.WPI_TalonSRX(constants["rightTalon"])
         self.rightVictor = ctre.WPI_VictorSPX(constants["rightVictor"])
-        self.rightVictor.setInverted(True)
         self.right = wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor)
 
         self.drive = wpilib.drive.DifferentialDrive(self.right, self.left)
@@ -64,34 +65,34 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
         self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
 
-        if self.controller.getPOV() == 90:
-            self.turnright90()
+        # if self.controller.getPOV() == 90:
+        #     self.turnright90()
 
         if self.controller.getAButton():
             # Intake
-            self.snowveyor.arcadeDrive(1, 0)
+            self.snowveyor.arcadeDrive(0.3, 0)
             pass
         elif self.controller.getBButton():
             pass
         elif self.controller.getYButton():
             # Outtake
-            self.snowveyor.arcadeDrive(1, 1)
+            self.snowveyor.arcadeDrive(0.3, 0.3)
             pass
         elif self.controller.getXButton():
             pass
 
 
         if self.controller.getRightTriggerAxis() >= 0.2:
-            self.liftArm.set(0.5)
+            self.liftArm.set(0.8)
         elif self.controller.getLeftTriggerAxis() >= 0.2:
-            self.liftArm.set(-0.5)
+            self.liftArm.set(-0.8)
         else:
             self.liftArm.set(0)
 
         if self.controller.getRightBumper():
-            self.rotateArm.set(0.5)
+            self.rotateArm.set(0.8)
         elif self.controller.getLeftBumper():
-            self.rotateArm.set(-0.5)
+            self.rotateArm.set(-0.8)
         else:
             self.rotateArm.set(0)
           
