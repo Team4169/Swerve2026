@@ -39,3 +39,8 @@ kGearingRatio = 8
 kWheelRadius = 0.0508
 
 # kEncoderResolution = -
+
+
+#SnowVeyor
+intake = 10
+outtake = 12
