@@ -90,7 +90,7 @@ class MyRobot(wpilib.TimedRobot):
             self.liftArm.set(0)
 
         if self.controller.getRightBumper():
-            self.rotateArm.set(0.8)
+            self.rotateArm.set(.8)
         elif self.controller.getLeftBumper():
             self.rotateArm.set(-0.8)
         else:
