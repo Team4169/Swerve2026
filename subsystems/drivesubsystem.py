@@ -6,7 +6,7 @@ import constants
 from networktables import NetworkTables
 import wpimath.controller
 import navx
-
+import rev
 class DriveSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
@@ -68,6 +68,14 @@ class DriveSubsystem(commands2.SubsystemBase):
         # NOTE FROM NOAH - Expirement with these two following lines later, for now commenting them out
         # self.leftEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
         # self.rightEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
+
+        #Snowveyor
+        self.intake = ctre.WPI_VictorSPX(constants["intake"])
+        self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
+        self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+        #Climbing
+        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
 
     def arcadeDrive(self, fwd: float, rot: float) -> None:
         """
