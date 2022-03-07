@@ -69,6 +69,8 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Gyro Yaw', self.gyro.getYaw())
         self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
         self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
+        self.output('Lift Encoder', self.liftArm.getSelectedSensorPosition())
+        self.output('Rotate Encoder', self.rotateArm.getSelectedSensorPosition())
 
         # if self.controller.getPOV() == 90:
         #     self.turnright90()
