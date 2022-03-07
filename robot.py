@@ -88,17 +88,11 @@ class MyRobot(wpilib.TimedRobot):
         self.yaw = self.gyro.getYaw()
         self.motor = [0, 0.5]
         self.humancontrol = False
-        # if self.gyro.getYaw() - yaw < 90:
-        #     self.motor = [0, 0.5]
-        # self.humancontrol = True
 
     def turnleft90(self):
         self.yaw = self.gyro.getYaw()
         self.motor = [0, -0.5]
         self.humancontrol = False
-        # if self.gyro.getYaw() - yaw < -90:
-        #     self.motor = [0.5, 0]
-        # self.humancontrol = True
 
 if __name__ == "__main__":
   wpilib.run(MyRobot)
