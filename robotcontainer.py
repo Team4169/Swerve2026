@@ -1,6 +1,8 @@
 import wpilib
 from wpilib.interfaces import GenericHID
 
+import rev
+
 import commands2
 import commands2.button
 
