@@ -3,9 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="23ad8137-12da-44aa-a17d-6d5fa04e4b10" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robotcontainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/robotcontainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/SnowVeyerCommands/DropOff.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/SnowVeyerCommands/DropOff.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/SnowVeyerCommands/PickUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/SnowVeyerCommands/PickUp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/lucautocommand.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/lucautocommand.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/lucautocommandInverted.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/lucautocommandInverted.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/newPath.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/newPath.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/newPathInverted.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/newPathInverted.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -6,8 +6,8 @@ from .drivedistance import DriveDistance
 from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
 from .reset_gyro import ResetGyro
-from SnowVeyerCommands.PickUp import pickUp
-from SnowVeyerCommands.DropOff import dropOff
+from .SnowVeyerCommands.PickUp import pickUp
+from .SnowVeyerCommands.DropOff import dropOff
 
 class LucAutoCommand2(commands2.SequentialCommandGroup):
     """
@@ -21,16 +21,16 @@ class LucAutoCommand2(commands2.SequentialCommandGroup):
             MoveCommand(-3.6666667, 0, drive),
             MoveCommand(0, -65, drive),
             MoveCommand(-0.75, -65, drive),
-            dropOff(2, 0.3),
+            dropOff(2, 0.3, drive),
             MoveCommand(0.75, -65, drive),
             MoveCommand(0, 130, drive),
             MoveCommand(-6.42, 130, drive),
-            pickUp(2, 0.3),
+            pickUp(2, 0.3, drive),
             MoveCommand(0, -50, drive),
             MoveCommand(-6.42, -50, drive),
             MoveCommand(0, -67.5, drive),
             MoveCommand(-1, -67.5, drive),
-            dropOff(2, 0.3),
+            dropOff(2, 0.3, drive),
             MoveCommand(1, -67.5, drive),
             # DriveDistance(
             #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, drive
