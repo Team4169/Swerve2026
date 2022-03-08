@@ -33,7 +33,7 @@ class MyRobot(wpilib.TimedRobot):
         self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
-        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
 
