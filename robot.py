@@ -36,6 +36,8 @@ class MyRobot(wpilib.TimedRobot):
         self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
+        self.rotateEncoder = self.rotateArm.getEncoder()
+        self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
@@ -67,8 +69,8 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Gyro Yaw', self.gyro.getYaw())
         # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
         # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
-        self.output('Lift Encoder', self.liftArm.getEncoder().getPosition())
-        self.output('Rotate Encoder', self.liftArm.getEncoder().getPosition())
+        self.output('Lift Encoder', self.liftEncoder.getPosition())
+        self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
         # if self.controller.getPOV() == 90:
         #     self.turnright90()
@@ -95,11 +97,11 @@ class MyRobot(wpilib.TimedRobot):
             self.liftArm.set(0)
 
         if self.controller.getRightBumper():
-            self.rotateArm.set(.8)
+            self.rotateArm.set(.2)
             self.output("rotate arm going","forward")
         elif self.controller.getLeftBumper():
             self.output("rotate arm going","back")
-            self.rotateArm.set(-0.8)
+            self.rotateArm.set(-0.2)
         else:
             self.output("rotate arm going","none")
 
