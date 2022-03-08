@@ -2,6 +2,7 @@ import wpilib.drive
 import ctre
 import rev
 from constants import constants
+from deadzone import addDeadzone
 from networktables import NetworkTables
 import navx
 
@@ -55,11 +56,11 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         print("Starting teleop...")
-        self.speed = [1, 1]
         self.humancontrol = True
         self.motor = [0, 0]
         self.intake = 0
         self.outtake = 0
+        self.climbMode = False
 
     def teleopPeriodic(self):
         self.output('Drive X', self.driverController.getLeftX())
@@ -70,66 +71,67 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Lift Encoder', self.liftEncoder.getPosition())
         self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
-        # if self.controller.getPOV() == 90:
-        #     self.turnright90()
-
-        if self.controller.getAButton():
-            # Intake
-            self.snowveyor.arcadeDrive(0.3, 0)
-            pass
-        elif self.controller.getBButton():
-            pass
-        elif self.controller.getYButton():
-            # Outtake
-            self.snowveyor.arcadeDrive(0.3, 0.3)
-            pass
-        elif self.controller.getXButton():
-            pass
-
-
-        if self.controller.getRightTriggerAxis() >= 0.2:
-            self.liftArm.set(0.8)
-        elif self.controller.getLeftTriggerAxis() >= 0.2:
-            self.liftArm.set(-0.8)
-        else:
-            self.liftArm.set(0)
-
-        if self.controller.getRightBumper():
-            self.rotateArm.set(.2)
-            self.output("rotate arm going","forward")
-        elif self.controller.getLeftBumper():
-            self.output("rotate arm going","back")
-            self.rotateArm.set(-0.2)
-        else:
-            self.output("rotate arm going","none")
-
-            self.rotateArm.set(0)
-
         self.straightMode = self.controller.getLeftBumperPressed()
         self.direction = -1 if self.controller.getRightBumperPressed() else 1
 
+        lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
+        rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
 
-        if self.humancontrol:
-            self.motor = [self.driverController.getLeftY() * self.speed[0], self.driverController.getLeftX() * self.speed[1]]
-        else:
-            print(str(self.gyro.getYaw()) + ' ' + str(self.yaw) + ' ' + str(self.gyro.getYaw() - self.yaw))
-            if abs(self.gyro.getYaw() - self.yaw) > 80:
-                self.humancontrol = True
+        if self.operatorController.getStartButtonPressed():
+            self.climbMode = not self.climbMode
 
-        self.drive.arcadeDrive(self.motor[0], self.motor[1])
+        if self.climbMode:
+            # TODO:
+            # Put climb code here
+            # MUST give drive train command AND return at end of function
+            return
 
-        # snowveyorController
-        if self.snowveyorController.getRightBumper():
-          self.intake = 1
-        else:
-          self.intake = 0
 
-        if self.snowveyorController.getLeftBumper():
-          self.outtake = 1
-        else:
-          self.outtake = 0
+        if self.straightMode:
+            whichbumper = (self.controller.getRightTriggerAxis() + self.controller.getLeftTriggerAxis())/2
+            if self.driverController.getRightTriggerAxis() < 0.2:
+                whichbumper = self.controller.getRightTriggerAxis()
+            elif self.controller.getLeftTriggerAxis() < 0.2:
+                whichbumper = self.controller.getLeftTriggerAxis()
+            lspeed = whichbumper * self.direction
+            rspeed = whichbumper * self.direction
 
-        self.snowveyor.arcadeDrive(self.intake, self.outtake)
+
+        if self.driverController.getAButton():
+            lspeed *= 0.5
+            rspeed *= 0.5
+        elif self.driverController.getBButton():
+            lspeed *= 0.25
+            rspeed *= 0.25
+        elif self.driverController.getYButton():
+            lspeed *= 0.1
+            rspeed *= 0.1
+        elif self.driverController.getXButton():
+            pass
+
+        if self.driverController.getRightBumper():
+            lspeed *= -1
+            rspeed *= -1
+
+        if self.operatorController.getLeftTriggerAxis() > 0.2:
+            self.snowveyor.arcadeDrive(1,0)
+
+        elif self.operatorController.getRightTriggerAxis() > 0.2:
+            self.snowveyor.arcadeDrive(1,1)
+
+        elif self.operatorController.getLeftBumper():
+            self.snowveyor.arcadeDrive(-1,0)
+
+        elif self.operatorController.getRightBumper():
+            self.snowveyor.arcadeDrive(-1,-1)
+
+
+        if abs(self.gyro.getYaw() - self.yaw) > 80:
+            self.humancontrol = True
+
+        self.drive.arcadeDrive(lspeed, rspeed)
+
+
   
     def turnright90(self):
         self.yaw = self.gyro.getYaw()
