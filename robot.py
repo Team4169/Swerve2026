@@ -33,12 +33,10 @@ class MyRobot(wpilib.TimedRobot):
         self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
-        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
 
-        # self.liftArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-        # self.rotateArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
@@ -69,8 +67,8 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Gyro Yaw', self.gyro.getYaw())
         # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
         # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
-        # self.output('Lift Encoder', self.liftArm.getSelectedSensorPosition())
-        # self.output('Rotate Encoder', self.rotateArm.getSelectedSensorPosition())
+        self.output('Lift Encoder', self.liftArm.getEncoder().getPosition())
+        self.output('Rotate Encoder', self.liftArm.getEncoder().getPosition())
 
         # if self.controller.getPOV() == 90:
         #     self.turnright90()
