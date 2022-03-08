@@ -21,10 +21,10 @@ class MyRobot(wpilib.TimedRobot):
         self.leftVictor.setInverted(True)
         self.leftTalon.setInverted(True)
 
-        self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
-
         self.rightTalon = ctre.WPI_TalonSRX(constants["rightTalon"])
         self.rightVictor = ctre.WPI_VictorSPX(constants["rightVictor"])
+
+        self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
         self.right = wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor)
 
         self.drive = wpilib.drive.DifferentialDrive(self.right, self.left)
@@ -57,7 +57,8 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         print("Starting teleop...")
-        self.mode = [False, False] # ['straight', 'backward']
+        self.direction = 1 # 1 or -1
+        self.straightMode = False
         self.speed = [1, 1]
         self.turn = [False, False]
         self.humancontrol = True
@@ -106,9 +107,10 @@ class MyRobot(wpilib.TimedRobot):
             self.output("rotate arm going","none")
 
             self.rotateArm.set(0)
-          
-        # self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
-        # self.mode = not self.mode if self.controller.getRightBumperPressed() else self.mode # backward mode
+
+        self.straightMode = self.controller.getLeftBumperPressed()
+        self.direction = -1 if self.controller.getRightBumperPressed() else 1
+
 
         if self.humancontrol:
             print('human' + str(self.motor[0]) + str(self.motor[1]))
