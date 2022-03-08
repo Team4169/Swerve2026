@@ -5,17 +5,13 @@ from constants import constants
 from networktables import NetworkTables
 import navx
 
-'''
-D-pad left/right: Turn 90 deg left or right
-X: Taunt
-'''
-
 class MyRobot(wpilib.TimedRobot):
     def output(self, text, value):
       print(text + ': ' + str(value))
       self.sd.putValue(text, str(value))
 
     def robotInit(self):
+
         self.leftTalon = ctre.WPI_TalonSRX(constants["leftTalon"])
         self.leftVictor = ctre.WPI_VictorSPX(constants["leftVictor"])
         self.leftVictor.setInverted(True)
@@ -42,7 +38,9 @@ class MyRobot(wpilib.TimedRobot):
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
-        self.controller = wpilib.XboxController(0)
+        self.driverController = wpilib.XboxController(0)
+        self.operatorController = wpilib.XboxController(1)
+        
         self.timer = wpilib.Timer()
         self.sd = NetworkTables.getTable("SmartDashboard")
         self.gyro = navx.AHRS.create_i2c()
@@ -57,16 +55,15 @@ class MyRobot(wpilib.TimedRobot):
 
     def teleopInit(self):
         print("Starting teleop...")
-        self.direction = 1 # 1 or -1
-        self.straightMode = False
         self.speed = [1, 1]
-        self.turn = [False, False]
         self.humancontrol = True
         self.motor = [0, 0]
+        self.intake = 0
+        self.outtake = 0
 
     def teleopPeriodic(self):
-        self.output('Drive X', self.controller.getLeftX())
-        self.output('Drive Y', self.controller.getLeftY())
+        self.output('Drive X', self.driverController.getLeftX())
+        self.output('Drive Y', self.driverController.getLeftY())
         self.output('Gyro Yaw', self.gyro.getYaw())
         # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
         # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
@@ -113,21 +110,36 @@ class MyRobot(wpilib.TimedRobot):
 
 
         if self.humancontrol:
-            print('human' + str(self.motor[0]) + str(self.motor[1]))
-            self.motor = [self.controller.getLeftY() * self.speed[0], self.controller.getLeftX() * self.speed[1]]
+            self.motor = [self.driverController.getLeftY() * self.speed[0], self.driverController.getLeftX() * self.speed[1]]
         else:
-            print('robot' + str(self.motor[0]) + str(self.motor[1]))
+            print(str(self.gyro.getYaw()) + ' ' + str(self.yaw) + ' ' + str(self.gyro.getYaw() - self.yaw))
+            if abs(self.gyro.getYaw() - self.yaw) > 80:
+                self.humancontrol = True
 
         self.drive.arcadeDrive(self.motor[0], self.motor[1])
 
+        # snowveyorController
+        if self.snowveyorController.getRightBumper():
+          self.intake = 1
+        else:
+          self.intake = 0
+
+        if self.snowveyorController.getLeftBumper():
+          self.outtake = 1
+        else:
+          self.outtake = 0
+
+        self.snowveyor.arcadeDrive(self.intake, self.outtake)
+  
     def turnright90(self):
-        self.humancontrol = False
+        self.yaw = self.gyro.getYaw()
         self.motor = [0, 0.5]
+        self.humancontrol = False
 
     def turnleft90(self):
-        yaw = self.gyro.getYaw()
-        if abs(self.gyro.getYaw() - yaw) < 0.01:
-            self.speed = [1 + ((self.gyro.getYaw() - yaw)/90) ** 4, 1 - ((self.gyro.getYaw() - yaw)/90) ** 4]
+        self.yaw = self.gyro.getYaw()
+        self.motor = [0, -0.5]
+        self.humancontrol = False
 
 if __name__ == "__main__":
   wpilib.run(MyRobot)
