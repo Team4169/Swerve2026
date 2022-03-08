@@ -19,7 +19,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def output(self, text, value):
       print(text + ': ' + str(value))
-      self.sd.putValue(text, str(value))
+      self.container.drive.sd.putValue(text, str(value))
 
     def robotInit(self) -> None:
         """
@@ -61,9 +61,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.motor = [0, 0]
 
     def teleopPeriodic(self) -> None:
-        self.output('Drive X', self.container.driverController.getLeftX())
-        self.output('Drive Y', self.container.driverController.getLeftY())
-        self.output('Gyro Yaw', self.container.drive.gyro.getYaw())
+        # self.output('Drive X', self.container.driverController.getLeftX())
+        # self.output('Drive Y', self.container.driverController.getLeftY())
+        # self.output('Gyro Yaw', self.container.drive.gyro.getYaw())
 
         if self.container.driverController.getPOV() == 90:
             self.turnright90()
@@ -93,6 +93,7 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.humancontrol = True
 
         self.container.drive.arcadeDrive(self.motor[0], self.motor[1])
+
 
     def turnright90(self):
         self.yaw = self.container.drive.gyro.getYaw()

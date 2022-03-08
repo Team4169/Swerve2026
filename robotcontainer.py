@@ -70,13 +70,13 @@ class RobotContainer:
         self.configureButtonBindings()
 
         # set up default drive command
-        self.drive.setDefaultCommand(
-            DefaultDrive(
-                self.drive,
-                lambda: -self.driverController.getRightY(),
-                lambda: self.driverController.getLeftY(),
-            )
-        )
+        # self.drive.setDefaultCommand(
+        #     DefaultDrive(
+        #         self.drive,
+        #         lambda: -self.driverController.getRightY(),
+        #         lambda: self.driverController.getLeftY(),
+        #     )
+        # )
 
     def configureButtonBindings(self):
         """
