@@ -5,9 +5,23 @@
 #      # "frontRightPort": 11,
 #      # "rearRightPort": 4
 # }
+
+# testbot
+# constants = {
+#    "frontLeftPort": 8,
+#    "rearLeftPort": 2,
+#    "frontRightPort": 10,
+#    "rearRightPort": 6
+# }
+
+#real bot
 constants = {
-   "frontLeftPort": 8,
-   "rearLeftPort": 2,
-   "frontRightPort": 10,
-   "rearRightPort": 6
+     "leftTalon": 1,
+     "leftVictor": 2,
+     "rightTalon": 7,
+     "rightVictor": 6,
+     "intake": 10,
+     "outtake": 12,
+     "liftArm": 5,
+     "rotateArm": 4
 }
