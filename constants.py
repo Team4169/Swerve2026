@@ -6,7 +6,8 @@
 #      # "rearRightPort": 4
 # }
 
-# testbot
+
+# Test bot
 # constants = {
 #    "frontLeftPort": 8,
 #    "rearLeftPort": 2,
@@ -14,7 +15,8 @@
 #    "rearRightPort": 6
 # }
 
-#real bot
+# Final bot
+
 constants = {
      "leftTalon": 1,
      "leftVictor": 2,
