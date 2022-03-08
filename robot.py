@@ -59,12 +59,15 @@ class MyRobot(commands2.TimedCommandRobot):
         self.speed = [1, 1]
         self.humancontrol = True
         self.motor = [0, 0]
+        self.intakeSpeed = 0
+        self.outtakeSpeed = 0
 
     def teleopPeriodic(self) -> None:
         # self.output('Drive X', self.container.driverController.getLeftX())
         # self.output('Drive Y', self.container.driverController.getLeftY())
         # self.output('Gyro Yaw', self.container.drive.gyro.getYaw())
 
+        # driveController
         if self.container.driverController.getPOV() == 90:
             self.turnright90()
 
@@ -94,6 +97,18 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.container.drive.arcadeDrive(self.motor[0], self.motor[1])
 
+        # snowveyorController
+        if self.container.snowveyorController.getRightBumper():
+          self.intakeSpeed = 1
+        else:
+          self.intakeSpeed = 0
+
+        if self.container.snowveyorController.getLeftBumper():
+          self.outtakeSpeed = 1
+        else:
+          self.outtakeSpeed = 0
+
+        self.container.drive.snowveyor.tankDrive(self.intakeSpeed, self.outtakeSpeed)
 
     def turnright90(self):
         self.yaw = self.container.drive.gyro.getYaw()

@@ -31,6 +31,7 @@ kAutoDriveSpeed = 0.2
 
 # Operator Interface
 kDriverControllerPort = 0
+kSnowveyorControllerPort = 1
 
 # Physical parameters
 kDriveTrainMotorCount = 2

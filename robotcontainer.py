@@ -33,6 +33,7 @@ class RobotContainer:
         # The driver's controller
         self.driverController = wpilib.XboxController(constants.kDriverControllerPort)
         # self.driverController = wpilib.Joystick(constants.kDriverControllerPort)
+        self.snowveyorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
 
         # The robot's subsystems
         self.drive = DriveSubsystem()
