@@ -34,11 +34,11 @@ class MyRobot(wpilib.TimedRobot):
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
         self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
 
-        self.liftArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-        self.rotateArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        # self.liftArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        # self.rotateArm.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
@@ -67,10 +67,10 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Drive X', self.controller.getLeftX())
         self.output('Drive Y', self.controller.getLeftY())
         self.output('Gyro Yaw', self.gyro.getYaw())
-        self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
-        self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
-        self.output('Lift Encoder', self.liftArm.getSelectedSensorPosition())
-        self.output('Rotate Encoder', self.rotateArm.getSelectedSensorPosition())
+        # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
+        # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
+        # self.output('Lift Encoder', self.liftArm.getSelectedSensorPosition())
+        # self.output('Rotate Encoder', self.rotateArm.getSelectedSensorPosition())
 
         # if self.controller.getPOV() == 90:
         #     self.turnright90()
@@ -98,9 +98,13 @@ class MyRobot(wpilib.TimedRobot):
 
         if self.controller.getRightBumper():
             self.rotateArm.set(.8)
+            self.output("rotate arm going","forward")
         elif self.controller.getLeftBumper():
+            self.output("rotate arm going","back")
             self.rotateArm.set(-0.8)
         else:
+            self.output("rotate arm going","none")
+
             self.rotateArm.set(0)
           
         # self.mode = not self.mode if self.controller.getLeftBumperPressed() else self.mode # straight mode
