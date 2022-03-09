@@ -88,14 +88,13 @@ class MyRobot(wpilib.TimedRobot):
 
 
         if self.straightMode:
-            whichbumper = (self.controller.getRightTriggerAxis() + self.controller.getLeftTriggerAxis())/2
-            if self.driverController.getRightTriggerAxis() < 0.2:
-                whichbumper = self.controller.getRightTriggerAxis()
-            elif self.controller.getLeftTriggerAxis() < 0.2:
-                whichbumper = self.controller.getLeftTriggerAxis()
-            lspeed = whichbumper * self.direction
-            rspeed = whichbumper * self.direction
+            whichbumper = (lspeed + rspeed) / 2
+            if abs(lspeed) < 0.2:
+                whichbumper = rspeed
+            elif abs(rspeed) < 0.2:
+                whichbumper = lspeed
 
+            lspeed, rspeed = whichbumper
 
         if self.driverController.getAButton():
             lspeed *= 0.5
