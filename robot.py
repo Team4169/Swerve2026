@@ -81,9 +81,33 @@ class MyRobot(wpilib.TimedRobot):
             self.climbMode = not self.climbMode
 
         if self.climbMode:
-            # TODO:
-            # Put climb code here
-            # MUST give drive train command AND return at end of function
+            if self.operatorController.getYButtonPressed():
+                self.liftArm.set(0.5)
+            elif self.operatorController.getAButtonPressed():
+                self.liftArm.set(-0.5)
+
+            if self.operatorController.getXButtonPressed():
+                self.rotateArm.set(-0.5)
+            elif self.operatorController.getBButtonPressed():
+                self.rotateArm.set(0.5)
+
+            dir = self.operatorController.getPOV()
+            if 225 < dir <= 315:
+                lspeed = 0
+                rspeed = 0.2
+            elif 135 < dir <= 225:
+                lspeed = -0.2
+                rspeed = -0.2
+            elif 45 < dir <= 135:
+                lspeed = 0.2
+                rspeed = 0
+            elif dir <= 45:
+                lspeed = 0.2
+                rspeed = 0.2
+            else:
+                lspeed = 0
+                rspeed = 0
+            self.drive.tankDrive(lspeed, rspeed)
             return
 
 
@@ -128,7 +152,7 @@ class MyRobot(wpilib.TimedRobot):
         if abs(self.gyro.getYaw() - self.yaw) > 80:
             self.humancontrol = True
 
-        self.drive.arcadeDrive(lspeed, rspeed)
+        self.drive.tankDrive(lspeed, rspeed)
 
 
   
