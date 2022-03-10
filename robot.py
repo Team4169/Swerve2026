@@ -119,10 +119,10 @@ class MyRobot(wpilib.TimedRobot):
             self.snowveyor.tankDrive(1,-1)
 
         elif self.operatorController.getLeftBumper():
-            self.snowveyor.arcadeDrive(-1,0)
+            self.snowveyor.tankDrive(-1,0)
 
         elif self.operatorController.getRightBumper():
-            self.snowveyor.arcadeDrive(-1,-1)
+            self.snowveyor.tankDrive(-1,-1)
 
 
         if abs(self.gyro.getYaw() - self.yaw) > 80:
