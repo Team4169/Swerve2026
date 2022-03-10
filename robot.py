@@ -35,7 +35,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.rotateEncoder = self.rotateArm.getEncoder()
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
-
+        self.yaw = 0
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
@@ -71,8 +71,8 @@ class MyRobot(wpilib.TimedRobot):
         self.output('Lift Encoder', self.liftEncoder.getPosition())
         self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
-        self.straightMode = self.controller.getLeftBumperPressed()
-        self.direction = -1 if self.controller.getRightBumperPressed() else 1
+        self.straightMode = self.driverController.getLeftBumperPressed()
+        self.direction = -1 if self.driverController.getRightBumperPressed() else 1
 
         lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
         rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
@@ -137,16 +137,16 @@ class MyRobot(wpilib.TimedRobot):
             rspeed *= -1
 
         if self.operatorController.getLeftTriggerAxis() > 0.2:
-            self.snowveyor.arcadeDrive(1,0)
+            self.snowveyor.tankDrive(1,0)
 
         elif self.operatorController.getRightTriggerAxis() > 0.2:
-            self.snowveyor.arcadeDrive(1,1)
+            self.snowveyor.tankDrive(1,-1)
 
         elif self.operatorController.getLeftBumper():
-            self.snowveyor.arcadeDrive(-1,0)
+            self.snowveyor.tankDrive(-1,0)
 
         elif self.operatorController.getRightBumper():
-            self.snowveyor.arcadeDrive(-1,-1)
+            self.snowveyor.tankDrive(-1,-1)
 
 
         if abs(self.gyro.getYaw() - self.yaw) > 80:
