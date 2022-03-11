@@ -33,13 +33,20 @@ class MyRobot(wpilib.TimedRobot):
         self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
-        self.liftArm.IdleMode(1)
+        self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
+        self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
 
         self.liftArm.setInverted(True)
 
         self.rotateEncoder = self.rotateArm.getEncoder()
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
+
+        self.liftArmUpLimitSwitch = wpilib.DigitalInput(0)
+        self.rotateArmBackLimitSwitch = wpilib.DigitalInput(2)
+
         self.yaw = 0
+
+
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
@@ -67,6 +74,8 @@ class MyRobot(wpilib.TimedRobot):
         self.climbMode = False
 
     def teleopPeriodic(self):
+        self.output("limit switch", self.liftArmUpLimitSwitch.get())
+        self.output("limit switch 2", self.rotateArmBackLimitSwitch.get())
         # self.output('Drive X', self.driverController.getLeftX())
         # self.output('Drive Y', self.driverController.getLeftY())
         # self.output('Gyro Yaw', self.gyro.getYaw())
@@ -85,18 +94,18 @@ class MyRobot(wpilib.TimedRobot):
             self.climbMode = not self.climbMode
 
         if self.climbMode:
-            if self.operatorController.getYButton():
+            if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants['liftArmUpLimitSwitchPressedValue']:
                 self.liftArm.set(0.6)
-            elif self.operatorController.getAButton():
+            elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants['liftArmUpLimitSwitchPressedValue']:
                 self.liftArm.set(-0.6)
             else:
                 self.liftArm.set(0)
                 # pass
 
-            if self.operatorController.getXButton():
-                self.rotateArm.set(-0.4)
-            elif self.operatorController.getBButton():
-                self.rotateArm.set(0.4)
+            if self.operatorController.getXButton(): # and self.rotateArmBackLimitSwitch.get() != constants["rotateArmBackLimitSwitchPressedValue"]:
+                self.rotateArm.set(-0.1)
+            elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants["rotateArmBackLimitSwitchPressedValue"]:
+                self.rotateArm.set(0.1)
             else:
                 self.rotateArm.set(0)
 

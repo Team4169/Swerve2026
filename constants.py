@@ -26,5 +26,7 @@ constants = {
      "outtake": 12,
      "liftArm": 5,
      "rotateArm": 4,
-     "deadzone": 0.05
+     "deadzone": 0.05,
+     "liftArmUpLimitSwitchPressedValue": False,
+     "rotateArmBackLimitSwitchPressedValue": False,
 }
