@@ -33,6 +33,10 @@ class MyRobot(wpilib.TimedRobot):
         self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
+        self.liftArm.IdleMode(1)
+
+        self.liftArm.setInverted(True)
+
         self.rotateEncoder = self.rotateArm.getEncoder()
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
         self.yaw = 0
@@ -63,13 +67,13 @@ class MyRobot(wpilib.TimedRobot):
         self.climbMode = False
 
     def teleopPeriodic(self):
-        self.output('Drive X', self.driverController.getLeftX())
-        self.output('Drive Y', self.driverController.getLeftY())
-        self.output('Gyro Yaw', self.gyro.getYaw())
-        # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
-        # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
-        self.output('Lift Encoder', self.liftEncoder.getPosition())
-        self.output('Rotate Encoder', self.rotateEncoder.getPosition())
+        # self.output('Drive X', self.driverController.getLeftX())
+        # self.output('Drive Y', self.driverController.getLeftY())
+        # self.output('Gyro Yaw', self.gyro.getYaw())
+        # # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
+        # # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
+        # self.output('Lift Encoder', self.liftEncoder.getPosition())
+        # self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
         self.straightMode = self.driverController.getLeftBumperPressed()
         self.direction = -1 if self.driverController.getRightBumperPressed() else 1
@@ -81,15 +85,20 @@ class MyRobot(wpilib.TimedRobot):
             self.climbMode = not self.climbMode
 
         if self.climbMode:
-            if self.operatorController.getYButtonPressed():
-                self.liftArm.set(0.5)
-            elif self.operatorController.getAButtonPressed():
-                self.liftArm.set(-0.5)
+            if self.operatorController.getYButton():
+                self.liftArm.set(0.6)
+            elif self.operatorController.getAButton():
+                self.liftArm.set(-0.6)
+            else:
+                self.liftArm.set(0)
+                # pass
 
-            if self.operatorController.getXButtonPressed():
-                self.rotateArm.set(-0.5)
-            elif self.operatorController.getBButtonPressed():
-                self.rotateArm.set(0.5)
+            if self.operatorController.getXButton():
+                self.rotateArm.set(-0.4)
+            elif self.operatorController.getBButton():
+                self.rotateArm.set(0.4)
+            else:
+                self.rotateArm.set(0)
 
             dir = self.operatorController.getPOV()
             if 225 < dir <= 315:
@@ -118,7 +127,8 @@ class MyRobot(wpilib.TimedRobot):
             elif abs(rspeed) < 0.2:
                 whichbumper = lspeed
 
-            lspeed, rspeed = whichbumper
+            lspeed = whichbumper
+            rspeed = whichbumper
 
         if self.driverController.getAButton():
             lspeed *= 0.5
@@ -152,6 +162,9 @@ class MyRobot(wpilib.TimedRobot):
         if abs(self.gyro.getYaw() - self.yaw) > 80:
             self.humancontrol = True
 
+
+        self.output('lspeed', lspeed)
+        self.output('rspeed', rspeed)
         self.drive.tankDrive(lspeed, rspeed)
 
 
