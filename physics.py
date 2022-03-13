@@ -42,8 +42,8 @@ class PhysicsEngine:
         )
         # print()
         # robot.container.drive.sd.putValue("simcollection",robot.container.drive.left1.getSimCollection())
-        self.leftEncoderSim = robot.container.drive.left1.getSimCollection()
-        self.rightEncoderSim = robot.container.drive.right1.getSimCollection()
+        self.leftEncoderSim = robot.container.drive.leftTalon.getSimCollection()
+        self.rightEncoderSim = robot.container.drive.rightTalon.getSimCollection()
         # self.leftEncoderSim = wpilib.simulation.EncoderSim.createForChannel(
         #     constants.kLeftEncoderPorts[0]
         # )

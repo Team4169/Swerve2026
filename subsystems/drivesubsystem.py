@@ -11,10 +11,10 @@ class DriveSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
 
-        self.left1 = ctre.WPI_TalonSRX(constants.kLeftMotor1Port)
-        self.left2 = ctre.WPI_TalonSRX(constants.kLeftMotor2Port)
-        self.right1 = ctre.WPI_TalonSRX(constants.kRightMotor1Port)
-        self.right2 = ctre.WPI_TalonSRX(constants.kRightMotor2Port)
+        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
+        self.leftVictor = ctre.WPI_TalonSRX(constants.leftVictor)
+        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
+        self.rightVictor = ctre.WPI_TalonSRX(constants.rightVictor)
 
         self.tpf = -924
         self.maxDriveSpeed = 0.6
@@ -42,11 +42,11 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
 
         # The robot's drive
-        self.right1.setInverted(True)
-        self.right2.setInverted(True)
+        self.rightTalon.setInverted(True)
+        self.rightVictor.setInverted(True)
         self.drive = wpilib.drive.DifferentialDrive(
-            wpilib.SpeedControllerGroup(self.left1, self.left2),
-            wpilib.SpeedControllerGroup(self.right1, self.right2),
+            wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor),
+            wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor),
         )
 
         # The left-side drive encoder
@@ -61,8 +61,8 @@ class DriveSubsystem(commands2.SubsystemBase):
         #     *constants.kRightEncoderPorts,
         #     reverseDirection=constants.kRightEncoderReversed
         # )
-        self.left1.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-        self.right2.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
 
         # Sets the distance per pulse for the encoders
         # NOTE FROM NOAH - Expirement with these two following lines later, for now commenting them out
@@ -79,21 +79,21 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.drive.arcadeDrive(fwd, rot)
 
     def resetEncoders(self) -> None:
-        self.left1.setSelectedSensorPosition(0, 0, 10)
-        self.right2.setSelectedSensorPosition(0, 0, 10)
+        self.leftTalon.setSelectedSensorPosition(0, 0, 10)
+        self.rightTalon.setSelectedSensorPosition(0, 0, 10)
         """Resets the drive encoders to currently read a position of 0."""
 
     def getAverageEncoderDistance(self) -> float:
         """Gets the average distance of the TWO encoders."""
-        self.sd.putValue("Left Encoder Value", self.left1.getSelectedSensorPosition())
-        self.sd.putValue("Right Encoder Value", self.right2.getSelectedSensorPosition())
-        return (self.left1.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / 2.0 * 12 / 924
+        self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        return (self.leftTalon.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / 2.0 * 12 / 924
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""
-        self.sd.putValue("Left Encoder Value", self.left1.getSelectedSensorPosition())
-        self.sd.putValue("Right Encoder Value", self.right2.getSelectedSensorPosition())
-        return (self.left1.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / -2.0
+        self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        return (self.leftTalon.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / -2.0
 
     def setMaxOutput(self, maxOutput: float):
         """
