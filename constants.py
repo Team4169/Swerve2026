@@ -49,3 +49,12 @@ outtake = 12
 # Climbing
 liftArm = 5
 rotateArm = 4
+
+liftArmUpLimitSwitch = 0
+liftArmUpLimitSwitchPressedValue = False
+liftArmDownLimitSwitch = 1
+liftArmDownLimitSwitchPressedValue = False
+rotateArmBackLimitSwitch = 2
+rotateArmBackLimitSwitchPressedValue = False
+rotateArmRobotLimitSwitch = 3
+rotateArmRobotLimitSwitchPressedValue = False

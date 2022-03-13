@@ -1,10 +1,8 @@
 import commands2
 import wpilib
 import wpilib.drive
-import ctre
 import constants
 from networktables import NetworkTables
-import wpimath.controller
 import rev
 
 
@@ -22,12 +20,13 @@ class ClimbingSubsystem(commands2.SubsystemBase):
         self.rotateEncoder = self.rotateArm.getEncoder()
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
-        self.liftArmUpLimitSwitch = wpilib.DigitalInput(0)
-        self.rotateArmBackLimitSwitch = wpilib.DigitalInput(2)
+        self.liftArmUpLimitSwitch = wpilib.DigitalInput(constants.liftArmUpLimitSwitch)
+        self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
+        self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
+        self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
 
         # smartdashboard
         self.sd = NetworkTables.getTable("SmartDashboard")
-
 
     def resetEncoders(self) -> None:
         pass
@@ -42,6 +41,14 @@ class ClimbingSubsystem(commands2.SubsystemBase):
     def getRotateArmEncoderDistance(self) -> float:
         """Gets the average distance of the TWO encoders."""
         return self.rotateEncoder.getPosition()
+
+    def getLiftArmLimitSwitchPressed(self) -> bool:
+        """Gets if either limit switch is pressed"""
+        return self.liftArmUpLimitSwitch.get() == constants.liftArmUpLimitSwitchPressedValue or self.liftArmDownLimitSwitch.get() == constants.liftArmDownLimitSwitchPressedValue
+
+    def getRotateArmLimitSwitchPressed(self) -> bool:
+        """Gets if either limit switch is pressed"""
+        return self.rotateArmRobotLimitSwitch.get() == constants.rotateArmRobotLimitSwitchPressedValue or self.rotateArmBackLimitSwitch.get() == constants.rotateArmBackLimitSwitchPressedValue
 
     def setRotateArm(self, speed):
         self.rotateArm.set(speed)

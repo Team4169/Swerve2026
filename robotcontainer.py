@@ -17,6 +17,11 @@ from commands.lucautocommandInverted import LucAutoCommand2
 from commands.newPath import newPath
 from commands.newPathInverted import newPathInverted
 
+from commands.climbingCommands.moveLiftArm import MoveLiftArm
+from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimitSwitch
+from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
+from commands.climbingCommands.liftArmToTop import LiftArmToTop
+
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from subsystems.climbingsubsystem import ClimbingSubsystem
@@ -88,10 +93,21 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-
-        commands2.button.JoystickButton(self.driverController, 3).whenHeld(
-            HalveDriveSpeed(self.drive)
+        commands2.button.JoystickButton(self.snowveyorController, 1).whenPressed(
+            MoveLiftArm(.5, self.climb)
         )
+        commands2.button.JoystickButton(self.snowveyorController, 2).whenPressed(
+            MoveLiftArmToLimitSwitch(.5, self.climb)
+        )
+        commands2.button.JoystickButton(self.snowveyorController, 3).whenPressed(
+            MoveLiftArmPastLocation(500, True, .5, self.climb)
+        )
+        commands2.button.JoystickButton(self.snowveyorController, 4).whenPressed(
+            LiftArmToTop(self.climb)
+        )
+        # commands2.button.JoystickButton(self.driverController, 3).whenHeld(
+        #     HalveDriveSpeed(self.drive)
+        # )
 
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()
