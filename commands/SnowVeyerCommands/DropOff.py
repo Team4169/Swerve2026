@@ -15,10 +15,10 @@ class dropOff(commands2.CommandBase):
         self.timer.start()
 
     def execute(self) -> None:
-        self.snowveyor.snowveyor.tankDrive(self.speed, self.speed)
+        self.snowveyor.tankDrive(self.speed, self.speed)
 
     def end(self, interrupted: bool) -> None:
-        self.snowveyor.snowveyor.tankDrive(0, 0)
+        self.snowveyor.tankDrive(0, 0)
 
     def isFinished(self) -> bool:
         return self.timer.get() > self.duration

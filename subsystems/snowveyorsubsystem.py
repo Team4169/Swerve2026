@@ -18,14 +18,11 @@ class SnowveyorSubsystem(commands2.SubsystemBase):
         self.outtake = ctre.WPI_VictorSPX(constants.outtake)
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
-    def arcadeDrive(self, fwd: float, rot: float) -> None:
+    def tankDrive(self, intakespeed: float, outtakespeed: float) -> None:
         """
-        Drives the robot using arcade controls.
-
-        :param fwd: the commanded forward movement
-        :param rot: the commanded rotation
+        Controls snowveyor with tankDrive. Not sure why we are using this implementation - Noah
         """
-        self.drive.arcadeDrive(fwd, rot)
+        self.snowveyor.tankDrive(intakespeed, outtakespeed)
 
 
     def getAverageEncoderTicks(self) -> float:
