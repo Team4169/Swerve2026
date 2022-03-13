@@ -8,8 +8,11 @@ import ctre, navx, rev
 
 import constants
 from robotcontainer import RobotContainer
+
 from networktables import NetworkTables
 from deadzone import addDeadzone
+
+
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -19,25 +22,24 @@ class MyRobot(commands2.TimedCommandRobot):
     Command v2 robots are encouraged to inherit from TimedCommandRobot, which
     has an implementation of robotPeriodic which runs the scheduler for you
     """
-
     autonomousCommand: typing.Optional[commands2.Command] = None
 
     def output(self, text, value):
       print(text + ': ' + str(value))
       self.container.driveSystem.sd.putValue(text, str(value))
 
-    def robotInit(self) -> None:
-        """
-        This function is run when the robot is first started up and should be used for any
-        initialization code.
-        """
-        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
-        self.leftVictor = ctre.WPI_VictorSPX(constants.leftVictor)
+
+class MyRobot(wpilib.TimedRobot):
+
+    def robotInit(self):
+
+        self.leftTalon = ctre.WPI_TalonSRX(constants["leftTalon"])
+        self.leftVictor = ctre.WPI_VictorSPX(constants["leftVictor"])
         self.leftVictor.setInverted(True)
         self.leftTalon.setInverted(True)
 
-        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
-        self.rightVictor = ctre.WPI_VictorSPX(constants.rightVictor)
+        self.rightTalon = ctre.WPI_TalonSRX(constants["rightTalon"])
+        self.rightVictor = ctre.WPI_VictorSPX(constants["rightVictor"])
 
         self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
         self.right = wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor)
@@ -48,6 +50,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.outtake = ctre.WPI_VictorSPX(constants.outtake)
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
+        
         self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
@@ -56,9 +59,10 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.liftArm.setInverted(True)
 
+
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
         self.rotateEncoder = self.rotateArm.getEncoder()
-
+        
 
         self.liftArmUpLimitSwitch = wpilib.DigitalInput(0)
         self.rotateArmBackLimitSwitch = wpilib.DigitalInput(2)
@@ -68,6 +72,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        
 
         self.driverController = wpilib.XboxController(0)
         self.operatorController = wpilib.XboxController(1)
@@ -75,9 +80,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.timer = wpilib.Timer()
         self.sd = NetworkTables.getTable("SmartDashboard")
         self.gyro = navx.AHRS.create_i2c()
+        
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
         self.container = RobotContainer(driverController=self.driverController, operatorController=self.operatorController, drive=self.drive, snowveyor=self.snowveyor)
+
 
 
 
@@ -101,11 +108,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
         print("Starting teleop...")
         self.humancontrol = True
+
         self.lspeed = 0
         self.rspeed = 0
         self.intake = 0
         self.outtake = 0
         self.climbMode = False
+
 
 
     def teleopPeriodic(self):
@@ -122,16 +131,20 @@ class MyRobot(commands2.TimedCommandRobot):
         self.straightMode = self.driverController.getLeftBumperPressed()
         self.direction = -1 if self.driverController.getRightBumperPressed() else 1
 
+
         self.lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
         self.rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
+
 
         if self.operatorController.getStartButtonPressed():
             self.climbMode = not self.climbMode
 
         if self.climbMode:
+          
             if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
                 self.liftArm.set(0.6)
             elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
+
                 self.liftArm.set(-0.6)
             else:
                 self.liftArm.set(0)
@@ -161,6 +174,7 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.lspeed = 0
                 self.rspeed = 0
             self.drive.tankDrive(self.lspeed, self.rspeed)
+
             return
 
 
@@ -211,20 +225,26 @@ class MyRobot(commands2.TimedCommandRobot):
         self.output('self.rspeed', self.rspeed)
         self.drive.tankDrive(self.lspeed, self.rspeed)
 
+
+        if abs(self.gyro.getYaw() - self.yaw) > 80:
+            self.humancontrol = True
+
+
+        self.output('lspeed', lspeed)
+        self.output('rspeed', rspeed)
+        self.drive.tankDrive(lspeed, rspeed)
+
+
+  
     def turnright90(self):
-        self.yaw = self.container.driveSystem.gyro.getYaw()
+        self.yaw = self.gyro.getYaw()
         self.motor = [0, 0.5]
         self.humancontrol = False
 
     def turnleft90(self):
-        self.yaw = self.container.driveSystem.gyro.getYaw()
+        self.yaw = self.gyro.getYaw()
         self.motor = [0, -0.5]
         self.humancontrol = False
-
-    def testInit(self) -> None:
-        # Cancels all running commands at the start of test mode
-        commands2.CommandScheduler.getInstance().cancelAll()
-
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
