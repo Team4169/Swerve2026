@@ -2,7 +2,7 @@ from subsystems.climbingsubsystem import ClimbingSubsystem
 import commands2
 import wpilib
 
-class liftArmUp(commands2.CommandBase):
+class moveLiftArm(commands2.CommandBase):
     def __init__(self, power: float, climb: ClimbingSubsystem) -> None:
         super().__init__()
         self.power = power
