@@ -1,15 +1,35 @@
-import wpilib.drive
-import ctre
-import rev
-from constants import constants
-from deadzone import addDeadzone
-from networktables import NetworkTables
-import navx
+#!/usr/bin/env python3
 
-class MyRobot(wpilib.TimedRobot):
+import typing
+import wpilib, wpilib.drive
+import commands2
+
+import ctre, navx, rev
+
+import constants
+from robotcontainer import RobotContainer
+
+from networktables import NetworkTables
+from deadzone import addDeadzone
+
+
+
+
+class MyRobot(commands2.TimedCommandRobot):
+    """
+    Our default robot class, pass it to wpilib.run
+
+    Command v2 robots are encouraged to inherit from TimedCommandRobot, which
+    has an implementation of robotPeriodic which runs the scheduler for you
+    """
+    autonomousCommand: typing.Optional[commands2.Command] = None
+
     def output(self, text, value):
       print(text + ': ' + str(value))
-      self.sd.putValue(text, str(value))
+      self.container.driveSystem.sd.putValue(text, str(value))
+
+
+class MyRobot(wpilib.TimedRobot):
 
     def robotInit(self):
 
@@ -26,20 +46,23 @@ class MyRobot(wpilib.TimedRobot):
 
         self.drive = wpilib.drive.DifferentialDrive(self.right, self.left)
 
-        self.intake = ctre.WPI_VictorSPX(constants["intake"])
-        self.outtake = ctre.WPI_VictorSPX(constants["outtake"])
+        self.intake = ctre.WPI_VictorSPX(constants.intake)
+        self.outtake = ctre.WPI_VictorSPX(constants.outtake)
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
 
-        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        
+        self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
         self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
 
         self.liftArm.setInverted(True)
 
-        self.rotateEncoder = self.rotateArm.getEncoder()
+
         self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
+        self.rotateEncoder = self.rotateArm.getEncoder()
+        
 
         self.liftArmUpLimitSwitch = wpilib.DigitalInput(0)
         self.rotateArmBackLimitSwitch = wpilib.DigitalInput(2)
@@ -49,29 +72,50 @@ class MyRobot(wpilib.TimedRobot):
 
         self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
         self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
+        
 
         self.driverController = wpilib.XboxController(0)
         self.operatorController = wpilib.XboxController(1)
-        
+
         self.timer = wpilib.Timer()
         self.sd = NetworkTables.getTable("SmartDashboard")
         self.gyro = navx.AHRS.create_i2c()
+        
+        # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        # autonomous chooser on the dashboard.
+        self.container = RobotContainer(driverController=self.driverController, operatorController=self.operatorController, drive=self.drive, snowveyor=self.snowveyor)
 
 
-    def autnomousInit(self):
-        self.timer.reset()
-        self.timer.start()
 
-    def autonomousPeriodic(self):
-        self.output('Time', self.timer.get())
 
-    def teleopInit(self):
+    def autonomousInit(self) -> None:
+        """This autonomous runs the autonomous command selected by your RobotContainer class."""
+        self.autonomousCommand = self.container.getAutonomousCommand()
+
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
+
+    def autonomousPeriodic(self) -> None:
+        """This function is called periodically during autonomous"""
+
+    def teleopInit(self) -> None:
+        # This makes sure that the autonomous stops running when
+        # teleop starts running. If you want the autonomous to
+        # continue until interrupted by another command, remove
+        # this line or comment it out.
+        if self.autonomousCommand:
+            self.autonomousCommand.cancel()
+
         print("Starting teleop...")
         self.humancontrol = True
-        self.motor = [0, 0]
+
+        self.lspeed = 0
+        self.rspeed = 0
         self.intake = 0
         self.outtake = 0
         self.climbMode = False
+
+
 
     def teleopPeriodic(self):
         self.output("limit switch", self.liftArmUpLimitSwitch.get())
@@ -87,73 +131,78 @@ class MyRobot(wpilib.TimedRobot):
         self.straightMode = self.driverController.getLeftBumperPressed()
         self.direction = -1 if self.driverController.getRightBumperPressed() else 1
 
-        lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
-        rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
+
+        self.lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
+        self.rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
+
 
         if self.operatorController.getStartButtonPressed():
             self.climbMode = not self.climbMode
 
         if self.climbMode:
-            if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants['liftArmUpLimitSwitchPressedValue']:
+          
+            if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
                 self.liftArm.set(0.6)
-            elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants['liftArmUpLimitSwitchPressedValue']:
+            elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
+
                 self.liftArm.set(-0.6)
             else:
                 self.liftArm.set(0)
                 # pass
 
-            if self.operatorController.getXButton(): # and self.rotateArmBackLimitSwitch.get() != constants["rotateArmBackLimitSwitchPressedValue"]:
+            if self.operatorController.getXButton(): # and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
                 self.rotateArm.set(-0.1)
-            elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants["rotateArmBackLimitSwitchPressedValue"]:
+            elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
                 self.rotateArm.set(0.1)
             else:
                 self.rotateArm.set(0)
 
             dir = self.operatorController.getPOV()
             if 225 < dir <= 315:
-                lspeed = 0
-                rspeed = 0.2
+                self.lspeed = 0
+                self.rspeed = 0.2
             elif 135 < dir <= 225:
-                lspeed = -0.2
-                rspeed = -0.2
+                self.lspeed = -0.2
+                self.rspeed = -0.2
             elif 45 < dir <= 135:
-                lspeed = 0.2
-                rspeed = 0
+                self.lspeed = 0.2
+                self.rspeed = 0
             elif dir <= 45:
-                lspeed = 0.2
-                rspeed = 0.2
+                self.lspeed = 0.2
+                self.rspeed = 0.2
             else:
-                lspeed = 0
-                rspeed = 0
-            self.drive.tankDrive(lspeed, rspeed)
+                self.lspeed = 0
+                self.rspeed = 0
+            self.drive.tankDrive(self.lspeed, self.rspeed)
+
             return
 
 
         if self.straightMode:
-            whichbumper = (lspeed + rspeed) / 2
-            if abs(lspeed) < 0.2:
-                whichbumper = rspeed
-            elif abs(rspeed) < 0.2:
-                whichbumper = lspeed
+            whichbumper = (self.lspeed + self.rspeed) / 2
+            if abs(self.lspeed) < 0.2:
+                whichbumper = self.rspeed
+            elif abs(self.rspeed) < 0.2:
+                whichbumper = self.lspeed
 
-            lspeed = whichbumper
-            rspeed = whichbumper
+            self.lspeed = whichbumper
+            self.rspeed = whichbumper
 
         if self.driverController.getAButton():
-            lspeed *= 0.5
-            rspeed *= 0.5
+            self.lspeed *= 0.5
+            self.rspeed *= 0.5
         elif self.driverController.getBButton():
-            lspeed *= 0.25
-            rspeed *= 0.25
+            self.lspeed *= 0.25
+            self.rspeed *= 0.25
         elif self.driverController.getYButton():
-            lspeed *= 0.1
-            rspeed *= 0.1
+            self.lspeed *= 0.1
+            self.rspeed *= 0.1
         elif self.driverController.getXButton():
             pass
 
         if self.driverController.getRightBumper():
-            lspeed *= -1
-            rspeed *= -1
+            self.lspeed *= -1
+            self.rspeed *= -1
 
         if self.operatorController.getLeftTriggerAxis() > 0.2:
             self.snowveyor.tankDrive(1,0)
@@ -166,6 +215,15 @@ class MyRobot(wpilib.TimedRobot):
 
         elif self.operatorController.getRightBumper():
             self.snowveyor.tankDrive(-1,-1)
+
+
+        if abs(self.gyro.getYaw() - self.yaw) > 80:
+            self.humancontrol = True
+
+
+        self.output('self.lspeed', self.lspeed)
+        self.output('self.rspeed', self.rspeed)
+        self.drive.tankDrive(self.lspeed, self.rspeed)
 
 
         if abs(self.gyro.getYaw() - self.yaw) > 80:
@@ -189,4 +247,4 @@ class MyRobot(wpilib.TimedRobot):
         self.humancontrol = False
 
 if __name__ == "__main__":
-  wpilib.run(MyRobot)
+    wpilib.run(MyRobot)
