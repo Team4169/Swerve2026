@@ -18,7 +18,8 @@ from commands.newPath import newPath
 from commands.newPathInverted import newPathInverted
 
 from subsystems.drivesubsystem import DriveSubsystem
-
+from subsystems.snowveyorsubsystem import SnowveyorSubsystem
+from subsystems.climbingsubsystem import ClimbingSubsystem
 
 class RobotContainer:
     """
@@ -37,6 +38,8 @@ class RobotContainer:
 
         # The robot's subsystems
         self.drive = DriveSubsystem()
+        self.snowveyor = SnowveyorSubsystem()
+        self.climb = ClimbingSubsystem()
 
         # Autonomous routines
 
@@ -49,11 +52,11 @@ class RobotContainer:
         self.complexAuto = ComplexAuto(self.drive)
 
         # A complex auto routine that drives forward, and then drives backward.
-        self.lucAutoCommand = LucAutoCommand(self.drive)
-        self.lucAutoCommand2 = LucAutoCommand2(self.drive)
+        self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
+        self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
         #simpler auto routine that drives to the second ball and places 2 into the smaller hub
-        self.newPath = newPath(self.drive)
-        self.newPathInverted = newPathInverted(self.drive)
+        self.newPath = newPath(self.drive, self.snowveyor)
+        self.newPathInverted = newPathInverted(self.drive, self.snowveyor)
 
         # Chooser
         self.chooser = wpilib.SendableChooser()

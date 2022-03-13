@@ -108,7 +108,7 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
           self.outtakeSpeed = 0
 
-        self.container.drive.snowveyor.tankDrive(self.intakeSpeed, self.outtakeSpeed)
+        self.container.snowveyor.snowveyor.tankDrive(self.intakeSpeed, self.outtakeSpeed)
 
     def turnright90(self):
         self.yaw = self.container.drive.gyro.getYaw()

@@ -45,3 +45,7 @@ kWheelRadius = 0.0508
 #SnowVeyor
 intake = 10
 outtake = 12
+
+# Climbing
+liftArm = 5
+rotateArm = 4

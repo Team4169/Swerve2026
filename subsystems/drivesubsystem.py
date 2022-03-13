@@ -69,17 +69,6 @@ class DriveSubsystem(commands2.SubsystemBase):
         # self.leftEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
         # self.rightEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
 
-        #Snowveyor
-        self.intake = ctre.WPI_VictorSPX(constants.intake)
-        self.outtake = ctre.WPI_VictorSPX(constants.outtake)
-        self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
-        #Climbing
-        
-        self.liftArm = rev.CANSparkMax(constants["liftArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        self.liftArmEncoder = self.liftArm.getEncoder()
-        self.rotateArm = rev.CANSparkMax(constants["rotateArm"], rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        self.rotateArmEncoder = self.rotateArm.getEncoder()
-
     def arcadeDrive(self, fwd: float, rot: float) -> None:
         """
         Drives the robot using arcade controls.
