@@ -106,7 +106,7 @@ class RobotContainer:
             MoveLiftArmToLimitSwitch(.5, self.climb)
         )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenPressed(
-            MoveLiftArmPastLocation(500, True, .5, self.climb)
+            MoveLiftArmPastLocation(-500, False, .5, self.climb)
         )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenPressed(
             LiftArmToTop(self.climb)

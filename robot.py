@@ -66,7 +66,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.output('Drive X', self.container.driverController.getLeftX())
         # self.output('Drive Y', self.container.driverController.getLeftY())
         # self.output('Gyro Yaw', self.container.drive.gyro.getYaw())
-
+        self.output("lift encoder", self.container.climb.liftEncoder.getPosition())
         # driveController
         if self.container.driverController.getPOV() == 90:
             self.turnright90()

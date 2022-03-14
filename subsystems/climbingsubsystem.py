@@ -9,6 +9,7 @@ import rev
 class ClimbingSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
+        # commands2.SubsystemBase.__init__(self)
         self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
