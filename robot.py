@@ -115,11 +115,11 @@ class MyRobot(wpilib.TimedRobot):
 
         print("Starting teleop...")
         self.humancontrol = True
-        self.lspeed = 0
-        self.rspeed = 0
+        self.speed = 0
         self.intake = 0
         self.outtake = 0
         self.climbMode = False
+        self.direction = 0
 
 
 
@@ -134,19 +134,17 @@ class MyRobot(wpilib.TimedRobot):
         # self.output('Lift Encoder', self.liftEncoder.getPosition())
         # self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
-        self.straightMode = self.driverController.getLeftBumperPressed()
-        self.direction = -1 if self.driverController.getRightBumperPressed() else 1
+        if self.driverController.getLeftBumperPressed():
+            self.direction = 0
+        else:
+            self.direction = self.driverController.getLeftY()
 
-
-        self.lspeed = addDeadzone(self.driverController.getLeftTriggerAxis()) * self.direction
-        self.rspeed = addDeadzone(self.driverController.getRightTriggerAxis()) * self.direction
-
-
+        self.speed = addDeadzone(getLeftY())
         if self.operatorController.getStartButtonPressed():
             self.climbMode = not self.climbMode
 
         if self.climbMode:
-          
+
             if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
                 self.liftArm.set(0.6)
             elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
@@ -184,31 +182,15 @@ class MyRobot(wpilib.TimedRobot):
             return
 
 
-        if self.straightMode:
-            whichbumper = (self.lspeed + self.rspeed) / 2
-            if abs(self.lspeed) < 0.2:
-                whichbumper = self.rspeed
-            elif abs(self.rspeed) < 0.2:
-                whichbumper = self.lspeed
-
-            self.lspeed = whichbumper
-            self.rspeed = whichbumper
-
         if self.driverController.getAButton():
-            self.lspeed *= 0.5
-            self.rspeed *= 0.5
+            self.speed *= 0.5
         elif self.driverController.getBButton():
-            self.lspeed *= 0.25
-            self.rspeed *= 0.25
+            self.speed *= 0.25
         elif self.driverController.getYButton():
-            self.lspeed *= 0.1
-            self.rspeed *= 0.1
+            self.speed *= 0.1
         elif self.driverController.getXButton():
             pass
 
-        if self.driverController.getRightBumper():
-            self.lspeed *= -1
-            self.rspeed *= -1
 
         if self.operatorController.getLeftTriggerAxis() > 0.2:
             self.snowveyor.tankDrive(1,0)
@@ -228,9 +210,7 @@ class MyRobot(wpilib.TimedRobot):
 
 
 
-        self.output('lspeed', self.lspeed)
-        self.output('rspeed', self.rspeed)
-        self.drive.tankDrive(self.lspeed, self.rspeed)
+        self.drive.arcadeDrive(self.speed)
 
 
     def turnright90(self):
