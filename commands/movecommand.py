@@ -11,8 +11,8 @@ class MoveCommand(commands2.CommandBase):
         self.drive = drive
         self.distance = distance * self.drive.tpf
         self.heading = heading
-        print("distance goal", distance)
-        print("turn goal", heading)
+        # print("distance goal", distance)
+        # print("turn goal", heading)
         self.goal_threshold_ticks = 25 # I believe 50 ticks per second, confirm.
         self.addRequirements(drive)
 
