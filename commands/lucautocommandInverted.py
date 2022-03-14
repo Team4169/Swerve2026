@@ -33,11 +33,4 @@ class LucAutoCommand2(commands2.SequentialCommandGroup):
             MoveCommand(-1, -67.5, drive),
             dropOff(2, 0.3, snowveyor),
             MoveCommand(1, -67.5, drive),
-            # DriveDistance(
-            #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, drive
-            # ),
-            # # Drive backward the specified distance
-            # DriveDistance(
-            #     constants.kAutoBackupDistanceInches, -constants.kAutoDriveSpeed, drive
-            # ),
         )

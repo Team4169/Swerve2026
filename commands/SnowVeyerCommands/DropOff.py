@@ -1,9 +1,9 @@
-from subsystems.snowveyorsubsystem import SnowveyorSubsystem
+from wpilib.drive import DifferentialDrive
 import commands2
 import wpilib
 
 class dropOff(commands2.CommandBase):
-    def __init__(self, duration: float, speed: float, snowveyor: SnowveyorSubsystem) -> None:
+    def __init__(self, duration: float, speed: float, snowveyor: DifferentialDrive) -> None:
         super().__init__()
         self.snowveyor = snowveyor
         self.speed = speed

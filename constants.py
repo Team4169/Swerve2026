@@ -1,11 +1,3 @@
-#
-# The constants module is a convenience place for teams to hold robot-wide
-# numerical or boolean constants. Don't use this for any other purpose!
-#
-
-import math
-import wpilib
-
 # Motors
 leftTalon = 1
 leftVictor = 2
@@ -17,6 +9,9 @@ kLeftEncoderPorts = (0, 1)
 kRightEncoderPorts = (2, 3)
 kLeftEncoderReversed = False
 kRightEncoderReversed = True
+
+tpf = -924
+
 
 kEncoderCPR = 1024
 kWheelDiameterInches = 6
@@ -59,6 +54,7 @@ rotateArmBackLimitSwitchPressedValue = False
 rotateArmRobotLimitSwitch = 3
 rotateArmRobotLimitSwitchPressedValue = False
 
+
 liftArmSlowSpeed = .1
 liftArmFastSpeed = .5
 liftArmCloseToBottomTicks = -100
@@ -68,3 +64,7 @@ rotateArmSlowSpeed = .05
 rotateArmFastSpeed = .1
 rotateArmCloseToRobotTicks = 50
 rotateArmCloseToBackTicks = 100
+
+
+deadzone = 0.1
+
