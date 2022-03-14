@@ -228,12 +228,6 @@ class MyRobot(wpilib.TimedRobot):
             self.humancontrol = True
 
 
-        self.output('self.lspeed', self.lspeed)
-        self.output('self.rspeed', self.rspeed)
-
-        if abs(self.gyro.getYaw() - self.yaw) > 80:
-            self.humancontrol = True
-
 
         self.output('lspeed', self.lspeed)
         self.output('rspeed', self.rspeed)
