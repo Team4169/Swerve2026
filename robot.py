@@ -115,7 +115,6 @@ class MyRobot(wpilib.TimedRobot):
 
         print("Starting teleop...")
         self.humancontrol = True
-
         self.lspeed = 0
         self.rspeed = 0
         self.intake = 0
@@ -234,7 +233,6 @@ class MyRobot(wpilib.TimedRobot):
         self.drive.tankDrive(self.lspeed, self.rspeed)
 
 
-  
     def turnright90(self):
         self.yaw = self.gyro.getYaw()
         self.motor = [0, 0.5]

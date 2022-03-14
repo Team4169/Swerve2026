@@ -2,7 +2,7 @@ from subsystems.climbingsubsystem import ClimbingSubsystem
 import commands2
 
 
-class MoveLiftArm(commands2.CommandBase):
+class MoveRotateArmToLimitSwitch(commands2.CommandBase):
     def __init__(self, power: float, climb: ClimbingSubsystem) -> None:
         super().__init__()
         self.power = power
@@ -13,7 +13,11 @@ class MoveLiftArm(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        self.climb.setLiftArm(self.power)
+        print("excuting MoveRotateArmToLimitSwitch")
+        self.climb.setRotateArm(self.power)
 
     def end(self, interrupted: bool) -> None:
-        self.climb.setLiftArm(0)
+        self.climb.setRotateArm(0)
+
+    def isFinished(self) -> bool:
+        return self.climb.getRotateArmLimitSwitchPressed()

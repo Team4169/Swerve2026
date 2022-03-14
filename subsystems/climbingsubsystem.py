@@ -9,8 +9,10 @@ import rev
 class ClimbingSubsystem(commands2.SubsystemBase):
     def __init__(self, liftArm, rotateArm, liftEncoder, rotateEncoder, liftArmUpLimitSwitch, rotateArmRobotLimitSwitch, liftArmDownLimitSwitch, rotateArmBackLimitSwitch) -> None:
         super().__init__()
+
         self.liftArm = liftArm
         self.rotateArm = rotateArm
+
 
 
 
