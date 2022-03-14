@@ -9,6 +9,7 @@ class MoveRotateArmPastLocation(commands2.CommandBase):
         self.above = above
         self.power = power
         self.climb = climb
+        self.addRequirements([self.climb])
 
     def initialize(self):
         pass
