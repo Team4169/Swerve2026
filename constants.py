@@ -58,3 +58,13 @@ rotateArmBackLimitSwitch = 2
 rotateArmBackLimitSwitchPressedValue = False
 rotateArmRobotLimitSwitch = 3
 rotateArmRobotLimitSwitchPressedValue = False
+
+liftArmSlowSpeed = .1
+liftArmFastSpeed = .5
+liftArmCloseToBottomTicks = -100
+liftArmCloseToTopTicks = -500
+
+rotateArmSlowSpeed = .05
+rotateArmFastSpeed = .1
+rotateArmCloseToRobotTicks = 50
+rotateArmCloseToBackTicks = 100
