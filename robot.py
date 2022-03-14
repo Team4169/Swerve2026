@@ -97,19 +97,6 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.container.drive.arcadeDrive(self.motor[0], self.motor[1])
 
-        # snowveyorController
-        if self.container.snowveyorController.getRightBumper():
-          self.intakeSpeed = 1
-        else:
-          self.intakeSpeed = 0
-
-        if self.container.snowveyorController.getLeftBumper():
-          self.outtakeSpeed = 1
-        else:
-          self.outtakeSpeed = 0
-
-        self.container.snowveyor.tankDrive(self.intakeSpeed, self.outtakeSpeed)
-
     def turnright90(self):
         self.yaw = self.container.drive.gyro.getYaw()
         self.motor = [0, 0.5]
