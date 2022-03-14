@@ -32,7 +32,7 @@ class RobotContainer:
     subsystems, commands, and button mappings) should be declared here.
     """
 
-    def __init__(self, driverController, operatorController, drive, snowveyor) -> None:
+    def __init__(self, driverController, operatorController, drive, snowveyor, liftArm, rotateArm, liftEncoder, rotateEncoder, liftArmUpLimitSwitch, rotateArmRobotLimitSwitch, rotateArmBackLimitSwitch, liftArmDownLimitSwitch) -> None:
 
         # Init controllers
         self.driverController = driverController
@@ -41,8 +41,16 @@ class RobotContainer:
         # The robot's subsystems
         self.driveSystem = DriveSubsystem(drive=drive)
         self.snowveyor = snowveyor
-        self.climb = ClimbingSubsystem()
-
+        self.climb = ClimbingSubsystem(
+            liftArm=liftArm,
+            rotateArm=rotateArm,
+            liftEncoder=liftEncoder,
+            rotateEncoder=rotateEncoder,
+            liftArmUpLimitSwitch=liftArmUpLimitSwitch,
+            rotateArmRobotLimitSwitch=rotateArmRobotLimitSwitch,
+            rotateArmBackLimitSwitch=rotateArmBackLimitSwitch,
+            liftArmDownLimitSwitch=liftArmDownLimitSwitch
+        )
         # Autonomous routines
 
         # A simple auto routine that drives forward a specified distance, and then stops.

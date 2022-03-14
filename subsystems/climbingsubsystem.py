@@ -7,23 +7,20 @@ import rev
 
 
 class ClimbingSubsystem(commands2.SubsystemBase):
-    def __init__(self) -> None:
+    def __init__(self, liftArm, rotateArm, liftEncoder, rotateEncoder, liftArmUpLimitSwitch, rotateArmRobotLimitSwitch, liftArmDownLimitSwitch, rotateArmBackLimitSwitch) -> None:
         super().__init__()
-        self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.liftArm = liftArm
+        self.rotateArm = rotateArm
 
-        self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
-        self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
 
-        self.liftArm.setInverted(True)
 
-        self.rotateEncoder = self.rotateArm.getEncoder()
-        self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
+        self.rotateEncoder = rotateEncoder
+        self.liftEncoder = liftEncoder
 
-        self.liftArmUpLimitSwitch = wpilib.DigitalInput(constants.liftArmUpLimitSwitch)
-        self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
-        self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
-        self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
+        self.liftArmUpLimitSwitch = liftArmUpLimitSwitch
+        self.liftArmDownLimitSwitch = liftArmDownLimitSwitch
+        self.rotateArmBackLimitSwitch = rotateArmBackLimitSwitch
+        self.rotateArmRobotLimitSwitch = rotateArmRobotLimitSwitch
 
         # smartdashboard
         self.sd = NetworkTables.getTable("SmartDashboard")

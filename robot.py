@@ -3,7 +3,6 @@
 import typing
 import wpilib, wpilib.drive
 import commands2
-
 import ctre, navx, rev
 
 import constants
@@ -15,13 +14,8 @@ from deadzone import addDeadzone
 
 
 
-class MyRobot(commands2.TimedCommandRobot):
-    """
-    Our default robot class, pass it to wpilib.run
+class MyRobot(wpilib.TimedRobot):
 
-    Command v2 robots are encouraged to inherit from TimedCommandRobot, which
-    has an implementation of robotPeriodic which runs the scheduler for you
-    """
     autonomousCommand: typing.Optional[commands2.Command] = None
 
     def output(self, text, value):
@@ -29,17 +23,15 @@ class MyRobot(commands2.TimedCommandRobot):
       self.container.driveSystem.sd.putValue(text, str(value))
 
 
-class MyRobot(wpilib.TimedRobot):
-
     def robotInit(self):
 
-        self.leftTalon = ctre.WPI_TalonSRX(constants["leftTalon"])
-        self.leftVictor = ctre.WPI_VictorSPX(constants["leftVictor"])
+        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
+        self.leftVictor = ctre.WPI_VictorSPX(constants.leftVictor)
         self.leftVictor.setInverted(True)
         self.leftTalon.setInverted(True)
 
-        self.rightTalon = ctre.WPI_TalonSRX(constants["rightTalon"])
-        self.rightVictor = ctre.WPI_VictorSPX(constants["rightVictor"])
+        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
+        self.rightVictor = ctre.WPI_VictorSPX(constants.rightVictor)
 
         self.left = wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor)
         self.right = wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor)
@@ -65,6 +57,9 @@ class MyRobot(wpilib.TimedRobot):
         
 
         self.liftArmUpLimitSwitch = wpilib.DigitalInput(0)
+        self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
+
+        self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
         self.rotateArmBackLimitSwitch = wpilib.DigitalInput(2)
 
         self.yaw = 0
@@ -83,7 +78,19 @@ class MyRobot(wpilib.TimedRobot):
         
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
-        self.container = RobotContainer(driverController=self.driverController, operatorController=self.operatorController, drive=self.drive, snowveyor=self.snowveyor)
+        self.container = RobotContainer(driverController=self.driverController,
+                                        operatorController=self.operatorController,
+                                        drive=self.drive,
+                                        snowveyor=self.snowveyor,
+                                        liftArm=self.liftArm,
+                                        rotateArm=self.rotateArm,
+                                        liftEncoder=self.liftEncoder,
+                                        rotateEncoder=self.rotateEncoder,
+                                        liftArmUpLimitSwitch=self.liftArmUpLimitSwitch,
+                                        rotateArmBackLimitSwitch=self.rotateArmBackLimitSwitch,
+                                        liftArmDownLimitSwitch= self.liftArmDownLimitSwitch,
+                                        rotateArmRobotLimitSwitch=self.rotateArmRobotLimitSwitch
+                                        )
 
 
 
