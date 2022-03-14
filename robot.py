@@ -237,9 +237,9 @@ class MyRobot(wpilib.TimedRobot):
             self.humancontrol = True
 
 
-        self.output('lspeed', lspeed)
-        self.output('rspeed', rspeed)
-        self.drive.tankDrive(lspeed, rspeed)
+        self.output('lspeed', self.lspeed)
+        self.output('rspeed', self.rspeed)
+        self.drive.tankDrive(self.lspeed, self.rspeed)
 
 
   
