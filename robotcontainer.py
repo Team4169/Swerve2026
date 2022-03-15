@@ -23,6 +23,7 @@ from commands.SnowVeyerCommands.intake import Intake
 from commands.SnowVeyerCommands.outtake import Outtake
 
 
+from commands.climbingCommands.moveRotateArm import MoveRotateArm
 from commands.climbingCommands.moveLiftArm import MoveLiftArm
 from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimitSwitch
 from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
@@ -99,18 +100,27 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            MoveLiftArm(.5, self.climb)
+        )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
             MoveLiftArm(-.5, self.climb)
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenPressed(
-            MoveLiftArmToLimitSwitch(.5, self.climb)
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
+            MoveRotateArm(.5, self.climb)
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenPressed(
-            MoveLiftArmPastLocation(-500, False, .5, self.climb)
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
+            MoveRotateArm(-.5, self.climb)
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenPressed(
-            LiftArmToTop(self.climb)
-        )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenPressed(
+        #     MoveLiftArmToLimitSwitch(.5, self.climb)
+        # )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenPressed(
+        #     MoveLiftArmPastLocation(-500, False, .5, self.climb)
+        # )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenPressed(
+        #     LiftArmToTop(self.climb)
+        # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
             Intake(1.0, self.snowveyor)
         )
