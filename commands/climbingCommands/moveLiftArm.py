@@ -7,7 +7,6 @@ class MoveLiftArm(commands2.CommandBase):
         super().__init__()
         self.power = power
         self.climb = climb
-        self.addRequirements([self.climb])
 
     def initialize(self):
         pass

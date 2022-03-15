@@ -6,7 +6,6 @@ class Intake(commands2.CommandBase):
         super().__init__()
         self.snowveyor = snowveyor
         self.speed = speed
-        self.addRequirements([self.snowveyor])
 
     def initialize(self) -> None:
         pass

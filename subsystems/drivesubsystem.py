@@ -7,9 +7,8 @@ from networktables import NetworkTables
 import wpimath.controller
 import navx
 import rev
-import constants
 class DriveSubsystem(commands2.SubsystemBase):
-    def __init__(self, drive) -> None:
+    def __init__(self) -> None:
         super().__init__()
 
         self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
@@ -17,7 +16,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
         self.rightVictor = ctre.WPI_TalonSRX(constants.rightVictor)
 
-
+        self.tpf = -924
         self.maxDriveSpeed = 0.6
         self.maxTurnSpeed = 0.5
 
@@ -37,7 +36,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.DrivekI = self.sd.getValue("DrivekI", 0.02)
         self.DrivekD = self.sd.getValue("DrivekD", 0.0005)
         self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
-        self.driveController.setTolerance(-0.1 * constants.tpf)
+        self.driveController.setTolerance(-0.1 * self.tpf)
 
         # gyro
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
