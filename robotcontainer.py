@@ -43,15 +43,52 @@ class RobotContainer:
 
     def __init__(self) -> None:
 
-        # The driver's controller
         self.driverController = wpilib.XboxController(constants.kDriverControllerPort)
-        # self.driverController = wpilib.Joystick(constants.kDriverControllerPort)
         self.operatorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
 
+        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
+        self.leftVictor = ctre.WPI_TalonSRX(constants.leftVictor)
+        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
+        self.rightVictor = ctre.WPI_TalonSRX(constants.rightVictor)
+
+        self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+
+        self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
+        self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
+
+        self.liftArm.setInverted(True)
+
+        self.rotateEncoder = self.rotateArm.getEncoder()
+        self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
+
+        self.liftArmUpLimitSwitch = wpilib.DigitalInput(constants.liftArmUpLimitSwitch)
+        self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
+        self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
+        self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
+
+        self.intake = ctre.WPI_VictorSPX(constants.intake)
+        self.outtake = ctre.WPI_VictorSPX(constants.outtake)
+        self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+
         # The robot's subsystems
-        self.drive = DriveSubsystem()
-        self.snowveyor = SnowveyorSubsystem()
-        self.climb = ClimbingSubsystem()
+        self.drive = DriveSubsystem(leftTalon=self.leftTalon,
+                                    leftVictor=self.leftVictor,
+                                    rightTalon=self.rightTalon,
+                                    rightVictor=self.rightVictor)
+
+        self.snowveyor = SnowveyorSubsystem(intake=self.intake,
+                                            outtake=self.outtake,
+                                            snowveyor=self.snowveyor)
+
+        self.climb = ClimbingSubsystem(liftArm=self.liftArm,
+                                       rotateArm=self.rotateArm,
+                                       liftEncoder=self.liftEncoder,
+                                       rotateEncoder=self.rotateEncoder,
+                                       liftArmUpLimitSwitch=self.liftArmUpLimitSwitch,
+                                       liftArmDownLimitSwitch=self.liftArmDownLimitSwitch,
+                                       rotateArmBackLimitSwitch=self.rotateArmBackLimitSwitch,
+                                       rotateArmRobotLimitSwitch=self.rotateArmRobotLimitSwitch)
 
         # Autonomous routines
 
@@ -83,7 +120,7 @@ class RobotContainer:
         # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomous", self.chooser)
 
-        self.configureButtonBindings()
+        # self.configureButtonBindings()
 
         # set up default drive command
         # self.drive.setDefaultCommand(

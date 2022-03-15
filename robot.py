@@ -31,6 +31,31 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
 
+        self.driverController = self.container.driverController
+        self.operatorController = self.container.operatorController
+
+        self.leftTalon = self.container.leftTalon
+        self.leftVictor = self.container.leftVictor
+        self.rightTalon = self.container.rightTalon
+        self.rightVictor = self.container.rightVictor
+
+        self.liftArm = self.container.liftArm
+        self.rotateArm = self.container.rotateArm
+
+        self.rotateEncoder = self.container.rotateEncoder
+        self.liftEncoder = self.container.liftEncoder
+
+        self.liftArmUpLimitSwitch = self.container.liftArmUpLimitSwitch
+        self.liftArmDownLimitSwitch = self.container.liftArmDownLimitSwitch
+        self.rotateArmBackLimitSwitch = self.container.rotateArmBackLimitSwitch
+        self.rotateArmRobotLimitSwitch = self.container.rotateArmRobotLimitSwitch
+
+        self.intake = self.container.intake
+        self.outtake = self.container.outtake
+        self.snowveyor = self.container.snowveyor
+
+
+
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
 
@@ -56,7 +81,6 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
 
         print("Starting teleop...")
-        self.speed = [1, 1]
         self.humancontrol = True
         self.speed = 0
         self.intake = 0
@@ -76,23 +100,24 @@ class MyRobot(commands2.TimedCommandRobot):
         self.speed = addDeadzone(getLeftY())
         if self.operatorController.getStartButtonPressed():
             self.climbMode = not self.climbMode
+            self.container.configureButtonBindings()
 
         if self.climbMode:
 
-            if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
-                self.liftArm.set(0.6)
-            elif self.operatorController.getAButton() and self.liftArmDownLimitSwitch != constants.liftArmDownLimitSwitchPressedValue:
-                self.liftArm.set(-0.6)
-            else:
-                self.liftArm.set(0)
-                # pass
-
-            if self.operatorController.getXButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
-                self.rotateArm.set(-0.1)
-            elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
-                self.rotateArm.set(0.1)
-            else:
-                self.rotateArm.set(0)
+            # if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
+            #     self.liftArm.set(0.6)
+            # elif self.operatorController.getAButton() and self.liftArmDownLimitSwitch != constants.liftArmDownLimitSwitchPressedValue:
+            #     self.liftArm.set(-0.6)
+            # else:
+            #     self.liftArm.set(0)
+            #     # pass
+            #
+            # if self.operatorController.getXButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
+            #     self.rotateArm.set(-0.1)
+            # elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
+            #     self.rotateArm.set(0.1)
+            # else:
+            #     self.rotateArm.set(0)
 
             dir = self.operatorController.getPOV()
             self.speed = 0.2
