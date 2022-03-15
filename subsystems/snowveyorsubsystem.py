@@ -7,16 +7,15 @@ from networktables import NetworkTables
 import wpimath.controller
 
 class SnowveyorSubsystem(commands2.SubsystemBase):
-    def __init__(self) -> None:
+    def __init__(self, intake, outtake, snowveyor) -> None:
         super().__init__()
 
         # smartdashboard
         self.sd = NetworkTables.getTable("SmartDashboard")
 
-        # Snowveyor
-        self.intake = ctre.WPI_VictorSPX(constants.intake)
-        self.outtake = ctre.WPI_VictorSPX(constants.outtake)
-        self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+        self.intake = intake
+        self.outtake = outtake
+        self.snowveyor = snowveyor
 
     def tankDrive(self, intakespeed: float, outtakespeed: float) -> None:
         """

@@ -8,13 +8,13 @@ import wpimath.controller
 import navx
 import rev
 class DriveSubsystem(commands2.SubsystemBase):
-    def __init__(self) -> None:
+    def __init__(self, leftTalon, leftVictor, rightTalon, rightVictor) -> None:
         super().__init__()
 
-        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
-        self.leftVictor = ctre.WPI_TalonSRX(constants.leftVictor)
-        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
-        self.rightVictor = ctre.WPI_TalonSRX(constants.rightVictor)
+        self.leftTalon = leftTalon
+        self.leftVictor = leftVictor
+        self.rightTalon = rightTalon
+        self.rightVictor = rightVictor
 
         self.tpf = -924
         self.maxDriveSpeed = 0.6

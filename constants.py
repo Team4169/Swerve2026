@@ -68,3 +68,5 @@ rotateArmSlowSpeed = .05
 rotateArmFastSpeed = .1
 rotateArmCloseToRobotTicks = 50
 rotateArmCloseToBackTicks = 100
+
+deadzone = .1
