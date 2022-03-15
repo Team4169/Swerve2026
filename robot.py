@@ -142,13 +142,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
         if self.driverController.getAButton():
-            self.speed *= 0.5
+            self.speed *= 0.75
         elif self.driverController.getBButton():
-            self.speed *= 0.25
+            self.speed *= 0.5
         elif self.driverController.getYButton():
-            self.speed *= 0.1
+            self.speed *= 0.3
         elif self.driverController.getXButton():
-            pass
+            self.speed = 0
 
 
         if self.operatorController.getLeftTriggerAxis() > 0.2:
