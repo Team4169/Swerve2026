@@ -87,7 +87,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         """Gets the average distance of the TWO encoders."""
         self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
         self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-        return (self.leftTalon.getSelectedSensorPosition()  * 12 / -900)
+        return (self.leftTalon.getSelectedSensorPosition()  * 12 / self.tpf)
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""
