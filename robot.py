@@ -138,14 +138,13 @@ class MyRobot(wpilib.TimedRobot):
 
             if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
                 self.liftArm.set(0.6)
-            elif self.operatorController.getAButton(): # and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
-
+            elif self.operatorController.getAButton() and self.liftArmDownLimitSwitch != constants.liftArmDownLimitSwitchPressedValue:
                 self.liftArm.set(-0.6)
             else:
                 self.liftArm.set(0)
                 # pass
 
-            if self.operatorController.getXButton(): # and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
+            if self.operatorController.getXButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
                 self.rotateArm.set(-0.1)
             elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
                 self.rotateArm.set(0.1)
@@ -153,22 +152,19 @@ class MyRobot(wpilib.TimedRobot):
                 self.rotateArm.set(0)
 
             dir = self.operatorController.getPOV()
+            self.speed = 0.2
             if 225 < dir <= 315:
-                self.lspeed = 0
-                self.rspeed = 0.2
+                self.direction = -1
             elif 135 < dir <= 225:
-                self.lspeed = -0.2
-                self.rspeed = -0.2
+                self.speed *= -1
+                self.direction = 0
             elif 45 < dir <= 135:
-                self.lspeed = 0.2
-                self.rspeed = 0
+                self.direction = 1
             elif dir <= 45:
-                self.lspeed = 0.2
-                self.rspeed = 0.2
+                self.direction = 0
             else:
-                self.lspeed = 0
-                self.rspeed = 0
-            self.drive.tankDrive(self.lspeed, self.rspeed)
+                self.speed = 0
+            self.drive.tankDrive(self.speed, self.rspeed)
 
             return
 
