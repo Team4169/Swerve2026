@@ -58,44 +58,90 @@ class MyRobot(commands2.TimedCommandRobot):
         print("Starting teleop...")
         self.speed = [1, 1]
         self.humancontrol = True
-        self.motor = [0, 0]
-        self.intakeSpeed = 0
-        self.outtakeSpeed = 0
+        self.speed = 0
+        self.intake = 0
+        self.outtake = 0
+        self.climbMode = False
+        self.direction = 0
 
-    def teleopPeriodic(self) -> None:
-        self.output('Drive X', self.container.driverController.getLeftX())
-        self.output('Drive Y', self.container.driverController.getLeftY())
-        self.output('Gyro Yaw', self.container.drive.gyro.getYaw())
-        self.output("lift encoder", self.container.climb.liftEncoder.getPosition())
-        # driveController
-        if self.container.driverController.getPOV() == 90:
-            self.turnright90()
 
-        if self.container.driverController.getPOV() == 270:
-            self.turnleft90()
 
-        if self.container.driverController.getYButton():
-            self.speed = [1, 1]
-        elif self.container.driverController.getBButton():
-            self.speed = [0.8, 0.8]
-        elif self.container.driverController.getAButton():
-            self.speed = [0.6, 0.6]
-        elif self.container.driverController.getXButton():
-            self.speed = [0.4, 0.4]
+    def teleopPeriodic(self):
 
-        if self.container.driverController.getLeftBumperPressed():
-            self.speed[1] = 0
-
-        if self.container.driverController.getRightBumperPressed():
-            self.speed = [-self.speed[0], -self.speed[1]]
-
-        if self.humancontrol:
-            self.motor = [self.container.driverController.getLeftY() * self.speed[0], self.container.driverController.getLeftX() * self.speed[1]]
+        if self.driverController.getLeftBumperPressed():
+            self.direction = 0
         else:
-            if abs(self.container.drive.gyro.getYaw() - self.yaw) > 80:
-                self.humancontrol = True
+            self.direction = self.driverController.getLeftY()
 
-        self.container.drive.arcadeDrive(self.motor[0], self.motor[1])
+        self.speed = addDeadzone(getLeftY())
+        if self.operatorController.getStartButtonPressed():
+            self.climbMode = not self.climbMode
+
+        if self.climbMode:
+
+            if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
+                self.liftArm.set(0.6)
+            elif self.operatorController.getAButton() and self.liftArmDownLimitSwitch != constants.liftArmDownLimitSwitchPressedValue:
+                self.liftArm.set(-0.6)
+            else:
+                self.liftArm.set(0)
+                # pass
+
+            if self.operatorController.getXButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
+                self.rotateArm.set(-0.1)
+            elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
+                self.rotateArm.set(0.1)
+            else:
+                self.rotateArm.set(0)
+
+            dir = self.operatorController.getPOV()
+            self.speed = 0.2
+            if 225 < dir <= 315:
+                self.direction = -1
+            elif 135 < dir <= 225:
+                self.speed *= -1
+                self.direction = 0
+            elif 45 < dir <= 135:
+                self.direction = 1
+            elif dir <= 45:
+                self.direction = 0
+            else:
+                self.speed = 0
+            self.drive.tankDrive(self.speed, self.rspeed)
+
+            return
+
+
+        if self.driverController.getAButton():
+            self.speed *= 0.5
+        elif self.driverController.getBButton():
+            self.speed *= 0.25
+        elif self.driverController.getYButton():
+            self.speed *= 0.1
+        elif self.driverController.getXButton():
+            pass
+
+
+        if self.operatorController.getLeftTriggerAxis() > 0.2:
+            self.snowveyor.tankDrive(1,0)
+
+        elif self.operatorController.getRightTriggerAxis() > 0.2:
+            self.snowveyor.tankDrive(1,-1)
+
+        elif self.operatorController.getLeftBumper():
+            self.snowveyor.tankDrive(-1,0)
+
+        elif self.operatorController.getRightBumper():
+            self.snowveyor.tankDrive(-1,-1)
+
+
+        if abs(self.gyro.getYaw() - self.yaw) > 80:
+            self.humancontrol = True
+
+
+
+        self.drive.arcadeDrive(self.speed, self.direction)
+
 
     def turnright90(self):
         self.yaw = self.container.drive.gyro.getYaw()
