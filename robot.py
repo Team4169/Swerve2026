@@ -124,15 +124,6 @@ class MyRobot(wpilib.TimedRobot):
 
 
     def teleopPeriodic(self):
-        self.output("limit switch", self.liftArmUpLimitSwitch.get())
-        self.output("limit switch 2", self.rotateArmBackLimitSwitch.get())
-        # self.output('Drive X', self.driverController.getLeftX())
-        # self.output('Drive Y', self.driverController.getLeftY())
-        # self.output('Gyro Yaw', self.gyro.getYaw())
-        # # self.output('Left Encoder', self.leftTalon.getSelectedSensorPosition())
-        # # self.output('Right Encoder', self.rightTalon.getSelectedSensorPosition())
-        # self.output('Lift Encoder', self.liftEncoder.getPosition())
-        # self.output('Rotate Encoder', self.rotateEncoder.getPosition())
 
         if self.driverController.getLeftBumperPressed():
             self.direction = 0
@@ -210,7 +201,7 @@ class MyRobot(wpilib.TimedRobot):
 
 
 
-        self.drive.arcadeDrive(self.speed)
+        self.drive.arcadeDrive(self.speed, self.direction)
 
 
     def turnright90(self):

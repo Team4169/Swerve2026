@@ -2,4 +2,9 @@ import constants
 
 def addDeadzone(val):
     threshold = constants.deadzone
-    return (val * (1 + threshold)) - threshold
+    if val > 0:
+        return (val * (1 + threshold)) - threshold
+    elif val < 0:
+        return (val * (1 - threshold)) - threshold
+    else:
+        return 0
