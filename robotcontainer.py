@@ -29,6 +29,8 @@ from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimi
 from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
 from commands.climbingCommands.liftArmToTop import LiftArmToTop
 
+from commands.doNothing import DoNothing
+
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from subsystems.climbingsubsystem import ClimbingSubsystem
@@ -133,7 +135,7 @@ class RobotContainer:
         #     )
         # )
 
-    def configureButtonBindings(self):
+    def bindClimbMode(self):
         """
         Use this method to define your button->command mappings. Buttons can be created by
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
@@ -157,21 +159,27 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
            coastRotateArm(self.coastBool, self.climb)
         )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
-        #     MoveLiftArm(-500, False, .5, self.climb)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
-        #     LiftArmToTop(self.climb)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
-        #     Intake(1.0, self.snowveyor)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whenHeld(
-        #     Outtake(1.0, self.snowveyor)
-        # )
-        # commands2.button.JoystickButton(self.driverController, 3).whenHeld(
-        #     HalveDriveSpeed(self.drive)
-        # )
+
+    def unbindClimbMode(self):
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
+            DoNothing()
+        )
+
 
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()

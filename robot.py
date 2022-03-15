@@ -105,27 +105,15 @@ class MyRobot(commands2.TimedCommandRobot):
             self.direction = self.driverController.getLeftX()
 
         self.speed = addDeadzone(self.driverController.getLeftY())
+
         if self.operatorController.getStartButtonPressed():
             self.climbMode = not self.climbMode
-            self.container.configureButtonBindings()
+            if self.climbMode:
+                self.container.bindClimbMode()
+            else:
+                self.container.unbindClimbMode()
 
         if self.climbMode:
-
-            # if self.operatorController.getYButton() and self.liftArmUpLimitSwitch.get() != constants.liftArmUpLimitSwitchPressedValue:
-            #     self.liftArm.set(0.6)
-            # elif self.operatorController.getAButton() and self.liftArmDownLimitSwitch != constants.liftArmDownLimitSwitchPressedValue:
-            #     self.liftArm.set(-0.6)
-            # else:
-            #     self.liftArm.set(0)
-            #     # pass
-            #
-            # if self.operatorController.getXButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
-            #     self.rotateArm.set(-0.1)
-            # elif self.operatorController.getBButton() and self.rotateArmBackLimitSwitch.get() != constants.rotateArmBackLimitSwitchPressedValue:
-            #     self.rotateArm.set(0.1)
-            # else:
-            #     self.rotateArm.set(0)
-
             dir = self.operatorController.getPOV()
             self.speed = 0.2
             if 225 < dir <= 315:
@@ -140,7 +128,6 @@ class MyRobot(commands2.TimedCommandRobot):
             else:
                 self.speed = 0
             self.drive.arcadeDrive(self.speed, self.direction)
-
             return
 
 
@@ -167,23 +154,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.snowveyor.tankDrive(-1,-1)
 
 
-        # if abs(self.gyro.getYaw() - self.yaw) > 80:
-        #     self.humancontrol = True
-
-
-
         self.drive.arcadeDrive(self.speed, self.direction)
 
-
-    def turnright90(self):
-        self.yaw = self.container.drive.gyro.getYaw()
-        self.motor = [0, 0.5]
-        self.humancontrol = False
-
-    def turnleft90(self):
-        self.yaw = self.container.drive.gyro.getYaw()
-        self.motor = [0, -0.5]
-        self.humancontrol = False
 
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
