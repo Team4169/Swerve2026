@@ -9,13 +9,12 @@ class MoveCommand(commands2.CommandBase):
         # Feature to add - difference tolerance per command instance. Currently uses the default from DriveSubsystem
         # Feature to add - different max speed for each command. Currently uses method of DriveSubsystem.
         self.drive = drive
-        self.distance = distance * self.drive.tpf
+        self.distance = distance * -self.drive.tpf
         self.heading = heading
         # print("distance goal", distance)
         # print("turn goal", heading)
         self.goal_threshold_ticks = 25 # I believe 50 ticks per second, confirm.
         self.addRequirements(drive)
-
 
     def initialize(self) -> None:
         self.drive.resetEncoders()
@@ -26,8 +25,9 @@ class MoveCommand(commands2.CommandBase):
 
     def execute(self) -> None:
         self.drive.sd.putValue("Gyro Yaw", self.drive.gyro.getYaw())
-        self.drive.sd.putValue("distance goal", self.distance)
+        self.drive.sd.putValue("distance goal new", self.distance)
         self.drive.sd.putValue("turn goal", self.heading)
+        self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
         if self.distance:
             drivespeed = self.drive.driveController.calculate(self.drive.getAverageEncoderTicks(), self.distance)
             self.drive.sd.putValue("calculated drive speed",drivespeed)

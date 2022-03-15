@@ -20,13 +20,13 @@ class newPath(commands2.SequentialCommandGroup):
         super().__init__(
             # Drive forward the specified distance
             ResetGyro(drive),
-            MoveCommand(-3.75, 0, drive),
-            pickUp(2, 0.3, snowveyor),
+            MoveCommand(3.75, 0, drive),
+            pickUp(2, 1, snowveyor),
             MoveCommand(0, 180, drive),
-            MoveCommand(-7, 180, drive),
+            MoveCommand(7, 180, drive),
             MoveCommand(0, 220, drive),
-            MoveCommand(-1, 220, drive),
-            dropOff(2, 0.3, snowveyor),
             MoveCommand(1, 220, drive),
+            dropOff(2, -1, snowveyor),
+            MoveCommand(-1, 220, drive),
 
             )

@@ -1,10 +1,12 @@
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 import commands2
 import wpilib
+from networktables import NetworkTables
 
 class pickUp(commands2.CommandBase):
     def __init__(self, duration: float, speed:float, snowveyor: SnowveyorSubsystem) -> None:
         super().__init__()
+        self.sd = NetworkTables.getTable("SmartDashboard")
         self.snowveyor = snowveyor
         self.speed = speed
         self.duration = duration
@@ -21,4 +23,6 @@ class pickUp(commands2.CommandBase):
         self.snowveyor.tankDrive(0, 0)
 
     def isFinished(self) -> bool:
+        self.sd.putValue("timer for intake", self.timer.get())
+        self.sd.putValue("duration for intake", self.timer.get())
         return self.timer.get() > self.duration

@@ -2,12 +2,12 @@
   "MainWindow": {
     "GLOBAL": {
       "height": "743",
-      "maximized": "0",
+      "maximized": "1",
       "style": "0",
       "userScale": "2",
       "width": "1370",
-      "xpos": "-168",
-      "ypos": "102"
+      "xpos": "62",
+      "ypos": "23"
     }
   },
   "Window": {

@@ -16,7 +16,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.rightTalon = rightTalon
         self.rightVictor = rightVictor
 
-        self.tpf = -924
+        self.tpf = -900
         self.maxDriveSpeed = 0.6
         self.maxTurnSpeed = 0.5
 
@@ -87,13 +87,13 @@ class DriveSubsystem(commands2.SubsystemBase):
         """Gets the average distance of the TWO encoders."""
         self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
         self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-        return (self.leftTalon.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / 2.0 * 12 / 924
+        return (self.leftTalon.getSelectedSensorPosition()  * 12 / -900)
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""
         self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
         self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-        return (self.leftTalon.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / -2.0
+        return self.leftTalon.getSelectedSensorPosition() * -1
 
     def setMaxOutput(self, maxOutput: float):
         """

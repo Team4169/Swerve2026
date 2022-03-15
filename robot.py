@@ -96,6 +96,9 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
 
+        self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
+        self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
+
         if self.driverController.getLeftBumperPressed():
             self.direction = 0
         else:
