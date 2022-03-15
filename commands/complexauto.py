@@ -25,4 +25,11 @@ class ComplexAuto(commands2.SequentialCommandGroup):
             MoveCommand(0, 270, drive),
             MoveCommand(-3, 270, drive),
             MoveCommand(0, 360, drive),
+            # DriveDistance(
+            #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, drive
+            # ),
+            # # Drive backward the specified distance
+            # DriveDistance(
+            #     constants.kAutoBackupDistanceInches, -constants.kAutoDriveSpeed, drive
+            # ),
         )

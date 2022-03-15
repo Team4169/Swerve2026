@@ -10,6 +10,8 @@ import constants
 
 from commands.complexauto import ComplexAuto
 from commands.drivedistance import DriveDistance
+from commands.defaultdrive import DefaultDrive
+from commands.halvedrivespeed import HalveDriveSpeed
 from commands.lucautocommand import LucAutoCommand
 from commands.lucautocommandInverted import LucAutoCommand2
 from commands.newPath import newPath
@@ -38,41 +40,34 @@ class RobotContainer:
     subsystems, commands, and button mappings) should be declared here.
     """
 
-    def __init__(self, driverController, operatorController, drive, snowveyor, liftArm, rotateArm, liftEncoder, rotateEncoder, liftArmUpLimitSwitch, rotateArmRobotLimitSwitch, rotateArmBackLimitSwitch, liftArmDownLimitSwitch) -> None:
+    def __init__(self) -> None:
 
-        # Init controllers
-        self.driverController = driverController
-        self.operatorController = operatorController
+        # The driver's controller
+        self.driverController = wpilib.XboxController(constants.kDriverControllerPort)
+        # self.driverController = wpilib.Joystick(constants.kDriverControllerPort)
+        self.operatorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
 
         # The robot's subsystems
-        self.driveSystem = DriveSubsystem(drive=drive)
-        self.snowveyor = snowveyor
-        self.climb = ClimbingSubsystem(
-            liftArm=liftArm,
-            rotateArm=rotateArm,
-            liftEncoder=liftEncoder,
-            rotateEncoder=rotateEncoder,
-            liftArmUpLimitSwitch=liftArmUpLimitSwitch,
-            rotateArmRobotLimitSwitch=rotateArmRobotLimitSwitch,
-            rotateArmBackLimitSwitch=rotateArmBackLimitSwitch,
-            liftArmDownLimitSwitch=liftArmDownLimitSwitch
-        )
+        self.drive = DriveSubsystem()
+        self.snowveyor = SnowveyorSubsystem()
+        self.climb = ClimbingSubsystem()
+
         # Autonomous routines
 
         # A simple auto routine that drives forward a specified distance, and then stops.
         self.simpleAuto = DriveDistance(
-            constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, self.driveSystem
+            constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, self.drive
         )
 
         # A complex auto routine that drives forward, and then drives backward.
-        self.complexAuto = ComplexAuto(self.driveSystem)
+        self.complexAuto = ComplexAuto(self.drive)
 
         # A complex auto routine that drives forward, and then drives backward.
-        self.lucAutoCommand = LucAutoCommand(self.driveSystem, self.snowveyor)
-        self.lucAutoCommand2 = LucAutoCommand2(self.driveSystem, self.snowveyor)
-        # Simpler auto routine that drives to the second ball and places 2 into the smaller hub
-        self.newPath = newPath(self.driveSystem, self.snowveyor)
-        self.newPathInverted = newPathInverted(self.driveSystem, self.snowveyor)
+        self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
+        self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
+        #simpler auto routine that drives to the second ball and places 2 into the smaller hub
+        self.newPath = newPath(self.drive, self.snowveyor)
+        self.newPathInverted = newPathInverted(self.drive, self.snowveyor)
 
         # Chooser
         self.chooser = wpilib.SendableChooser()
@@ -86,7 +81,6 @@ class RobotContainer:
         self.chooser.addOption("SimplePathInverted", self.newPathInverted)
         # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomous", self.chooser)
-
 
         self.configureButtonBindings()
 
@@ -126,7 +120,6 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, 3).whenHeld(
         #     HalveDriveSpeed(self.drive)
         # )
-
 
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()

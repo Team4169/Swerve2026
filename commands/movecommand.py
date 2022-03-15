@@ -1,6 +1,7 @@
 import commands2
+
 from subsystems.drivesubsystem import DriveSubsystem
-import constants
+
 
 class MoveCommand(commands2.CommandBase):
     def __init__(self, distance: float, heading: float, drive: DriveSubsystem) -> None:
@@ -8,7 +9,7 @@ class MoveCommand(commands2.CommandBase):
         # Feature to add - difference tolerance per command instance. Currently uses the default from DriveSubsystem
         # Feature to add - different max speed for each command. Currently uses method of DriveSubsystem.
         self.drive = drive
-        self.distance = distance * constants.tpf
+        self.distance = distance * self.drive.tpf
         self.heading = heading
         # print("distance goal", distance)
         # print("turn goal", heading)
