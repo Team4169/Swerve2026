@@ -53,7 +53,7 @@ class RobotContainer:
 
         self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-
+        
         self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
         self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
 
@@ -70,6 +70,8 @@ class RobotContainer:
         self.intake = ctre.WPI_VictorSPX(constants.intake)
         self.outtake = ctre.WPI_VictorSPX(constants.outtake)
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+
+        self.coastBool=False
 
         # The robot's subsystems
         self.drive = DriveSubsystem(leftTalon=self.leftTalon,
@@ -148,6 +150,10 @@ class RobotContainer:
         )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
             MoveRotateArm(-.5, self.climb)
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
+           self.coastBool=not self.coastBool
+           coastRotateArm(self.coastBool, self.climb)
         )
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenPressed(
         #     MoveLiftArmToLimitSwitch(.5, self.climb)
