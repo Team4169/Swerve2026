@@ -31,6 +31,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
+        wpilib.CameraServer().launch("vision.py:main")
         self.container = RobotContainer()
 
         self.driverController = self.container.driverController
@@ -161,10 +162,10 @@ class MyRobot(commands2.TimedCommandRobot):
             self.snowveyor.tankDrive(1,-1)
 
         elif self.operatorController.getLeftBumper():
-            self.snowveyor.tankDrive(-1,0)
+            self.snowveyor.tankDrive(1,0)
 
         elif self.operatorController.getRightBumper():
-            self.snowveyor.tankDrive(-1,-1)
+            self.snowveyor.tankDrive(1,-1)
 
 
         # if abs(self.gyro.getYaw() - self.yaw) > 80:
