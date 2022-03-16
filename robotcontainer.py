@@ -29,6 +29,8 @@ from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimi
 from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
 from commands.climbingCommands.liftArmToTop import LiftArmToTop
 
+from commands.doNothing import DoNothing
+
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from subsystems.climbingsubsystem import ClimbingSubsystem
@@ -53,7 +55,7 @@ class RobotContainer:
 
         self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-
+        
         self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
         self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
 
@@ -70,6 +72,8 @@ class RobotContainer:
         self.intake = ctre.WPI_VictorSPX(constants.intake)
         self.outtake = ctre.WPI_VictorSPX(constants.outtake)
         self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+
+        self.coastBool=False
 
         # The robot's subsystems
         self.drive = DriveSubsystem(leftTalon=self.leftTalon,
@@ -131,12 +135,15 @@ class RobotContainer:
         #     )
         # )
 
-    def configureButtonBindings(self):
+    def bindClimbMode(self):
         """
         Use this method to define your button->command mappings. Buttons can be created by
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            MoveLiftArm(.5, self.climb)
+        )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
             MoveLiftArm(-.5, self.climb)
         )
@@ -148,22 +155,31 @@ class RobotContainer:
         )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
             MoveRotateArm(-.5, self.climb)
+        )      
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
+           coastRotateArm(self.coastBool, self.climb)
         )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
-        #     MoveLiftArm(-500, False, .5, self.climb)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
-        #     LiftArmToTop(self.climb)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
-        #     Intake(1.0, self.snowveyor)
-        # )
-        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whenHeld(
-        #     Outtake(1.0, self.snowveyor)
-        # )
-        # commands2.button.JoystickButton(self.driverController, 3).whenHeld(
-        #     HalveDriveSpeed(self.drive)
-        # )
+
+    def unbindClimbMode(self):
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
+            DoNothing()
+        )
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
+            DoNothing()
+        )
+
 
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()

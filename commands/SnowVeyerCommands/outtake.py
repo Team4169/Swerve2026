@@ -12,7 +12,7 @@ class Outtake(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        self.snowveyor.tankDrive(self.speed, self.speed)
+        self.snowveyor.tankDrive(self.speed, -self.speed)
 
     def end(self, interrupted: bool) -> None:
         self.snowveyor.tankDrive(0, 0)
