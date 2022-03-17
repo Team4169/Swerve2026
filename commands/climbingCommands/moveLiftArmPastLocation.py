@@ -20,6 +20,8 @@ class MoveLiftArmPastLocation(commands2.CommandBase):
         self.climb.setLiftArm(0)
 
     def isFinished(self) -> bool:
+        if self.climb.getLiftArmLimitSwitchPressed():
+            return True
         if self.above:
             if self.climb.getLiftArmEncoderDistance() > self.tickLocation:
                 return True

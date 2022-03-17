@@ -24,10 +24,12 @@ from commands.SnowVeyerCommands.outtake import Outtake
 
 
 from commands.climbingCommands.moveRotateArm import MoveRotateArm
+from commands.climbingCommands.liftArmToTop import LiftArmToTop
 from commands.climbingCommands.moveLiftArm import MoveLiftArm
 from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimitSwitch
 from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
 from commands.climbingCommands.liftArmToTop import LiftArmToTop
+from commands.climbingCommands.coastRotateArm import coastRotateArm
 
 from commands.doNothing import DoNothing
 
@@ -141,9 +143,12 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-            MoveLiftArm(.5, self.climb)
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenPressed(
+            LiftArmToTop(self.climb)
         )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+        #     MoveLiftArm(.5, self.climb)
+        # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
             MoveLiftArm(-.5, self.climb)
         )
@@ -179,6 +184,7 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
             DoNothing()
         )
+
 
 
     def getAutonomousCommand(self) -> commands2.Command:

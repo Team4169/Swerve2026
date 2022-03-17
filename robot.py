@@ -97,9 +97,10 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
 
+        self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
         self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
-
+        self.output("climb mode",self.climbMode)
         if self.driverController.getLeftBumperPressed():
             self.direction = 0
         else:
@@ -108,6 +109,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.speed = addDeadzone(self.driverController.getLeftY())
 
         if self.operatorController.getStartButtonPressed():
+            # self.output("")
             self.climbMode = not self.climbMode
             if self.climbMode:
                 self.container.bindClimbMode()
