@@ -113,7 +113,7 @@ class RobotContainer:
         #simpler auto routine that drives to the second ball and places 2 into the smaller hub
         self.newPath = newPath(self.drive, self.snowveyor)
         self.newPathInverted = newPathInverted(self.drive, self.snowveyor)
-
+        self.zeroBall = zeroBall(self.drive, self.snowveyor)
         # Chooser
         self.chooser = wpilib.SendableChooser()
 
