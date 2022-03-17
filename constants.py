@@ -52,11 +52,11 @@ rotateArm = 4
 
 liftArmUpLimitSwitch = 0
 liftArmUpLimitSwitchPressedValue = False
-liftArmDownLimitSwitch = 1
+liftArmDownLimitSwitch = 2
 liftArmDownLimitSwitchPressedValue = False
-rotateArmBackLimitSwitch = 2
+rotateArmBackLimitSwitch = 3
 rotateArmBackLimitSwitchPressedValue = False
-rotateArmRobotLimitSwitch = 3
+rotateArmRobotLimitSwitch = 1
 rotateArmRobotLimitSwitchPressedValue = False
 
 liftArmSlowSpeed = .1
