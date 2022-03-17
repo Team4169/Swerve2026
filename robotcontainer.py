@@ -16,6 +16,7 @@ from commands.lucautocommand import LucAutoCommand
 from commands.lucautocommandInverted import LucAutoCommand2
 from commands.newPath import newPath
 from commands.newPathInverted import newPathInverted
+from commands.zeroBall import zeroBall
 
 from commands.SnowVeyerCommands.DropOff import dropOff
 from commands.SnowVeyerCommands.PickUp import pickUp
@@ -123,6 +124,7 @@ class RobotContainer:
         self.chooser.addOption("Luc AutoInverted", self.lucAutoCommand2)
         self.chooser.addOption("SimplePath", self.newPath)
         self.chooser.addOption("SimplePathInverted", self.newPathInverted)
+        self.chooser.addOption("zeroBall", self.zeroBall)
         # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomous", self.chooser)
 

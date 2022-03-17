@@ -18,5 +18,5 @@ class MoveLiftArm(commands2.CommandBase):
         self.climb.setLiftArm(0)
 
     def isFinished(self) -> bool:
-        if self.climb.getLiftArmLimitSwitchPressed():
+        if self.climb.getLiftArmLimitSwitchPressed() and speed > 0:
             return True

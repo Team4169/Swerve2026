@@ -11,7 +11,7 @@ from .SnowVeyerCommands.PickUp import pickUp
 from .SnowVeyerCommands.DropOff import dropOff
 
 #parallel to the angled line and and inch from the intersection across from the hub
-class newPathInverted(commands2.SequentialCommandGroup):
+class zeroBall(commands2.SequentialCommandGroup):
     """
     A complex auto command that drives forward, releases a hatch, and then drives backward.
     """
@@ -20,13 +20,5 @@ class newPathInverted(commands2.SequentialCommandGroup):
         super().__init__(
             # Drive forward the specified distance
             ResetGyro(drive),
-            MoveCommand(3.75, 0, drive),
-            pickUp(-2, 0.3, snowveyor),
-            MoveCommand(0, -180, drive),
-            MoveCommand(7, -180, drive),
-            MoveCommand(0, -220, drive),
-            MoveCommand(1, -220, drive),
-            dropOff(-2, 0.3, snowveyor),
-            MoveCommand(-1, -220, drive),
-            
+            MoveCommand(-10, 0, drive),
             )
