@@ -101,12 +101,14 @@ class MyRobot(commands2.TimedCommandRobot):
         self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
         self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
         self.output("climb mode",self.climbMode)
-        if self.driverController.getLeftBumperPressed():
+        if self.driverController.getLeftBumper():
+            self.output("straight mode", True)
             self.direction = 0
         else:
+            self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
 
-        self.speed = addDeadzone(self.driverController.getLeftY())
+        self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
 
         if self.operatorController.getStartButtonPressed():
             # self.output("")
@@ -118,16 +120,18 @@ class MyRobot(commands2.TimedCommandRobot):
 
         if self.climbMode:
             dir = self.operatorController.getPOV()
-            self.speed = 0.2
-            if 225 < dir <= 315:
-                self.direction = -1
-            elif 135 < dir <= 225:
+            self.speed = 0.4
+            if dir == 0:
+                self.direction = 0
+            elif dir == 90:
+                self.speed = 0
+                self.direction = 0.4
+            elif dir == 180:
                 self.speed *= -1
                 self.direction = 0
-            elif 45 < dir <= 135:
-                self.direction = 1
-            elif dir <= 45:
-                self.direction = 0
+            elif dir == 270:
+                self.speed = 0
+                self.direction = -0.4
             else:
                 self.speed = 0
             self.output("endgame dir",dir)
@@ -137,13 +141,17 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
         if self.driverController.getAButton():
-            self.speed *= 0.75
-        elif self.driverController.getBButton():
             self.speed *= 0.5
+            self.direction *= 0.5
+        elif self.driverController.getBButton():
+            self.speed *= 0.6
+            self.direction *= 0.6
         elif self.driverController.getYButton():
-            self.speed *= 0.3
+            self.speed *= 0.75
+            self.direction *= 0.75
         elif self.driverController.getXButton():
-            self.speed = 0
+            self.speed *= 0.4
+            self.direction *= 0.4
 
 
         if self.operatorController.getLeftTriggerAxis() > 0.2:
