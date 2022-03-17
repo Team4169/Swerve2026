@@ -145,8 +145,8 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenPressed(
-            LiftArmToTop(self.climb)
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+            MoveLiftArm(0.5, self.climb)
         )
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
         #     MoveLiftArm(.5, self.climb)
