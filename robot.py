@@ -130,6 +130,8 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.direction = 0
             else:
                 self.speed = 0
+            self.output("endgame dir",dir)
+            self.output("endgame drive speed",self.speed)
             self.drive.arcadeDrive(self.speed, self.direction)
             return
 
