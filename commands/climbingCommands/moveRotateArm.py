@@ -16,3 +16,7 @@ class MoveRotateArm(commands2.CommandBase):
 
     def end(self, interrupted: bool) -> None:
         self.climb.setRotateArm(0)
+
+    def isFinished(self) -> bool:
+        if self.climb.getRotateArmLimitSwitchPressed():
+            return True

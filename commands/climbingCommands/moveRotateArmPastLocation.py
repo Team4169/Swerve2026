@@ -20,6 +20,8 @@ class MoveRotateArmPastLocation(commands2.CommandBase):
         self.climb.setRotateArm(0)
 
     def isFinished(self) -> bool:
+        if self.climb.getRotateArmLimitSwitchPressed():
+            return True
         if self.above:
             if self.climb.getRotateArmEncoderDistance() > self.tickLocation:
                 return True
