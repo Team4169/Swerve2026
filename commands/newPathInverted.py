@@ -21,12 +21,12 @@ class newPathInverted(commands2.SequentialCommandGroup):
             # Drive forward the specified distance
             ResetGyro(drive),
             MoveCommand(3.75, 0, drive),
-            pickUp(1, 0.3, snowveyor),
+            pickUp(1, 1, snowveyor),
             MoveCommand(0, -180, drive),
             MoveCommand(7, -180, drive),
             MoveCommand(0, -220, drive),
             MoveCommand(1, -220, drive),
-            dropOff(1, 0.3, snowveyor),
+            dropOff(1, 1, snowveyor),
             MoveCommand(-1, -220, drive),
             
             )
