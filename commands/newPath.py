@@ -9,6 +9,7 @@ from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from .reset_gyro import ResetGyro
 from .SnowVeyerCommands.PickUp import pickUp
 from .SnowVeyerCommands.DropOff import dropOff
+from .movecommandTimed import MoveCommandTimed
 
 #parallel to the angled line and and inch from the intersection across from the hub
 class newPath(commands2.SequentialCommandGroup):
@@ -25,7 +26,7 @@ class newPath(commands2.SequentialCommandGroup):
             MoveCommand(0, 180, drive),
             MoveCommand(7, 180, drive),
             MoveCommand(0, 220, drive),
-            MoveCommand(.25, 220, drive),
+            MoveCommandTimed(.25, 220, drive, 1),
             dropOff(1, 1, snowveyor),
             MoveCommand(-1, 220, drive),
 
