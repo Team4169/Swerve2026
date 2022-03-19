@@ -21,7 +21,7 @@ class LucAutoCommand2(commands2.SequentialCommandGroup):
             ResetGyro(drive),
             MoveCommand(3.6666667, 0, drive),
             MoveCommand(0, -65, drive),
-            MoveCommand(0.5, -65, drive),
+            MoveCommand(0.75, -65, drive),
             dropOff(1, 0.3, snowveyor),
             MoveCommand(-0.75, -65, drive),
             MoveCommand(0, 130, drive),
