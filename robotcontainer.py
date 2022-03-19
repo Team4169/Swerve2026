@@ -146,17 +146,17 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-            MoveLiftArm(0.5, self.climb)
+            MoveLiftArm(0.7, self.climb)
         )
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
         #     MoveLiftArm(.5, self.climb)
         # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
-            MoveLiftArm(-.5, self.climb)
+            MoveLiftArm(-.7, self.climb)
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-            MoveLiftArm(.5, self.climb)
-        )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+        #     MoveLiftArm(.5, self.climb)
+        # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
             MoveRotateArm(.5, self.climb)
         )
@@ -174,9 +174,9 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
             DoNothing()
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-            DoNothing()
-        )
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
+        #     DoNothing()
+        # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
             DoNothing()
         )
