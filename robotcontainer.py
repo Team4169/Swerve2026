@@ -146,13 +146,13 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-            MoveLiftArm(0.7, self.climb)
+            MoveLiftArm(0.85, self.climb)
         )
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
         #     MoveLiftArm(.5, self.climb)
         # )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
-            MoveLiftArm(-.7, self.climb)
+            MoveLiftArm(-.85, self.climb)
         )
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
         #     MoveLiftArm(.5, self.climb)
