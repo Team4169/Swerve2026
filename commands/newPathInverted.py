@@ -25,7 +25,7 @@ class newPathInverted(commands2.SequentialCommandGroup):
             MoveCommand(0, -180, drive),
             MoveCommand(7, -180, drive),
             MoveCommand(0, -220, drive),
-            MoveCommand(.75, -220, drive),
+            MoveCommand(.25, -220, drive),
             dropOff(1, 1, snowveyor),
             MoveCommand(-1, -220, drive),
             
