@@ -145,6 +145,9 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
+            MoveLiftArm(-.5, self.climb)
+        )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
             MoveLiftArm(1, self.climb)
         )
@@ -168,6 +171,9 @@ class RobotContainer:
         )
 
     def unbindClimbMode(self):
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
+            DoNothing()
+        )
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
             DoNothing()
         )
