@@ -120,18 +120,18 @@ class MyRobot(commands2.TimedCommandRobot):
 
         if self.climbMode:
             dir = self.operatorController.getPOV()
-            self.speed = 0.4
+            self.speed = 0.5
             if dir == 0:
                 self.direction = 0
             elif dir == 90:
                 self.speed = 0
-                self.direction = 0.4
+                self.direction = 0.7
             elif dir == 180:
                 self.speed *= -1
                 self.direction = 0
             elif dir == 270:
                 self.speed = 0
-                self.direction = -0.4
+                self.direction = -0.7
             else:
                 self.speed = 0
             self.output("endgame dir",dir)
