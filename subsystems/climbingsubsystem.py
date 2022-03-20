@@ -50,11 +50,11 @@ class ClimbingSubsystem(commands2.SubsystemBase):
     def setRotateArm(self, speed):
         self.rotateArm.set(speed)
 
-    def setCoast(self,isTrue):
-        if isTrue:
-            self.rotateArm.IdleMode.kBrake
+    def setCoast(self, isTrue):
+        if not isTrue:
+            self.rotateArm.setIdleMode(self.rotateArm.IdleMode.kBrake)
         else:
-            self.rotateArm.IdleMode.kCoast
+            self.rotateArm.setIdleMode(self.rotateArm.IdleMode.kCoast)
 
     def setLiftArm(self, speed):
         self.liftArm.set(speed)

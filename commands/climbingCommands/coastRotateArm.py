@@ -14,8 +14,8 @@ class coastRotateArm(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        self.climb.setCoast(isCoast)
-        output("Break Mode:",isCoast)
+        self.climb.setCoast(True)
+        # output("Break Modes:",self.isCoast)
 
     def end(self, interrupted: bool) -> None:
         self.climb.setCoast(False)
