@@ -20,7 +20,7 @@ class MyRobot(commands2.TimedCommandRobot):
     autonomousCommand: typing.Optional[commands2.Command] = None
 
     def output(self, text, value):
-      print(text + ': ' + str(value))
+      # print(text + ': ' + str(value))
       self.container.drive.sd.putValue(text, str(value))
 
     def robotInit(self) -> None:
@@ -85,7 +85,7 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
 
-        print("Starting teleop...")
+        # print("Starting teleop...")
         self.humancontrol = True
         self.speed = 0
         self.intake = 0

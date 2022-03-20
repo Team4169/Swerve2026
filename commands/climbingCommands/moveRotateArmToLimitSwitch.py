@@ -12,7 +12,7 @@ class MoveRotateArmToLimitSwitch(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        print("excuting MoveRotateArmToLimitSwitch")
+        # print("excuting MoveRotateArmToLimitSwitch")
         self.climb.setRotateArm(self.power)
 
     def end(self, interrupted: bool) -> None:
