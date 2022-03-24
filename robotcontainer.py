@@ -126,7 +126,7 @@ class RobotContainer:
         self.chooser.addOption("SimplePathInverted", self.newPathInverted)
         self.chooser.addOption("zeroBall", self.zeroBall)
         # Put the chooser on the dashboard
-        wpilib.SmartDashboard.putData("Autonomous", self.chooser)
+        wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
 
         # self.configureButtonBindings()
 

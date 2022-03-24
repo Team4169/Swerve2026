@@ -22,7 +22,7 @@ class LucAutoCommand(commands2.SequentialCommandGroup):
             MoveCommand(3.6666667, 0, drive),
             MoveCommand(0, 65, drive),
             MoveCommand(0.75, 65, drive),
-            dropOff(1, 1, snowveyor),
+            dropOff(1.5, -1, snowveyor),
             MoveCommand(-0.75, 65, drive),
             MoveCommand(0, -130, drive),
             MoveCommand(6.42, -130, drive),
@@ -31,7 +31,7 @@ class LucAutoCommand(commands2.SequentialCommandGroup):
             MoveCommand(6.42, 50, drive),
             MoveCommand(0, 67.5, drive),
             MoveCommand(1, 67.5, drive),
-            dropOff(1, 1, snowveyor),
+            dropOff(1.5, -1, snowveyor),
             MoveCommand(-1, 67.5, drive),
             # DriveDistance(
             #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, drive

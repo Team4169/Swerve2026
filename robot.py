@@ -31,7 +31,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
-        wpilib.CameraServer().launch("vision.py:main")
+        # wpilib.CameraServer().launch("vision.py:main")
         self.container = RobotContainer()
 
         self.driverController = self.container.driverController
@@ -70,6 +70,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
         self.autonomousCommand = self.container.getAutonomousCommand()
+        self.output("ato com", self.autonomousCommand)
 
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
