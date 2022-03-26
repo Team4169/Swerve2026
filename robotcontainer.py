@@ -166,7 +166,7 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
             MoveRotateArm(-.3, self.climb)
         )      
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenHeld(
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whenHeld(
            coastRotateArm(self.coastBool, self.climb)
         )
 
@@ -189,7 +189,7 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
             DoNothing()
         )
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whenPressed(
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whenPressed(
             DoNothing()
         )
 
