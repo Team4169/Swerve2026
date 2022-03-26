@@ -18,7 +18,7 @@ class DriveSubsystem(commands2.SubsystemBase):
 
         self.tpf = -900
         self.maxDriveSpeed = 0.6
-        self.maxTurnSpeed = 0.5
+        self.maxTurnSpeed = 0.6
 
         # smartdashboard
         self.sd = NetworkTables.getTable("SmartDashboard")
