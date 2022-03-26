@@ -162,10 +162,10 @@ class MyRobot(commands2.TimedCommandRobot):
             self.snowveyor.tankDrive(1,-1)
 
         elif self.operatorController.getLeftBumper():
-            self.snowveyor.tankDrive(1,0)
+            self.snowveyor.tankDrive(-1,0)
 
         elif self.operatorController.getRightBumper():
-            self.snowveyor.tankDrive(1,-1)
+            self.snowveyor.tankDrive(-1,1)
 
 
         self.drive.arcadeDrive(self.speed, self.direction)
