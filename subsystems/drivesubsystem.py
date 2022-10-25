@@ -5,7 +5,7 @@ import ctre
 import constants
 from networktables import NetworkTables
 import wpimath.controller
-import navx
+# import navx
 import rev
 class DriveSubsystem(commands2.SubsystemBase):
     def __init__(self, leftTalon, leftVictor, rightTalon, rightVictor) -> None:
@@ -39,7 +39,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.driveController.setTolerance(-0.1 * self.tpf)
 
         # gyro
-        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
 
         # The robot's drive
         self.rightTalon.setInverted(True)

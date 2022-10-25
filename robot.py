@@ -17,7 +17,7 @@ class MyRobot(commands2.TimedCommandRobot):
     has an implementation of robotPeriodic which runs the scheduler for you
     """
 
-    autonomousCommand: typing.Optional[commands2.Command] = None
+    # autonomousCommand: typing.Optional[commands2.Command] = None
 
     def output(self, text, value):
       # print(text + ': ' + str(value))
@@ -35,27 +35,27 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
 
         self.driverController = self.container.driverController
-        self.operatorController = self.container.operatorController
+        # self.operatorController = self.container.operatorController
 
         self.leftTalon = self.container.leftTalon
         self.leftVictor = self.container.leftVictor
         self.rightTalon = self.container.rightTalon
         self.rightVictor = self.container.rightVictor
 
-        self.liftArm = self.container.liftArm
-        self.rotateArm = self.container.rotateArm
+        #self.liftArm = self.container.liftArm
+        #self.rotateArm = self.container.rotateArm
 
-        self.rotateEncoder = self.container.rotateEncoder
-        self.liftEncoder = self.container.liftEncoder
+        # self.rotateEncoder = self.container.rotateEncoder
+        # self.liftEncoder = self.container.liftEncoder
 
-        self.liftArmUpLimitSwitch = self.container.liftArmUpLimitSwitch
-        self.liftArmDownLimitSwitch = self.container.liftArmDownLimitSwitch
-        self.rotateArmBackLimitSwitch = self.container.rotateArmBackLimitSwitch
-        self.rotateArmRobotLimitSwitch = self.container.rotateArmRobotLimitSwitch
+        # self.liftArmUpLimitSwitch = self.container.liftArmUpLimitSwitch
+        # self.liftArmDownLimitSwitch = self.container.liftArmDownLimitSwitch
+        #self.rotateArmBackLimitSwitch = self.container.rotateArmBackLimitSwitch
+        #self.rotateArmRobotLimitSwitch = self.container.rotateArmRobotLimitSwitch
 
-        self.intake = self.container.intake
-        self.outtake = self.container.outtake
-        self.snowveyor = self.container.snowveyor
+        # self.intake = self.container.intake
+        # self.outtake = self.container.outtake
+        # self.snowveyor = self.container.snowveyor
 
         self.drive = self.container.drive
 
@@ -69,11 +69,11 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
-        self.autonomousCommand = self.container.getAutonomousCommand()
-        self.output("ato com", self.autonomousCommand)
-
-        if self.autonomousCommand:
-            self.autonomousCommand.schedule()
+        # self.autonomousCommand = self.container.getAutonomousCommand()
+        # self.output("ato com", self.autonomousCommand)
+        #
+        # if self.autonomousCommand:
+        #     self.autonomousCommand.schedule()
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
@@ -97,11 +97,11 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def teleopPeriodic(self):
-        self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
-        self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
+        # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
+        # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
         self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
-        self.output("climb mode",self.climbMode)
+        # self.output("climb mode",self.climbMode)
         if self.driverController.getLeftBumper():
             self.output("straight mode", True)
             self.direction = 0
@@ -111,34 +111,34 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
 
-        if self.operatorController.getStartButtonPressed():
-            # self.output("")
-            self.climbMode = not self.climbMode
-            if self.climbMode:
-                self.container.bindClimbMode()
-            else:
-                self.container.unbindClimbMode()
+        # if self.operatorController.getStartButtonPressed():
+        #     # self.output("")
+        #     self.climbMode = not self.climbMode
+        #     if self.climbMode:
+        #         self.container.bindClimbMode()
+        #     else:
+        #         self.container.unbindClimbMode()
 
-        if self.climbMode:
-            dir = self.operatorController.getPOV()
-            self.speed = 0.5
-            if dir == 0:
-                self.direction = 0
-            elif dir == 90:
-                self.speed = 0
-                self.direction = 0.7
-            elif dir == 180:
-                self.speed *= -1
-                self.direction = 0
-            elif dir == 270:
-                self.speed = 0
-                self.direction = -0.7
-            else:
-                self.speed = 0
-            self.output("endgame dir",dir)
-            self.output("endgame drive speed",self.speed)
-            self.drive.arcadeDrive(self.speed, self.direction)
-            return
+        # if self.climbMode:
+        #     dir = self.operatorController.getPOV()
+        #     self.speed = 0.5
+        #     if dir == 0:
+        #         self.direction = 0
+        #     elif dir == 90:
+        #         self.speed = 0
+        #         self.direction = 0.7
+        #     elif dir == 180:
+        #         self.speed *= -1
+        #         self.direction = 0
+        #     elif dir == 270:
+        #         self.speed = 0
+        #         self.direction = -0.7
+        #     else:
+        #         self.speed = 0
+        #     self.output("endgame dir",dir)
+        #     self.output("endgame drive speed",self.speed)
+        #     self.drive.arcadeDrive(self.speed, self.direction)
+        #     return
 
 
         if self.driverController.getAButton():
@@ -155,17 +155,17 @@ class MyRobot(commands2.TimedCommandRobot):
             self.direction *= 0.5
 
 
-        if self.operatorController.getLeftTriggerAxis() > 0.2:
-            self.snowveyor.tankDrive(1,0)
-
-        elif self.operatorController.getRightTriggerAxis() > 0.2:
-            self.snowveyor.tankDrive(1,-1)
-
-        elif self.operatorController.getLeftBumper():
-            self.snowveyor.tankDrive(-1,0)
-
-        elif self.operatorController.getRightBumper():
-            self.snowveyor.tankDrive(-1,1)
+        # if self.operatorController.getLeftTriggerAxis() > 0.2:
+        #     self.snowveyor.tankDrive(1,0)
+        #
+        # elif self.operatorController.getRightTriggerAxis() > 0.2:
+        #     self.snowveyor.tankDrive(1,-1)
+        #
+        # elif self.operatorController.getLeftBumper():
+        #     self.snowveyor.tankDrive(-1,0)
+        #
+        # elif self.operatorController.getRightBumper():
+        #     self.snowveyor.tankDrive(-1,1)
 
 
         self.drive.arcadeDrive(self.speed, self.direction)
