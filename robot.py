@@ -38,9 +38,9 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.operatorController = self.container.operatorController
 
         self.leftTalon = self.container.leftTalon
-        self.leftVictor = self.container.leftVictor
+        self.leftTalon2 = self.container.leftTalon2
         self.rightTalon = self.container.rightTalon
-        self.rightVictor = self.container.rightVictor
+        self.rightTalon2 = self.container.rightTalon2
 
         #self.liftArm = self.container.liftArm
         #self.rotateArm = self.container.rotateArm

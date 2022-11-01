@@ -52,9 +52,9 @@ class RobotContainer:
         # self.operatorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
 
         self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
-        self.leftVictor = ctre.WPI_TalonSRX(constants.leftTalon2)
+        self.leftTalon2 = ctre.WPI_TalonSRX(constants.leftTalon2)
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
-        self.rightVictor = ctre.WPI_TalonSRX(constants.rightTalon2)
+        self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
 
         #self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         #self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -80,9 +80,9 @@ class RobotContainer:
 
         # The robot's subsystems
         self.drive = DriveSubsystem(leftTalon=self.leftTalon,
-                                    leftVictor=self.leftVictor,
+                                    leftTalon2=self.leftTalon2,
                                     rightTalon=self.rightTalon,
-                                    rightVictor=self.rightVictor)
+                                    rightTalon2=self.rightTalon2)
 
         # self.snowveyor = SnowveyorSubsystem(intake=self.intake,
         #                                     outtake=self.outtake,

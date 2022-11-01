@@ -8,13 +8,13 @@ import wpimath.controller
 # import navx
 import rev
 class DriveSubsystem(commands2.SubsystemBase):
-    def __init__(self, leftTalon, leftVictor, rightTalon, rightVictor) -> None:
+    def __init__(self, leftTalon, leftTalon2, rightTalon, rightTalon2) -> None:
         super().__init__()
 
         self.leftTalon = leftTalon
-        self.leftVictor = leftVictor
+        self.leftTalon2 = leftTalon2
         self.rightTalon = rightTalon
-        self.rightVictor = rightVictor
+        self.rightTalon2 = rightTalon2
 
         self.tpf = -900
         self.maxDriveSpeed = 0.6
@@ -43,10 +43,10 @@ class DriveSubsystem(commands2.SubsystemBase):
 
         # The robot's drive
         self.rightTalon.setInverted(True)
-        self.rightVictor.setInverted(True)
+        self.rightTalon2.setInverted(True)
         self.drive = wpilib.drive.DifferentialDrive(
-            wpilib.SpeedControllerGroup(self.leftTalon, self.leftVictor),
-            wpilib.SpeedControllerGroup(self.rightTalon, self.rightVictor),
+            wpilib.SpeedControllerGroup(self.leftTalon, self.leftTalon2),
+            wpilib.SpeedControllerGroup(self.rightTalon, self.rightTalon2),
         )
 
         # The left-side drive encoder
