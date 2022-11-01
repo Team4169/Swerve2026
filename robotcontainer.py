@@ -52,9 +52,9 @@ class RobotContainer:
         # self.operatorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
 
         self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
-        self.leftVictor = ctre.WPI_VictorSPX(constants.leftVictor)
+        self.leftVictor = ctre.WPI_TalonSRX(constants.leftTalon2)
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
-        self.rightVictor = ctre.WPI_VictorSPX(constants.rightVictor)
+        self.rightVictor = ctre.WPI_TalonSRX(constants.rightTalon2)
 
         #self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
         #self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)

@@ -7,10 +7,10 @@ import math
 import wpilib
 
 # Motors
-leftTalon = 1
-leftVictor = 2
-rightTalon = 7
-rightVictor = 6
+leftTalon = 6
+leftTalon2 = 10
+rightTalon = 8
+rightTalon2 = 2
 
 # Encoders
 kLeftEncoderPorts = (0, 1)
