@@ -10,9 +10,9 @@ import constants
 
 # from commands.complexauto import ComplexAuto
 # from commands.drivedistance import DriveDistance
-# from commands.defaultdrive import DefaultDrive
+from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
-# from commands.lucautocommand import LucAutoCommand
+from commands.lucautocommand import LucAutoCommand
 # from commands.lucautocommandInverted import LucAutoCommand2
 # from commands.newPath import newPath
 # from commands.newPathInverted import newPathInverted
@@ -108,36 +108,38 @@ class RobotContainer:
         # self.complexAuto = ComplexAuto(self.drive)
 
         # A complex auto routine that drives forward, and then drives backward.
-        # self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
+        #  self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
+        self.lucAutoCommand = LucAutoCommand(self.drive)
         # self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
         # #simpler auto routine that drives to the second ball and places 2 into the smaller hub
         # self.newPath = newPath(self.drive, self.snowveyor)
         # self.newPathInverted = newPathInverted(self.drive, self.snowveyor)
         # self.zeroBall = zeroBall(self.drive, self.snowveyor)
         # Chooser
-        # self.chooser = wpilib.SendableChooser()
+        self.chooser = wpilib.SendableChooser()
         #
         # # Add commands to the autonomous command chooser
         # # self.chooser.setDefaultOption("Complex Auto", self.complexAuto)
+        self.chooser.setDefaultOption("Luc Auto", self.lucAutoCommand)
         # # self.chooser.addOption("Simple Auto", self.simpleAuto)
-        # self.chooser.addOption("Luc Auto", self.lucAutoCommand)
+        self.chooser.addOption("Luc Auto", self.lucAutoCommand)
         # self.chooser.addOption("Luc AutoInverted", self.lucAutoCommand2)
         # self.chooser.addOption("SimplePath", self.newPath)
         # self.chooser.addOption("SimplePathInverted", self.newPathInverted)
         # self.chooser.addOption("zeroBall", self.zeroBall)
         # # Put the chooser on the dashboard
-        # wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
+        wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
 
         # self.configureButtonBindings()
 
         # set up default drive command
-        # self.drive.setDefaultCommand(
-        #     DefaultDrive(
-        #         self.drive,
-        #         lambda: -self.driverController.getRightY(),
-        #         lambda: self.driverController.getLeftY(),
-        #     )
-        # )
+        self.drive.setDefaultCommand(
+            DefaultDrive(
+                self.drive,
+                lambda: -self.driverController.getRightY(),
+                lambda: self.driverController.getLeftY(),
+            )
+        )
 
     # def bindClimbMode(self):
     #     """
@@ -195,5 +197,5 @@ class RobotContainer:
     #
     #
     #
-    # def getAutonomousCommand(self) -> commands2.Command:
-    #     return self.chooser.getSelected()
+    def getAutonomousCommand(self) -> commands2.Command:
+        return self.chooser.getSelected()

@@ -15,7 +15,7 @@ rightTalon2 = 2
 # Encoders
 kLeftEncoderPorts = (0, 1)
 kRightEncoderPorts = (2, 3)
-kLeftEncoderReversed = False
+kLeftEncoderReversed = False;
 kRightEncoderReversed = True
 
 kEncoderCPR = 1024
