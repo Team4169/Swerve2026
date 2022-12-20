@@ -8,6 +8,9 @@ import ctre
 
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
+from networktables import NetworkTables
+
+
 
 class MyRobot(commands2.TimedCommandRobot):
     """
@@ -41,6 +44,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.leftTalon2 = self.container.leftTalon2
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
+
+        self.neoMotor = self.container.neoMotor
 
         #self.liftArm = self.container.liftArm
         #self.rotateArm = self.container.rotateArm
@@ -98,6 +103,8 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def teleopPeriodic(self):
+        #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
+
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())

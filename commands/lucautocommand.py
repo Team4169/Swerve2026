@@ -19,26 +19,11 @@ class LucAutoCommand(commands2.SequentialCommandGroup):
         super().__init__(
             # Drive forward the specified distance
             ResetGyro(drive),
-            MoveCommand(3, 45, drive),
-            # MoveCommand(3.6666667, 0, drive),
-            # MoveCommand(0, 65, drive),
-            # MoveCommand(0.75, 65, drive),
-            # #dropOff(1.5, -1, snowveyor),
-            # MoveCommand(-0.75, 65, drive),
-            # MoveCommand(0, -130, drive),
-            # MoveCommand(6.42, -130, drive),
-            # #pickUp(1, 1, snowveyor),
-            # MoveCommand(0, 50, drive),
-            # MoveCommand(6.42, 50, drive),
-            # MoveCommand(0, 67.5, drive),
-            # MoveCommand(1, 67.5, drive),
-            # #dropOff(1.5, -1, snowveyor),
-            # MoveCommand(-1, 67.5, drive),
-            # DriveDistance(
-            #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, drive
-            # ),
-            # # Drive backward the specified distance
-            # DriveDistance(
-            #     constants.kAutoBackupDistanceInches, -constants.kAutoDriveSpeed, drive
-            # ),
+            MoveCommand(5, 0, drive),
+            MoveCommand(0, 120, drive),
+            MoveCommand(5, 120,drive),
+            MoveCommand(0,240, drive),
+            MoveCommand(5,240, drive),
+
+            #MoveCommand(5, 360, drive)
         )

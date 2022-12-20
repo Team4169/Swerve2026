@@ -1,5 +1,6 @@
 import wpilib
 from wpilib.interfaces import GenericHID
+from networktables import NetworkTables
 
 import rev, ctre
 
@@ -13,6 +14,7 @@ import constants
 from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
 from commands.lucautocommand import LucAutoCommand
+from commands.centerRobotToTarget import CenterRobotToTarget
 # from commands.lucautocommandInverted import LucAutoCommand2
 # from commands.newPath import newPath
 # from commands.newPathInverted import newPathInverted
@@ -56,8 +58,16 @@ class RobotContainer:
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
         self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
 
-        #self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        #self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+
+        self.table = NetworkTables.getTable("limelight")
+        tx = self.table.getNumber('tx', None)
+        ty = self.table.getNumber('ty', None)
+        ta = self.table.getNumber('ta', None)
+        ts = self.table.getNumber('ts', None)
+
+        # self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
+        # self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         
         #self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
         #self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
@@ -110,6 +120,7 @@ class RobotContainer:
         # A complex auto routine that drives forward, and then drives backward.
         #  self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
         self.lucAutoCommand = LucAutoCommand(self.drive)
+        self.centerRobotToTarget = CenterRobotToTarget(self.drive, self.neoMotor)
         # self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
         # #simpler auto routine that drives to the second ball and places 2 into the smaller hub
         # self.newPath = newPath(self.drive, self.snowveyor)
@@ -140,6 +151,8 @@ class RobotContainer:
                 lambda: self.driverController.getLeftY(),
             )
         )
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kY).whenPressed(
+            CenterRobotToTarget(self.drive, self.neoMotor))
 
     # def bindClimbMode(self):
     #     """
