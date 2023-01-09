@@ -46,26 +46,19 @@ class CenterRobotToTarget(commands2.CommandBase):
             #self.drive.arcadeDrive(0.5,0)
             #Try this again to see if driving is choppy^
 
-            if self.ta < 1:
-
-                print("Driving UwU")
-                self.drive.arcadeDrive(0.7, 0)
-            else:
-                print("not driving :(")
-                self.drive.arcadeDrive(0, 0)
-            #
-            #
+            # if self.ty < -5:
+            #     #move left
+            #     self.drive.arcadeDrive(0, -0.5)
+            # elif self.ty > 5:
+            #     #move right
+            #     self.drive.arcadeDrive(0, 0.5)
             # else:
-            #     self.drive.arcadeDrive(0,0)
-            # if self.tx < -1:
-            #     pass
-            #     # turn the robot right
-            # elif self.tx > 1:
-            #     pass
-            #     # turn the robot left
+            #     self.drive.arcadeDrive(0, 0)
+
         else:
             self.neoMotor.set(0.1)
-            self.drive.arcadeDrive(0, 0)
+            #turn right
+            self.drive.arcadeDrive(0, 0.5)
 
     def isFinished(self) -> bool:
         self.ticks += 1

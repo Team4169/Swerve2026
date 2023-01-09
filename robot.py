@@ -176,7 +176,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.snowveyor.tankDrive(-1,1)
 
 
-        self.drive.arcadeDrive(self.speed, self.direction)
+        #self.drive.arcadeDrive(self.speed, self.direction)
 
 
     def testInit(self) -> None:

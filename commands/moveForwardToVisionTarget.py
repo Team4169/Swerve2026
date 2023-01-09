@@ -13,7 +13,7 @@ import rev
 #from .SnowVeyerCommands.dropOff import dropOff
 
 
-class CenterRobotToTarget(commands2.CommandBase):
+class MoveForwardToVisionTarget(commands2.CommandBase):
     """
     An auto command that spins a motor based on limelight target detection
     """
