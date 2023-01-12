@@ -4,7 +4,7 @@ import typing
 import wpilib
 import commands2
 import ctre
-
+import math
 
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
@@ -116,9 +116,44 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
+        self.leftX = self.driverController.getLeftX()
+        self.leftY = self.driverController.getLeftY()
+        self.rightX = self.driveController.getLeftX()
+        #There are 2 different ways of programming mecanum, this is the from the first
+        #note the direction of the motors on the right must be reversed 
+        
+        
+        # self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
+        # self.mag = math.sqrt(self.leftX**2 + self.leftY**2)
+        # self.angle = math.atan2(self.leftY, self.leftX)
 
-        self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
+        # self.frontLeftBackRight = math.sin(self.angle+ .25*math.pi) * self.mag
+        # self.frontRightBackLeft = math.sin(self.angle - .25 * math.pi) * self.mag
+        # #code that sets the motors to their correct speeds
+        # self.leftTalon.set(self.frontLeftBackRight)
+        # self.leftTalon2.set(self.frontRightBackLeft)
+        # self.rightTalon.set(self.frontRightBackLeft)
+        # self.rightTalon2.set(self.frontLeftBackRight)
 
+    #this is from the second
+    #note the direction of the motors on the right must be reversed
+        # self.gyroRad = self.drive.gyro * (math.pi/180)
+        # self.rotX = self.leftX * math.cos(self.gyroRad) - self.leftY * math.sin(self.gyroRad)
+        # self.rotY = self.leftX * math.sin(self.gyroRad) + self.leftY * math.cos(self.gyroRad)
+
+        # self.denom = math.max(math.abs(self.leftY) + math.abs(self.leftX) + math.abs(self.rightX), 1);
+
+        # self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
+        # self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
+        # self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
+        # self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
+
+        # self.leftTalon.set(self.frontLeftMotor)
+        # self.leftTalon2.set(self.backLeftMotor)
+        # self.rightTalon.set(self.frontRightMotor)
+        # self.rightTalon2.set(self.backRightMotor)
+
+        #
         # if self.operatorController.getStartButtonPressed():
         #     # self.output("")
         #     self.climbMode = not self.climbMode
