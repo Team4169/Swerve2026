@@ -3,7 +3,7 @@ import wpilib
 import wpilib.drive
 import ctre
 import constants
-from networktables import NetworkTables
+# from networktables import NetworkTables
 import wpimath.controller
 
 class SnowveyorSubsystem(commands2.SubsystemBase):
@@ -11,7 +11,7 @@ class SnowveyorSubsystem(commands2.SubsystemBase):
         super().__init__()
 
         # smartdashboard
-        self.sd = NetworkTables.getTable("SmartDashboard")
+        # # self.sd = NetworkTables.getTable("SmartDashboard")
 
         self.intake = intake
         self.outtake = outtake
@@ -26,8 +26,8 @@ class SnowveyorSubsystem(commands2.SubsystemBase):
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""
-        self.sd.putValue("Left Encoder Value", self.left1.getSelectedSensorPosition())
-        self.sd.putValue("Right Encoder Value", self.right2.getSelectedSensorPosition())
+        # self.sd.putValue("Left Encoder Value", self.left1.getSelectedSensorPosition())
+        # self.sd.putValue("Right Encoder Value", self.right2.getSelectedSensorPosition())
         return (self.left1.getSelectedSensorPosition() + self.right2.getSelectedSensorPosition()) / -2.0
 
     def setIntake(self, speed: float):

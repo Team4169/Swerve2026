@@ -7,7 +7,7 @@ from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from .reset_gyro import ResetGyro
-from networktables import NetworkTables
+# from networktables import NetworkTables
 import rev
 #from .SnowVeyerCommands.pickUp import pickUp
 #from .SnowVeyerCommands.dropOff import dropOff
@@ -31,14 +31,14 @@ class CenterRobotToTarget(commands2.CommandBase):
         self.tickgoal = 500 # 10 seconds at 50 tps
 
     def execute(self) -> None:
-        table = NetworkTables.getTable("limelight")
+        # table = NetworkTables.getTable("limelight")
         self.tx = table.getNumber('tx', None)
         self.ty = table.getNumber('ty', None)
         self.ta = table.getNumber('ta', None)
         self.ts = table.getNumber('ts', None)
         self.tv = table.getNumber('tv', None)
         print(f"Ta:{self.ta}, type:{type(self.ta)}")
-        self.drive.sd.putValue("ta", str(self.ta))
+        # self.drive.sd.putValue("ta", str(self.ta))
         #TV: anything is being detected
         if self.tv == 1:
             self.neoMotor.set(0)

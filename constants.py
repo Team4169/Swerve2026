@@ -7,10 +7,10 @@ import math
 import wpilib
 
 # Motors
-leftTalon = 6
-leftTalon2 = 10
-rightTalon = 8
-rightTalon2 = 2
+leftTalon = 3
+leftTalon2 = 7
+rightTalon = 9
+rightTalon2 = 4
 neoMotor = 1
 
 # Encoders

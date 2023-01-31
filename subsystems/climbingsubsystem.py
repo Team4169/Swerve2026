@@ -2,7 +2,7 @@ import commands2
 import wpilib
 import wpilib.drive
 import constants
-from networktables import NetworkTables
+# from networktables import NetworkTables
 import rev
 
 
@@ -23,7 +23,7 @@ class ClimbingSubsystem(commands2.SubsystemBase):
 
 
         # smartdashboard
-        self.sd = NetworkTables.getTable("SmartDashboard")
+        # # self.sd = NetworkTables.getTable("SmartDashboard")
 
     def resetEncoders(self) -> None:
         pass

@@ -3,7 +3,7 @@ import wpilib
 import wpilib.drive
 import ctre
 import constants
-from networktables import NetworkTables
+from ntcore import NetworkTable
 import wpimath.controller
 import navx
 import rev
@@ -21,32 +21,32 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.maxTurnSpeed = 0.6
 
         # smartdashboard
-        self.sd = NetworkTables.getTable("SmartDashboard")
+        ## self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
 
         # Create PID Controller for Turning
-        self.TurnkP = self.sd.getValue("TurnkP", 0.032)
-        self.TurnkI = self.sd.getValue("TurnkI", 0)
-        self.TurnkD = self.sd.getValue("TurnkD", 0)
-        self.turnController = wpimath.controller.PIDController(self.TurnkP, self.TurnkI, self.TurnkD)
-        self.turnController.enableContinuousInput(-180.0, 180.0)
-        self.turnController.setTolerance(10.0)
+        #self.TurnkP = # self.sd.getDoubleTopic("TurnkP").subscribe(0.032)
+        #self.TurnkI = # self.sd.getDoubleTopic("TurnkI").subscribe(0.0)
+        #self.TurnkD = # self.sd.getDoubleTopic("TurnkD").subscribe(0.0)
+        #self.turnController = wpimath.controller.PIDController(self.TurnkP, self.TurnkI, self.TurnkD)
+        #self.turnController.enableContinuousInput(-180.0, 180.0)
+        #self.turnController.setTolerance(10.0)
 
         # Create PID Controller for Drive
-        self.DrivekP = self.sd.getValue("DrivekP", 0.02)
-        self.DrivekI = self.sd.getValue("DrivekI", 0.02)
-        self.DrivekD = self.sd.getValue("DrivekD", 0.0005)
-        self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
-        self.driveController.setTolerance(-0.1 * self.tpf)
+        #self.DrivekP = # self.sd.getDoubleTopic("DrivekP").subscribe(0.02)
+        #self.DrivekI = # self.sd.getDoubleTopic("DrivekI", 0.02)
+        #self.DrivekD = # self.sd.getDoubleTopic("DrivekD", 0.0005)
+        #self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
+        #self.driveController.setTolerance(-0.1 * self.tpf)
 
         # gyro
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
-        self.sd.putValue("Gyro Yaw: ", self.gyro.getYaw())
+        ## self.sd.putValue("Gyro Yaw: ", self.gyro.getYaw())
         # The robot's drive
         self.rightTalon.setInverted(True)
         self.rightTalon2.setInverted(True)
         self.drive = wpilib.drive.DifferentialDrive(
-            wpilib.SpeedControllerGroup(self.leftTalon, self.leftTalon2),
-            wpilib.SpeedControllerGroup(self.rightTalon, self.rightTalon2),
+            wpilib.MotorControllerGroup(self.leftTalon, self.leftTalon2),
+            wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2),
         )
 
         # The left-side drive encoder
@@ -85,14 +85,14 @@ class DriveSubsystem(commands2.SubsystemBase):
 
     def getAverageEncoderDistance(self) -> float:
         """Gets the average distance of the TWO encoders."""
-        self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
-        self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
         return (self.leftTalon.getSelectedSensorPosition()  * 12 / self.tpf)
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""
-        self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
-        self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
         return self.leftTalon.getSelectedSensorPosition() * -1
 
     def setMaxOutput(self, maxOutput: float):

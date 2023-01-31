@@ -1,7 +1,7 @@
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 import commands2
 import wpilib
-from networktables import NetworkTables
+# from networktables import NetworkTables
 
 class dropOff(commands2.CommandBase):
     def __init__(self, duration: float, speed: float, snowveyor: SnowveyorSubsystem) -> None:

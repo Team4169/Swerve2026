@@ -8,7 +8,7 @@ import math
 
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
-from networktables import NetworkTables
+# from networktables import NetworkTables
 
 
 
@@ -23,8 +23,9 @@ class MyRobot(commands2.TimedCommandRobot):
     autonomousCommand: typing.Optional[commands2.Command] = None
 
     def output(self, text, value):
+        pass
       # print(text + ': ' + str(value))
-      self.container.drive.sd.putValue(text, str(value))
+      # self.container.drive.sd.putValue(text, str(value))
 
     def robotInit(self) -> None:
         """
@@ -118,7 +119,7 @@ class MyRobot(commands2.TimedCommandRobot):
             self.direction = self.driverController.getLeftX()
         self.leftX = self.driverController.getLeftX()
         self.leftY = self.driverController.getLeftY()
-        self.rightX = self.driveController.getLeftX()
+        self.rightX = self.driverController.getRightX()
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
         
@@ -137,23 +138,23 @@ class MyRobot(commands2.TimedCommandRobot):
 
     #this is from the second
     #note the direction of the motors on the right must be reversed
-        # self.gyroRad = self.drive.gyro * (math.pi/180)
-        # self.rotX = self.leftX * math.cos(self.gyroRad) - self.leftY * math.sin(self.gyroRad)
-        # self.rotY = self.leftX * math.sin(self.gyroRad) + self.leftY * math.cos(self.gyroRad)
+        self.gyroRad = self.drive.gyro.getYaw() * (math.pi/180)
+        self.rotX = self.leftX * math.cos(self.gyroRad) - self.leftY * math.sin(self.gyroRad)
+        self.rotY = self.leftX * math.sin(self.gyroRad) + self.leftY * math.cos(self.gyroRad)
 
-        # self.denom = math.max(math.abs(self.leftY) + math.abs(self.leftX) + math.abs(self.rightX), 1);
+        self.denom = max(abs(self.leftY) + abs(self.leftX) + abs(self.rightX), 1);
 
-        # self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
-        # self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
-        # self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
-        # self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
+        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
+        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
+        self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
+        self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
 
-        # self.leftTalon.set(self.frontLeftMotor)
-        # self.leftTalon2.set(self.backLeftMotor)
-        # self.rightTalon.set(self.frontRightMotor)
-        # self.rightTalon2.set(self.backRightMotor)
+        self.leftTalon.set(self.frontLeftMotor)
+        self.leftTalon2.set(self.backLeftMotor)
+        self.rightTalon.set(self.frontRightMotor)
+        self.rightTalon2.set(self.backRightMotor)
 
-        #
+
         # if self.operatorController.getStartButtonPressed():
         #     # self.output("")
         #     self.climbMode = not self.climbMode
@@ -161,7 +162,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #         self.container.bindClimbMode()
         #     else:
         #         self.container.unbindClimbMode()
-
+        #
         # if self.climbMode:
         #     dir = self.operatorController.getPOV()
         #     self.speed = 0.5

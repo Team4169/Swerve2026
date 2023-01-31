@@ -24,15 +24,15 @@ class MoveCommand(commands2.CommandBase):
         self.drive.turnController.setSetpoint(self.heading)
 
     def execute(self) -> None:
-        self.drive.sd.putValue("Gyro Yaw", self.drive.gyro.getYaw())
-        self.drive.sd.putValue("distance goal new", self.distance)
-        self.drive.sd.putValue("turn goal", self.heading)
-        self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
+        # self.drive.sd.putValue("Gyro Yaw", self.drive.gyro.getYaw())
+        # self.drive.sd.putValue("distance goal new", self.distance)
+        # self.drive.sd.putValue("turn goal", self.heading)
+        # self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
         if self.distance:
             drivespeed = self.drive.driveController.calculate(self.drive.getAverageEncoderTicks(), self.distance)
-            self.drive.sd.putValue("calculated drive speed",drivespeed)
+            # self.drive.sd.putValue("calculated drive speed",drivespeed)
             drivespeed = self.drive.validateDriveSpeed(drivespeed)
-            self.drive.sd.putValue("final calculated drive speed",drivespeed)
+            # self.drive.sd.putValue("final calculated drive speed",drivespeed)
         else:
             drivespeed = 0
         turnspeed = self.drive.turnController.calculate(self.drive.gyro.getYaw(), self.heading)
@@ -48,7 +48,7 @@ class MoveCommand(commands2.CommandBase):
             self.in_threshold += 1
         else:
             self.in_threshold = 0
-        self.drive.sd.putValue("self.in_threshold", self.in_threshold)
+        # self.drive.sd.putValue("self.in_threshold", self.in_threshold)
         if self.in_threshold > self.goal_threshold_ticks:
             return True
         return False
