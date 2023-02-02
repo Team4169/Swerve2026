@@ -8,7 +8,7 @@ import math
 
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
-# from networktables import NetworkTables
+import ntcore
 
 
 
@@ -105,12 +105,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
         #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
-
+        self.container.drive.gyroOut.set(self.container.drive.gyro.getYaw())
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
-        self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
-        self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
+        # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
+        # self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
         # self.output("climb mode",self.climbMode)
+
         if self.driverController.getLeftBumper():
             self.output("straight mode", True)
             self.direction = 0

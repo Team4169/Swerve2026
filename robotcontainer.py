@@ -1,6 +1,6 @@
 import wpilib
 from wpilib.interfaces import GenericHID
-# from networktables import NetworkTables
+import ntcore
 
 import rev, ctre
 

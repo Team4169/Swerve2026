@@ -3,7 +3,7 @@ import wpilib
 import wpilib.drive
 import ctre
 import constants
-from ntcore import NetworkTable
+import ntcore
 import wpimath.controller
 import navx
 import rev
@@ -21,26 +21,28 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.maxTurnSpeed = 0.6
 
         # smartdashboard
-        ## self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
+        self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
 
         # Create PID Controller for Turning
-        #self.TurnkP = # self.sd.getDoubleTopic("TurnkP").subscribe(0.032)
-        #self.TurnkI = # self.sd.getDoubleTopic("TurnkI").subscribe(0.0)
-        #self.TurnkD = # self.sd.getDoubleTopic("TurnkD").subscribe(0.0)
+        self.TurnkI = self.sd.getDoubleTopic("TurnkI").subscribe(0.0)
+        self.TurnkP = self.sd.getDoubleTopic("TurnkP").subscribe(0.032)
+        self.TurnkD = self.sd.getDoubleTopic("TurnkD").subscribe(0.0)
         #self.turnController = wpimath.controller.PIDController(self.TurnkP, self.TurnkI, self.TurnkD)
         #self.turnController.enableContinuousInput(-180.0, 180.0)
         #self.turnController.setTolerance(10.0)
 
         # Create PID Controller for Drive
-        #self.DrivekP = # self.sd.getDoubleTopic("DrivekP").subscribe(0.02)
-        #self.DrivekI = # self.sd.getDoubleTopic("DrivekI", 0.02)
-        #self.DrivekD = # self.sd.getDoubleTopic("DrivekD", 0.0005)
+        self.DrivekP = self.sd.getDoubleTopic("DrivekP").subscribe(0.02)
+        self.DrivekI = self.sd.getDoubleTopic("DrivekI").subscribe(0.02)
+        self.DrivekD = self.sd.getDoubleTopic("DrivekD").subscribe(0.0005)
         #self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
         #self.driveController.setTolerance(-0.1 * self.tpf)
 
         # gyro
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
-        ## self.sd.putValue("Gyro Yaw: ", self.gyro.getYaw())
+        self.gyroOut = self.sd.getDoubleTopic("Gyro Yaw").publish()
+        self.gyroOut.set(self.gyro.getYaw())
+        
         # The robot's drive
         self.rightTalon.setInverted(True)
         self.rightTalon2.setInverted(True)

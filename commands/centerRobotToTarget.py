@@ -7,7 +7,7 @@ from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from .reset_gyro import ResetGyro
-# from networktables import NetworkTables
+import ntcore
 import rev
 #from .SnowVeyerCommands.pickUp import pickUp
 #from .SnowVeyerCommands.dropOff import dropOff

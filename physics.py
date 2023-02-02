@@ -1,56 +1,41 @@
 #
-# See the documentation for more details on how this works
+# See the notes for the other physics sample
 #
-# The idea here is you provide a simulation object that overrides specific
-# pieces of WPILib, and modifies motors/sensors accordingly depending on the
-# state of the simulation. An example of this would be measuring a motor
-# moving for a set period of time, and then changing a limit switch to turn
-# on after that period of time. This can help you do more complex simulations
-# of your robot code without too much extra effort.
-#
-import wpilib
+
 import wpilib.simulation
-from wpimath.system import LinearSystemId
-from wpimath.system.plant import DCMotor
-from robot import MyRobot
-import constants
 
 from pyfrc.physics.core import PhysicsInterface
+from pyfrc.physics import drivetrains
+
+import typing
+
+if typing.TYPE_CHECKING:
+    from robot import MyRobot
 
 
 class PhysicsEngine:
     """
-    Simulates a motor moving something that strikes two limit switches,
-    one on each end of the track. Obviously, this is not particularly
-    realistic, but it's good enough to illustrate the point
+    Simulates a 4-wheel mecanum robot using Tank Drive joystick control
     """
 
     def __init__(self, physics_controller: PhysicsInterface, robot: "MyRobot"):
+        """
+        :param physics_controller: `pyfrc.physics.core.Physics` object
+                                   to communicate simulation effects to
+        """
 
         self.physics_controller = physics_controller
 
         # Motors
-        self.l_motor = wpilib.simulation.PWMSim(1)
-        self.r_motor = wpilib.simulation.PWMSim(2)
-        self.system = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5, 0.3)
-        self.drivesim = wpilib.simulation.DifferentialDrivetrainSim(
-            self.system,
-            constants.kTrackWidth,
-            DCMotor.CIM(constants.kDriveTrainMotorCount),
-            constants.kGearingRatio,
-            constants.kWheelRadius,
-        )
-        # print()
-        # robot.container.drive.sd.putValue("simcollection",robot.container.drive.left1.getSimCollection())
-        self.leftEncoderSim = robot.container.drive.leftTalon.getSimCollection()
-        self.rightEncoderSim = robot.container.drive.rightTalon.getSimCollection()
-        # self.leftEncoderSim = wpilib.simulation.EncoderSim.createForChannel(
-        #     constants.kLeftEncoderPorts[0]
-        # )
-        # wpilib.simulation.EncoderSim.cou
-        # self.rightEncoderSim = wpilib.simulation.EncoderSim().createForChannel(
-        #     constants.kRightEncoderPorts[0]
-        # )
+        self.lf_motor = wpilib.simulation.PWMSim(robot.frontLeftMotor.getChannel())
+        self.lr_motor = wpilib.simulation.PWMSim(robot.rearLeftMotor.getChannel())
+        self.rf_motor = wpilib.simulation.PWMSim(robot.frontRightMotor.getChannel())
+        self.rr_motor = wpilib.simulation.PWMSim(robot.rearRightMotor.getChannel())
+
+        # Gyro
+        self.gyro = wpilib.simulation.AnalogGyroSim(robot.gyro)
+
+        self.drivetrain = drivetrains.MecanumDrivetrain()
 
     def update_sim(self, now: float, tm_diff: float) -> None:
         """
@@ -63,22 +48,15 @@ class PhysicsEngine:
         """
 
         # Simulate the drivetrain
-        l_motor = self.l_motor.getSpeed()
-        r_motor = self.r_motor.getSpeed()
+        lf_motor = self.lf_motor.getSpeed()
+        lr_motor = self.lr_motor.getSpeed()
+        rf_motor = self.rf_motor.getSpeed()
+        rr_motor = self.rr_motor.getSpeed()
 
-        voltage = wpilib.RobotController.getInputVoltage()
-        self.drivesim.setInputs(l_motor * voltage, r_motor * voltage)
-        self.drivesim.update(tm_diff)
-        # print("ayo")
-        # print(self.drivesim.getLeftPosition())
-        # print()
-        self.leftEncoderSim.setQuadratureRawPosition(int(self.drivesim.getLeftPosition() * 39.37))
-        self.rightEncoderSim.setQuadratureRawPosition(int(self.drivesim.getRightPosition() * 39.37))
-        self.leftEncoderSim.setQuadratureVelocity(int(self.drivesim.getLeftVelocity() * 39.37))
-        self.rightEncoderSim.setQuadratureVelocity(int(self.drivesim.getRightVelocity() * 39.37))
-        # self.leftEncoderSim.setDistance(self.drivesim.getLeftPosition() * 39.37)
-        # self.leftEncoderSim.setRate(self.drivesim.getLeftVelocity() * 39.37)
-        # self.rightEncoderSim.setDistance(self.drivesim.getRightPosition() * 39.37)
-        # self.rightEncoderSim.setRate(self.drivesim.getRightVelocity() * 39.37)
+        speeds = self.drivetrain.calculate(lf_motor, lr_motor, rf_motor, rr_motor)
+        pose = self.physics_controller.drive(speeds, tm_diff)
 
-        self.physics_controller.field.setRobotPose(self.drivesim.getPose())
+        # Update the gyro simulation
+        # -> FRC gyros are positive clockwise, but the returned pose is positive
+        #    counter-clockwise
+        self.gyro.setAngle(-pose.rotation().degrees())

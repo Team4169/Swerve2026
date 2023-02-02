@@ -2,7 +2,7 @@ import commands2
 import wpilib
 import wpilib.drive
 import constants
-# from networktables import NetworkTables
+import ntcore
 import rev
 
 

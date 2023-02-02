@@ -3,7 +3,7 @@ import wpilib
 import wpilib.drive
 import ctre
 import constants
-# from networktables import NetworkTables
+import ntcore
 import wpimath.controller
 
 class SnowveyorSubsystem(commands2.SubsystemBase):

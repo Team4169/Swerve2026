@@ -1,7 +1,7 @@
 from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 import commands2
 import wpilib
-# from networktables import NetworkTables
+import ntcore
 
 class pickUp(commands2.CommandBase):
     def __init__(self, duration: float, speed:float, snowveyor: SnowveyorSubsystem) -> None:
