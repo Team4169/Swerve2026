@@ -11,7 +11,6 @@ leftTalon = 3
 leftTalon2 = 7
 rightTalon = 9
 rightTalon2 = 4
-neoMotor = 1
 
 # Encoders
 kLeftEncoderPorts = (0, 1)

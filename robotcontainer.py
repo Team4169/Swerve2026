@@ -59,7 +59,7 @@ class RobotContainer:
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
         self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
 
-        self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        # self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         # self.table = NetworkTables.getTable("limelight")
         # tx = self.table.getNumber('tx', None)
@@ -94,8 +94,7 @@ class RobotContainer:
         self.drive = DriveSubsystem(leftTalon=self.leftTalon,
                                     leftTalon2=self.leftTalon2,
                                     rightTalon=self.rightTalon,
-                                    rightTalon2=self.rightTalon2)
-
+                                    rightTalon2=self.rightTalon2) #.drive
         # self.snowveyor = SnowveyorSubsystem(intake=self.intake,
         #                                     outtake=self.outtake,
         #                                     snowveyor=self.snowveyor)
@@ -147,13 +146,13 @@ class RobotContainer:
         # self.configureButtonBindings()
 
         # set up default drive command
-        self.drive.setDefaultCommand(
-            DefaultDrive(
-                self.drive,
-                lambda: -self.driverController.getRightY(),
-                lambda: self.driverController.getLeftY(),
-            )
-        )
+        # self.drive.setDefaultCommand(
+        #     DefaultDrive(
+        #         self.drive,
+        #         lambda: -self.driverController.getRightY(),
+        #         lambda: self.driverController.getLeftY(),
+        #     )
+        # )
         #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kY).whenPressed(
         #    MoveForwardToVisionTarget(self.drive, self.neoMotor))
         #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kB).whenPressed(

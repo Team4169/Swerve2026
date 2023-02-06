@@ -2,6 +2,7 @@
 
 import typing
 import wpilib
+
 import commands2
 import ctre
 import math
@@ -28,6 +29,7 @@ class MyRobot(commands2.TimedCommandRobot):
       # self.container.drive.sd.putValue(text, str(value))
 
     def robotInit(self) -> None:
+        
         """
         This function is run when the robot is first started up and should be used for any
         initialization code.
@@ -46,7 +48,13 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
 
-        self.neoMotor = self.container.neoMotor
+        self.mech = wpilib.drive.MecanumDrive(
+            self.leftTalon,
+            self.leftTalon2,
+            self.rightTalon,
+            self.rightTalon2,
+        )
+        # self.neoMotor = self.container.neoMotor
 
         #self.liftArm = self.container.liftArm
         #self.rotateArm = self.container.rotateArm
@@ -119,7 +127,7 @@ class MyRobot(commands2.TimedCommandRobot):
             self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
         self.leftX = self.driverController.getLeftX()
-        self.leftY = self.driverController.getLeftY()
+        self.leftY = -self.driverController.getLeftY()
         self.rightX = self.driverController.getRightX()
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
@@ -139,21 +147,22 @@ class MyRobot(commands2.TimedCommandRobot):
 
     #this is from the second
     #note the direction of the motors on the right must be reversed
+
         self.gyroRad = self.drive.gyro.getYaw() * (math.pi/180)
-        self.rotX = self.leftX * math.cos(self.gyroRad) - self.leftY * math.sin(self.gyroRad)
-        self.rotY = self.leftX * math.sin(self.gyroRad) + self.leftY * math.cos(self.gyroRad)
+        self.rotX = self.leftX * math.cos(-self.gyroRad) - self.leftY * math.sin(-self.gyroRad)
+        self.rotY = self.leftX * math.sin(-self.gyroRad) + self.leftY * math.cos(-self.gyroRad)
 
         self.denom = max(abs(self.leftY) + abs(self.leftX) + abs(self.rightX), 1);
 
-        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
-        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
-        self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
-        self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
+        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) #/ self.denom
+        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) #/ self.denom
+        self.frontRightMotor = (self.rotY - self.rotX - self.rightX)# / self.denom
+        self.backRightMotor = (self.rotY + self.rotX - self.rightX) #/ self.denom
 
-        self.leftTalon.set(self.frontLeftMotor)
-        self.leftTalon2.set(self.backLeftMotor)
-        self.rightTalon.set(self.frontRightMotor)
-        self.rightTalon2.set(self.backRightMotor)
+        # self.leftTalon.set(self.frontLeftMotor)
+        # self.leftTalon2.set(self.backLeftMotor)
+        # self.rightTalon.set(self.frontRightMotor)
+        # self.rightTalon2.set(self.backRightMotor)
 
 
         # if self.operatorController.getStartButtonPressed():
@@ -184,20 +193,19 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.output("endgame drive speed",self.speed)
         #     self.drive.arcadeDrive(self.speed, self.direction)
         #     return
+        self.mech.driveCartesian(self.leftX, self.leftY, self.rightX) #self.gyroRad
+        
+        # if self.driverController.getAButton():
+        #     self.leftTalon2.set(1)
+        
+        # elif self.driverController.getBButton():
+        #     self.rightTalon2.set(1)
 
-
-        if self.driverController.getAButton():
-            self.speed *= 0.6
-            self.direction *= 0.6
-        elif self.driverController.getBButton():
-            self.speed *= 0.75
-            self.direction *= 0.75
-        elif self.driverController.getYButton():
-            self.speed *= 0.85
-            self.direction *= 0.85
-        elif self.driverController.getXButton():
-            self.speed *= 0.5
-            self.direction *= 0.5
+        # elif self.driverController.getYButton():
+        #     self.rightTalon.set(1)
+        
+        # elif self.driverController.getXButton():
+        #     self.leftTalon.set(1)
 
 
         # if self.operatorController.getLeftTriggerAxis() > 0.2:

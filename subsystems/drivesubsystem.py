@@ -44,12 +44,12 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.gyroOut.set(self.gyro.getYaw())
         
         # The robot's drive
-        self.rightTalon.setInverted(True)
-        self.rightTalon2.setInverted(True)
+        # self.rightTalon.setInverted(True)
+        # self.rightTalon2.setInverted(True)
         self.drive = wpilib.drive.DifferentialDrive(
             wpilib.MotorControllerGroup(self.leftTalon, self.leftTalon2),
-            wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2),
-        )
+            wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2)
+            )
 
         # The left-side drive encoder
         # NOTE FROM NOAH - I commented the encoders out, will use the talon interface to get encoders
