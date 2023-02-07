@@ -48,12 +48,12 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
 
-        self.mech = wpilib.drive.MecanumDrive(
-            self.leftTalon,
-            self.leftTalon2,
-            self.rightTalon,
-            self.rightTalon2,
-        )
+        # self.mech = wpilib.drive.MecanumDrive(
+        #     self.leftTalon,
+        #     self.leftTalon2,
+        #     self.rightTalon,
+        #     self.rightTalon2,
+        # )
         # self.neoMotor = self.container.neoMotor
 
         #self.liftArm = self.container.liftArm
@@ -126,9 +126,9 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
-        self.leftX = self.driverController.getLeftX()
-        self.leftY = -self.driverController.getLeftY()
-        self.rightX = self.driverController.getRightX()
+        self.leftX = addDeadzone(self.driverController.getLeftX())
+        self.leftY = addDeadzone(-self.driverController.getLeftY())
+        self.rightX = addDeadzone(self.driverController.getRightX())
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
         
@@ -159,12 +159,31 @@ class MyRobot(commands2.TimedCommandRobot):
         self.frontRightMotor = (self.rotY - self.rotX - self.rightX)# / self.denom
         self.backRightMotor = (self.rotY + self.rotX - self.rightX) #/ self.denom
 
-        # self.leftTalon.set(self.frontLeftMotor)
-        # self.leftTalon2.set(self.backLeftMotor)
-        # self.rightTalon.set(self.frontRightMotor)
-        # self.rightTalon2.set(self.backRightMotor)
+        self.leftTalon.set(self.frontLeftMotor)
+        self.leftTalon2.set(self.backLeftMotor)
+        self.rightTalon.set(self.frontRightMotor)
+        self.rightTalon2.set(self.backRightMotor)
+        
+        #XXX: This is test for each individual motor
+        # if self.driverController.getAButton():
+        #     self.leftTalon2.set(0.5)
+        # else:
+        #     self.leftTalon2.set(0)
+        
+        # if self.driverController.getBButton():
+        #     self.rightTalon2.set(0.5)
+        # else:
+        #     self.rightTalon2.set(0)
 
-
+        # if self.driverController.getYButton():
+        #     self.rightTalon.set(0.5)
+        # else:
+        #     self.rightTalon.set(0)
+        
+        # if self.driverController.getXButton():
+        #     self.leftTalon.set(0.5)
+        # else:
+        #     self.leftTalon.set(0)
         # if self.operatorController.getStartButtonPressed():
         #     # self.output("")
         #     self.climbMode = not self.climbMode
@@ -193,19 +212,9 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.output("endgame drive speed",self.speed)
         #     self.drive.arcadeDrive(self.speed, self.direction)
         #     return
-        self.mech.driveCartesian(self.leftX, self.leftY, self.rightX) #self.gyroRad
+        # self.mech.driveCartesian(self.leftX, self.leftY, self.rightX) #self.gyroRad
         
-        # if self.driverController.getAButton():
-        #     self.leftTalon2.set(1)
-        
-        # elif self.driverController.getBButton():
-        #     self.rightTalon2.set(1)
-
-        # elif self.driverController.getYButton():
-        #     self.rightTalon.set(1)
-        
-        # elif self.driverController.getXButton():
-        #     self.leftTalon.set(1)
+        # addDeadzone(
 
 
         # if self.operatorController.getLeftTriggerAxis() > 0.2:
@@ -231,3 +240,67 @@ class MyRobot(commands2.TimedCommandRobot):
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
+# #!/usr/bin/env python3
+# """
+#     This is a demo program showing how to use Mecanum control with the
+#     MecanumDrive class.
+# """
+# import ctre
+# import wpilib
+# from wpilib.drive import MecanumDrive
+
+
+# class MyRobot(wpilib.TimedRobot):
+#     # Channels on the roboRIO that the motor controllers are plugged in to
+#     frontLeftChannel = 3
+#     rearLeftChannel = 7
+#     frontRightChannel = 9
+#     rearRightChannel = 4
+
+#     # The channel on the driver station that the joystick is connected to
+#     joystickChannel = 0
+
+#     def robotInit(self):
+#         """Robot initialization function"""
+#         self.frontLeftMotor = ctre.WPI_TalonSRX(self.frontLeftChannel)
+#         self.rearLeftMotor = ctre.WPI_TalonSRX(self.rearLeftChannel)
+#         self.frontRightMotor = ctre.WPI_TalonSRX(self.frontRightChannel)
+#         self.rearRightMotor = ctre.WPI_TalonSRX(self.rearRightChannel)
+
+#         # invert the left side motors
+#         self.frontRightMotor.setInverted(True)
+#         self.frontLeftMotor.setInverted(True)
+
+#         # you may need to change or remove this to match your robot
+#         # self.rearRightMotor.setInverted(True)
+
+#         self.drive = MecanumDrive(
+#             self.frontLeftMotor,
+#             self.rearLeftMotor,
+#             self.frontRightMotor,
+#             self.rearRightMotor,
+#         )
+#         # Define the Xbox Controller.
+#         self.stick = wpilib.XboxController(self.joystickChannel)
+
+#     def teleopInit(self):
+#         self.drive.setSafetyEnabled(True)
+
+#     def teleopPeriodic(self):
+#         """Runs the motors with Mecanum drive."""
+#         # Use the joystick X axis for lateral movement, Y axis for forward movement, and Z axis for rotation.
+#         # This sample does not use field-oriented drive, so the gyro input is set to zero.
+#         # This Stick configuration is created by K.E. on our team.  Left stick Y axis is speed, Left Stick X axis is strafe, and Right Stick Y axis is turn.
+#         self.drive.driveCartesian(
+#             self.stick.getLeftX(),
+#             self.stick.getLeftY(),
+#             self.stick.getRightY(),
+#         )
+
+#         """Alternatively, to match the driver station enumeration, you may use  ---> self.drive.driveCartesian(
+#             self.stick.getRawAxis(1), self.stick.getRawAxis(3), self.stick.getRawAxis(2), 0
+#         )"""
+
+
+# if __name__ == "__main__":
+#     wpilib.run(MyRobot)
