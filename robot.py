@@ -94,6 +94,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #write auto code here
 
     def teleopInit(self) -> None:
+        self.container.drive.gyro.reset()
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
@@ -126,8 +127,8 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
-        self.leftX = addDeadzone(self.driverController.getLeftX())
-        self.leftY = addDeadzone(-self.driverController.getLeftY())
+        self.leftY = addDeadzone(self.driverController.getLeftX())
+        self.leftX = addDeadzone(self.driverController.getLeftY())
         self.rightX = addDeadzone(self.driverController.getRightX())
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
@@ -147,17 +148,17 @@ class MyRobot(commands2.TimedCommandRobot):
 
     #this is from the second
     #note the direction of the motors on the right must be reversed
-
-        self.gyroRad = self.drive.gyro.getYaw() * (math.pi/180)
+        # print(self.container.drive.gyro.getYaw())
+        self.gyroRad = self.container.drive.gyro.getYaw() * (math.pi/180)
         self.rotX = self.leftX * math.cos(-self.gyroRad) - self.leftY * math.sin(-self.gyroRad)
         self.rotY = self.leftX * math.sin(-self.gyroRad) + self.leftY * math.cos(-self.gyroRad)
 
         self.denom = max(abs(self.leftY) + abs(self.leftX) + abs(self.rightX), 1);
 
-        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) #/ self.denom
-        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) #/ self.denom
-        self.frontRightMotor = (self.rotY - self.rotX - self.rightX)# / self.denom
-        self.backRightMotor = (self.rotY + self.rotX - self.rightX) #/ self.denom
+        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
+        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
+        self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
+        self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
 
         self.leftTalon.set(self.frontLeftMotor)
         self.leftTalon2.set(self.backLeftMotor)
