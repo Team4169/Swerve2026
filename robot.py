@@ -2,7 +2,7 @@
 
 import typing
 import wpilib
-
+from wpimath.geometry import Rotation2d 
 import commands2
 import ctre
 import math
@@ -48,12 +48,12 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
 
-        # self.mech = wpilib.drive.MecanumDrive(
-        #     self.leftTalon,
-        #     self.leftTalon2,
-        #     self.rightTalon,
-        #     self.rightTalon2,
-        # )
+        self.mech = wpilib.drive.MecanumDrive(
+            self.leftTalon,
+            self.leftTalon2,
+            self.rightTalon,
+            self.rightTalon2,
+        )
         # self.neoMotor = self.container.neoMotor
 
         #self.liftArm = self.container.liftArm
@@ -127,8 +127,8 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
-        self.leftY = addDeadzone(self.driverController.getLeftX())
-        self.leftX = addDeadzone(self.driverController.getLeftY())
+        self.leftX = addDeadzone(self.driverController.getLeftX())
+        self.leftY = addDeadzone(self.driverController.getLeftY())
         self.rightX = addDeadzone(self.driverController.getRightX())
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
@@ -160,10 +160,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
         self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
 
-        self.leftTalon.set(self.frontLeftMotor)
-        self.leftTalon2.set(self.backLeftMotor)
-        self.rightTalon.set(self.frontRightMotor)
-        self.rightTalon2.set(self.backRightMotor)
+        # self.leftTalon.set(self.frontLeftMotor)
+        # self.leftTalon2.set(self.backLeftMotor)
+        # self.rightTalon.set(self.frontRightMotor)
+        # self.rightTalon2.set(self.backRightMotor)
         
         #XXX: This is test for each individual motor
         # if self.driverController.getAButton():
@@ -185,35 +185,8 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.leftTalon.set(0.5)
         # else:
         #     self.leftTalon.set(0)
-        # if self.operatorController.getStartButtonPressed():
-        #     # self.output("")
-        #     self.climbMode = not self.climbMode
-        #     if self.climbMode:
-        #         self.container.bindClimbMode()
-        #     else:
-        #         self.container.unbindClimbMode()
-        #
-        # if self.climbMode:
-        #     dir = self.operatorController.getPOV()
-        #     self.speed = 0.5
-        #     if dir == 0:
-        #         self.direction = 0
-        #     elif dir == 90:
-        #         self.speed = 0
-        #         self.direction = 0.7
-        #     elif dir == 180:
-        #         self.speed *= -1
-        #         self.direction = 0
-        #     elif dir == 270:
-        #         self.speed = 0
-        #         self.direction = -0.7
-        #     else:
-        #         self.speed = 0
-        #     self.output("endgame dir",dir)
-        #     self.output("endgame drive speed",self.speed)
-        #     self.drive.arcadeDrive(self.speed, self.direction)
-        #     return
-        # self.mech.driveCartesian(self.leftX, self.leftY, self.rightX) #self.gyroRad
+
+        self.mech.driveCartesian( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
         
         # addDeadzone(
 
