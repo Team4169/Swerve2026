@@ -70,3 +70,7 @@ rotateArmCloseToRobotTicks = 50
 rotateArmCloseToBackTicks = 100
 
 deadzone = .1
+
+maxBalanceAngle = 15
+balanceSensitivity = -2
+maxBalanceSpeed = .3

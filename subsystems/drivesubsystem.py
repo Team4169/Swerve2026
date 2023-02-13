@@ -43,6 +43,9 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.gyroOut = self.sd.getDoubleTopic("Gyro Yaw").publish()
         self.gyroOut.set(self.gyro.getYaw())
         
+        self.gyroPitchOut = self.sd.getDoubleTopic("Gyro Pitch").publish()
+        self.gyroPitchOut.set(self.gyro.getPitch())
+        
         # The robot's drive
         self.rightTalon2.setInverted(True)
         self.rightTalon.setInverted(True)

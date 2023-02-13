@@ -6,7 +6,7 @@ from wpimath.geometry import Rotation2d
 import commands2
 import ctre
 import math
-
+import constants
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
 import ntcore
@@ -110,11 +110,12 @@ class MyRobot(commands2.TimedCommandRobot):
         self.climbMode = False
         self.direction = 0
 
-
+ 
 
     def teleopPeriodic(self):
         #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
         self.container.drive.gyroOut.set(self.container.drive.gyro.getYaw())
+        self.container.drive.gyroPitchOut.set(self.container.drive.gyro.getPitch())
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
@@ -165,6 +166,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.rightTalon.set(self.frontRightMotor)
         # self.rightTalon2.set(self.backRightMotor)
         
+            
+
         #XXX: This is test for each individual motor
         # if self.driverController.getAButton():
         #     self.leftTalon2.set(0.5)
@@ -184,10 +187,24 @@ class MyRobot(commands2.TimedCommandRobot):
         # if self.driverController.getXButton():
         #     self.leftTalon.set(0.5)
         # else:
-        #     self.leftTalon.set(0)
 
-        self.mech.driveCartesian( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
+        #     self.leftTalon.set(0)
         
+        
+        if not self.driverController.getAButton():
+            self.mech.driveCartesian( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
+        else:
+
+            self.pitchAngle = self.container.drive.gyro.getPitch()
+            self.speed = constants.maxBalanceSpeed*2/(1 + math.e**(-constants.balanceSensitivity*(self.pitchAngle/constants.maxBalanceAngle)))-constants.maxBalanceSpeed #min(max(-abs(self.pitchAngle) + , 0), 1)
+            
+            
+            self.leftTalon.set(self.speed)
+            self.rightTalon.set(self.speed)
+            self.leftTalon2.set(self.speed)
+            self.rightTalon2.set(self.speed)
+            
+
         # addDeadzone(
 
 
