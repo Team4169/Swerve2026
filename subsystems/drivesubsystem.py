@@ -38,17 +38,23 @@ class DriveSubsystem(commands2.SubsystemBase):
         #self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
         #self.driveController.setTolerance(-0.1 * self.tpf)
 
+        #driver contstants for balancing
+        self.balanceSensitivitySub = self.sd.getDoubleTopic("balanceSensitivity").subscribe(-2.0)
+
         # gyro
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
         self.gyroOut = self.sd.getDoubleTopic("Gyro Yaw").publish()
-        self.gyroOut.set(self.gyro.getYaw())
         
         self.gyroPitchOut = self.sd.getDoubleTopic("Gyro Pitch").publish()
-        self.gyroPitchOut.set(self.gyro.getPitch())
         
         # The robot's drive
         self.rightTalon2.setInverted(True)
         self.rightTalon.setInverted(True)
+
+        #encoders
+        self.encoderLeftOut = self.sd.getDoubleTopic("Left Encoder").publish()
+        self.encoderRightOut = self.sd.getDoubleTopic("Right Encoder").publish()
+
         # self.drive = wpilib.drive.DifferentialDrive(
         #     wpilib.MotorControllerGroup(self.leftTalon, self.leftTalon2),
         #     wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2)
@@ -83,22 +89,22 @@ class DriveSubsystem(commands2.SubsystemBase):
     #     """
     #     self.drive.arcadeDrive(fwd, rot)
 
-    # def resetEncoders(self) -> None:
-    #     self.leftTalon.setSelectedSensorPosition(0, 0, 10)
-    #     self.rightTalon.setSelectedSensorPosition(0, 0, 10)
-    #     """Resets the drive encoders to currently read a position of 0."""
+    def resetEncoders(self) -> None:
+        self.leftTalon.setSelectedSensorPosition(0, 0, 10)
+        self.rightTalon.setSelectedSensorPosition(0, 0, 10)
+        """Resets the drive encoders to currently read a position of 0."""
 
-    # def getAverageEncoderDistance(self) -> float:
-    #     """Gets the average distance of the TWO encoders."""
-    #     # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
-    #     # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-    #     return (self.leftTalon.getSelectedSensorPosition()  * 12 / self.tpf)
+    def getAverageEncoderDistance(self) -> float:
+        """Gets the average distance of the TWO encoders."""
+        # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        return (self.leftTalon.getSelectedSensorPosition()  * 12 / self.tpf)
 
-    # def getAverageEncoderTicks(self) -> float:
-    #     """Gets the average distance of the TWO encoders."""
-    #     # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
-    #     # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-    #     return self.leftTalon.getSelectedSensorPosition() * -1
+    def getAverageEncoderTicks(self) -> float:
+        """Gets the average distance of the TWO encoders."""
+        # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
+        # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
+        return self.leftTalon.getSelectedSensorPosition() * -1
 
     # def setMaxOutput(self, maxOutput: float):
     #     """
@@ -107,16 +113,16 @@ class DriveSubsystem(commands2.SubsystemBase):
     #     """
     #     self.drive.setMaxOutput(maxOutput)
 
-    # def validateDriveSpeed(self, speed):
-    #     if speed > self.maxDriveSpeed:
-    #         return self.maxDriveSpeed
-    #     if speed < -1 * self.maxDriveSpeed:
-    #         return -1 * self.maxDriveSpeed
-    #     return speed
+    def validateDriveSpeed(self, speed):
+        if speed > self.maxDriveSpeed:
+            return self.maxDriveSpeed
+        if speed < -1 * self.maxDriveSpeed:
+            return -1 * self.maxDriveSpeed
+        return speed
 
-    # def validateTurnSpeed(self, turnSpeed):
-    #     if turnSpeed > self.maxTurnSpeed:
-    #         return self.maxTurnSpeed
-    #     if turnSpeed < -1 * self.maxTurnSpeed:
-    #         return -1 * self.maxTurnSpeed
-    #     return turnSpeed
+    def validateTurnSpeed(self, turnSpeed):
+        if turnSpeed > self.maxTurnSpeed:
+            return self.maxTurnSpeed
+        if turnSpeed < -1 * self.maxTurnSpeed:
+            return -1 * self.maxTurnSpeed
+        return turnSpeed

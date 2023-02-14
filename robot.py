@@ -94,7 +94,10 @@ class MyRobot(commands2.TimedCommandRobot):
         #write auto code here
 
     def teleopInit(self) -> None:
+
+        self.container.drive.resetEncoders()
         self.container.drive.gyro.reset()
+
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
@@ -116,6 +119,10 @@ class MyRobot(commands2.TimedCommandRobot):
         #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
         self.container.drive.gyroOut.set(self.container.drive.gyro.getYaw())
         self.container.drive.gyroPitchOut.set(self.container.drive.gyro.getPitch())
+
+        self.container.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
+        self.container.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
+
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
@@ -189,16 +196,14 @@ class MyRobot(commands2.TimedCommandRobot):
         # else:
 
         #     self.leftTalon.set(0)
-        
+        self.container.drive.balanceSensitivitySub.get()
         
         if not self.driverController.getAButton():
             self.mech.driveCartesian( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
         else:
-
             self.pitchAngle = self.container.drive.gyro.getPitch()
             self.speed = constants.maxBalanceSpeed*2/(1 + math.e**(-constants.balanceSensitivity*(self.pitchAngle/constants.maxBalanceAngle)))-constants.maxBalanceSpeed #min(max(-abs(self.pitchAngle) + , 0), 1)
-            
-            
+            # maybe make it drive cartesian so that the robot can balance while sideways
             self.leftTalon.set(self.speed)
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)

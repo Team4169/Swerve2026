@@ -37,10 +37,10 @@ class MoveCommand(commands2.CommandBase):
             drivespeed = 0
         turnspeed = self.drive.turnController.calculate(self.drive.gyro.getYaw(), self.heading)
         turnspeed = self.drive.validateTurnSpeed(turnspeed)
-        self.drive.arcadeDrive(drivespeed, turnspeed)
+        self.drive.driveCartesian(drivespeed, 0,  turnspeed)
 
     def end(self, interrupted: bool) -> None:
-        self.drive.arcadeDrive(0, 0)
+        self.drive.driveCartesian(0, 0, 0)
 
     def isFinished(self) -> bool:
         if self.drive.turnController.atSetpoint() and \
