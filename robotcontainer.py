@@ -38,6 +38,7 @@ from commands.lucautocommand import LucAutoCommand
 from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.armsubsystem import ArmSubsystem
 # from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 # from subsystems.climbingsubsystem import ClimbingSubsystem
 
@@ -58,6 +59,14 @@ class RobotContainer:
         self.leftTalon2 = ctre.WPI_TalonSRX(constants.leftTalon2)
         self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
         self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
+
+        #Arm motor controllers
+        self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev._rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
+        self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.rotatingArm = rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+
+        #Arm motor encoders
+        self.grabbingArmEncoder = wpilib.counter.UpDownCounter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
 
         # self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
@@ -96,6 +105,27 @@ class RobotContainer:
                                     leftTalon2=self.leftTalon2,
                                     rightTalon=self.rightTalon,
                                     rightTalon2=self.rightTalon2) #.drive
+        
+        self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
+                                extendingArm=self.extendingArm,
+                                rotatingArm=self.rotatingArm,
+                                grabbingArmLimitSwitchMin =None,
+                                grabbingArmLimitSwitchMax =None,
+                                extendingArmLimitSwitchMin =None,
+                                extendingArmLimitSwitchMax =None,
+                                rotatingArmLimitSwitchMin =None,
+                                rotatingArmLimitSwitchMax =None,
+                                grabbingArmEncoder=self.grabbingArmEncoder,
+                                extendingArmEncoder=None,
+                                rotatingArmEncoder=None
+                                )
+        
+                                
+
+
+
+
+
         # self.snowveyor = SnowveyorSubsystem(intake=self.intake,
         #                                     outtake=self.outtake,
         #                                     snowveyor=self.snowveyor)

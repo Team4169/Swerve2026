@@ -12,6 +12,18 @@ leftTalon2 = 7
 rightTalon = 9
 rightTalon2 = 4
 
+# Arm motors
+grabbingArmID = 2
+extendingArmID = None
+rotatingArmID = None
+
+# Arm encoders
+grabbingArmEncoderPort = 0
+extendingArmEncoderID = None
+rotatingArmEncoderID = None
+
+
+
 # Encoders
 kLeftEncoderPorts = (0, 1)
 kRightEncoderPorts = (2, 3)

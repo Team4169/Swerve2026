@@ -56,7 +56,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.rotateEncoder = self.container.rotateEncoder
         # self.liftEncoder = self.container.liftEncoder
 
-        # self.liftArmUpLimitSwitch = self.container.liftArmUpLimitSwitch
+        # self.liftArmUpxtSwitch = self.container.liftArmUpLimitSwitch
         # self.liftArmDownLimitSwitch = self.container.liftArmDownLimitSwitch
         #self.rotateArmBackLimitSwitch = self.container.rotateArmBackLimitSwitch
         #self.rotateArmRobotLimitSwitch = self.container.rotateArmRobotLimitSwitch
@@ -64,7 +64,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.intake = self.container.intake
         # self.outtake = self.container.outtake
         # self.snowveyor = self.container.snowveyor
-
+        self.arm = self.container.arm
+        
         self.drive = self.container.drive
 
 
@@ -134,7 +135,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightX = addDeadzone(self.driverController.getRightX())
         #There are 2 different ways of programming mecanum, this is the from the first
         #note the direction of the motors on the right must be reversed 
-        
+        self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
         
         # self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
         # self.mag = math.sqrt(self.leftX**2 + self.leftY**2)
@@ -167,7 +168,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.rightTalon.set(self.frontRightMotor)
         # self.rightTalon2.set(self.backRightMotor)
         if self.driverController.getBButton():
-            self.drive.driveMecanum( 0, .5, 0, Rotation2d(self.gyroRad)) 
+            self.arm.setGrabbingArm(0.5)
         #     self.leftTalon.set(.2)
         #     self.rightTalon2.set(.2)
 
@@ -208,11 +209,12 @@ class MyRobot(commands2.TimedCommandRobot):
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)
             self.rightTalon2.set(self.speed)
-        # else:
-        #     self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
+        else:
+            self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
             
 
         # addDeadzone(
+        # if self.moving:
 
 
         # if self.operatorController.getLeftTriggerAxis() > 0.2:
