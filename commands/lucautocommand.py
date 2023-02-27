@@ -20,10 +20,10 @@ class LucAutoCommand(commands2.SequentialCommandGroup):
             # Drive forward the specified distance
             ResetGyro(drive),
             MoveCommand(5, 0, drive),
-            MoveCommand(0, 120, drive),
-            MoveCommand(5, 120,drive),
-            MoveCommand(0,240, drive),
-            MoveCommand(5,240, drive),
+            # MoveCommand(0, 120, drive),
+            # MoveCommand(5, 120,drive),
+            # MoveCommand(0,240, drive),
+            # MoveCommand(5,240, drive),
 
             #MoveCommand(5, 360, drive)
         )

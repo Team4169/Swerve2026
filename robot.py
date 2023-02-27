@@ -34,7 +34,7 @@ class MyRobot(commands2.TimedCommandRobot):
         This function is run when the robot is first started up and should be used for any
         initialization code.
         """
-
+        
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
         # wpilib.CameraServer().launch("vision.py:main")
@@ -48,12 +48,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
 
-        self.mech = wpilib.drive.MecanumDrive(
-            self.leftTalon,
-            self.leftTalon2,
-            self.rightTalon,
-            self.rightTalon2,
-        )
         # self.neoMotor = self.container.neoMotor
 
         #self.liftArm = self.container.liftArm
@@ -172,9 +166,17 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.leftTalon2.set(self.backLeftMotor)
         # self.rightTalon.set(self.frontRightMotor)
         # self.rightTalon2.set(self.backRightMotor)
-        
-            
+        if self.driverController.getBButton():
+            self.drive.driveMecanum( 0, .5, 0, Rotation2d(self.gyroRad)) 
+        #     self.leftTalon.set(.2)
+        #     self.rightTalon2.set(.2)
 
+        #     # self.rightTalon.set(0.129409522551)
+        #     # self.leftTalon2.set(0.129409522551)
+            
+        # else:
+        #     self.leftTalon.set(0)
+        #     self.rightTalon2.set(0)
         #XXX: This is test for each individual motor
         # if self.driverController.getAButton():
         #     self.leftTalon2.set(0.5)
@@ -198,9 +200,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.leftTalon.set(0)
         self.container.drive.balanceSensitivitySub.get()
         
-        if not self.driverController.getAButton():
-            self.mech.driveCartesian( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
-        else:
+        if self.driverController.getAButton():
             self.pitchAngle = self.container.drive.gyro.getPitch()
             self.speed = constants.maxBalanceSpeed*2/(1 + math.e**(-constants.balanceSensitivity*(self.pitchAngle/constants.maxBalanceAngle)))-constants.maxBalanceSpeed #min(max(-abs(self.pitchAngle) + , 0), 1)
             # maybe make it drive cartesian so that the robot can balance while sideways
@@ -208,6 +208,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)
             self.rightTalon2.set(self.speed)
+        # else:
+        #     self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
             
 
         # addDeadzone(

@@ -7,6 +7,7 @@ import ntcore
 import wpimath.controller
 import navx
 import rev
+from wpimath.geometry import Rotation2d 
 class DriveSubsystem(commands2.SubsystemBase):
     def __init__(self, leftTalon, leftTalon2, rightTalon, rightTalon2) -> None:
         super().__init__()
@@ -17,8 +18,8 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.rightTalon2 = rightTalon2
 
         self.tpf = -900
-        self.maxDriveSpeed = 0.6
-        self.maxTurnSpeed = 0.6
+        self.maxDriveSpeed = 0.2
+        self.maxTurnSpeed = 0.2
 
         # smartdashboard
         self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
@@ -27,16 +28,16 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.TurnkI = self.sd.getDoubleTopic("TurnkI").subscribe(0.0)
         self.TurnkP = self.sd.getDoubleTopic("TurnkP").subscribe(0.032)
         self.TurnkD = self.sd.getDoubleTopic("TurnkD").subscribe(0.0)
-        #self.turnController = wpimath.controller.PIDController(self.TurnkP, self.TurnkI, self.TurnkD)
-        #self.turnController.enableContinuousInput(-180.0, 180.0)
-        #self.turnController.setTolerance(10.0)
+        self.turnController = wpimath.controller.PIDController(self.TurnkP.get(0.032), self.TurnkI.get(0), self.TurnkD.get(0))
+        self.turnController.enableContinuousInput(-180.0, 180.0)
+        self.turnController.setTolerance(10.0)
 
         # Create PID Controller for Drive
         self.DrivekP = self.sd.getDoubleTopic("DrivekP").subscribe(0.02)
         self.DrivekI = self.sd.getDoubleTopic("DrivekI").subscribe(0.02)
         self.DrivekD = self.sd.getDoubleTopic("DrivekD").subscribe(0.0005)
-        #self.driveController = wpimath.controller.PIDController(self.DrivekP, self.DrivekI, self.DrivekD)
-        #self.driveController.setTolerance(-0.1 * self.tpf)
+        self.driveController = wpimath.controller.PIDController(self.DrivekP.get(0.02), self.DrivekI.get(0.02), self.DrivekD.get(0.0005))
+        self.driveController.setTolerance(-0.1 * self.tpf)
 
         #driver contstants for balancing
         self.balanceSensitivitySub = self.sd.getDoubleTopic("balanceSensitivity").subscribe(-2.0)
@@ -54,7 +55,12 @@ class DriveSubsystem(commands2.SubsystemBase):
         #encoders
         self.encoderLeftOut = self.sd.getDoubleTopic("Left Encoder").publish()
         self.encoderRightOut = self.sd.getDoubleTopic("Right Encoder").publish()
-
+        self.drive = wpilib.drive.MecanumDrive(
+            self.leftTalon,
+            self.leftTalon2,
+            self.rightTalon,
+            self.rightTalon2,
+        )
         # self.drive = wpilib.drive.DifferentialDrive(
         #     wpilib.MotorControllerGroup(self.leftTalon, self.leftTalon2),
         #     wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2)
@@ -79,7 +85,8 @@ class DriveSubsystem(commands2.SubsystemBase):
         # NOTE FROM NOAH - Expirement with these two following lines later, for now commenting them out
         # self.leftEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
         # self.rightEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
-
+    def driveMecanum(self, x, y, z, angle=Rotation2d(0.0)):   
+        self.drive.driveCartesian(x, y, z, angle)
     # def arcadeDrive(self, fwd: float, rot: float) -> None:
     #     """
     #     Drives the robot using arcade controls.
