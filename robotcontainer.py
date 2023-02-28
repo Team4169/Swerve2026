@@ -62,12 +62,11 @@ class RobotContainer:
 
         #Arm motor controllers
         self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev._rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
-        self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.rotatingArm = rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.extendingArm = None #rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.rotatingArm = None #rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         #Arm motor encoders
-        self.grabbingArmEncoder = wpilib.counter.UpDownCounter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
-
+        self.grabbingArmEncoder = wpilib.Counter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
         # self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         # self.table = NetworkTables.getTable("limelight")
@@ -88,7 +87,7 @@ class RobotContainer:
         # self.rotateEncoder = self.rotateArm.getEncoder()
         # self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
-        # self.liftArmUpLimitSwitch = wpilib.DigitalInput(constants.liftArmUpLimitSwitch)
+        self.grabbingArmOpenLimitSwitch = wpilib.DigitalInput(constants.grabbingArmOpenLimitSwitch)
         # self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
         # self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
         # self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
@@ -109,8 +108,8 @@ class RobotContainer:
         self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
                                 extendingArm=self.extendingArm,
                                 rotatingArm=self.rotatingArm,
-                                grabbingArmLimitSwitchMin =None,
-                                grabbingArmLimitSwitchMax =None,
+                                grabbingArmLimitSwitchOpen = self.grabbingArmOpenLimitSwitch,
+                                grabbingArmLimitSwitchClosed =None,
                                 extendingArmLimitSwitchMin =None,
                                 extendingArmLimitSwitchMax =None,
                                 rotatingArmLimitSwitchMin =None,

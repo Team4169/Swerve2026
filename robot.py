@@ -90,8 +90,10 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopInit(self) -> None:
 
-        self.container.drive.resetEncoders()
-        self.container.drive.gyro.reset()
+        self.drive.resetEncoders()
+        self.drive.gyro.reset()
+        self.arm.resetEncoders()
+
 
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
@@ -112,12 +114,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
         #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
-        self.container.drive.gyroOut.set(self.container.drive.gyro.getYaw())
-        self.container.drive.gyroPitchOut.set(self.container.drive.gyro.getPitch())
-
-        self.container.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
-        self.container.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
-
+        self.drive.gyroOut.set(self.drive.gyro.getYaw())
+        self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
+        
+        # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
+        # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
+        self.arm.grabbingLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
+        self.arm.grabbingTicks.set(self.arm.getGrabbingArmEncoderDistance())
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
@@ -168,7 +171,16 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.rightTalon.set(self.frontRightMotor)
         # self.rightTalon2.set(self.backRightMotor)
         if self.driverController.getBButton():
-            self.arm.setGrabbingArm(0.5)
+            self.arm.setGrabbingArmSpeed(0.1)
+        elif self.driverController.getXButton():
+            self.arm.setGrabbingArmSpeed(-0.1)
+        elif self.driverController.getYButton():
+            self.arm.setGrabbingArmAngle(90, 0.09)
+        elif self.driverController.getAButton():
+            self.arm.setGrabbingArmAngle(45, 0.09)
+        else:
+            self.arm.setGrabbingArmSpeed(0)
+
         #     self.leftTalon.set(.2)
         #     self.rightTalon2.set(.2)
 

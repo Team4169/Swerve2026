@@ -19,6 +19,8 @@ rotatingArmID = None
 
 # Arm encoders
 grabbingArmEncoderPort = 0
+positiveTicksPerDeg = 173/360
+negativeTicksPerDeg = 221500/360
 extendingArmEncoderID = None
 rotatingArmEncoderID = None
 
@@ -62,14 +64,15 @@ outtake = 12
 liftArm = 5
 rotateArm = 4
 
-liftArmUpLimitSwitch = 0
-liftArmUpLimitSwitchPressedValue = False
-liftArmDownLimitSwitch = 2
-liftArmDownLimitSwitchPressedValue = False
-rotateArmBackLimitSwitch = 3
-rotateArmBackLimitSwitchPressedValue = False
-rotateArmRobotLimitSwitch = 1
-rotateArmRobotLimitSwitchPressedValue = False
+grabbingArmOpenLimitSwitch = 1
+grabbingArmOpenLimitSwitchPressedValue = False
+
+# liftArmDownLimitSwitch = 2
+# liftArmDownLimitSwitchPressedValue = False
+# rotateArmBackLimitSwitch = 3
+# rotateArmBackLimitSwitchPressedValue = False
+# rotateArmRobotLimitSwitch = 1
+# rotateArmRobotLimitSwitchPressedValue = False
 
 liftArmSlowSpeed = .1
 liftArmFastSpeed = .5
