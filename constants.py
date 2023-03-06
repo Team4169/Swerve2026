@@ -14,8 +14,8 @@ rightTalon2 = 4
 
 # Arm motors
 grabbingArmID = 2
-extendingArmID = None
-rotatingArmID = None
+extendingArmID = 100 # todo find out what these are
+rotatingArmID = 101  # todo
 
 # Arm encoders
 grabbingArmEncoderPort = 0
@@ -24,7 +24,7 @@ negativeTicksPerDeg = 221500/360
 
 extendingArmEncoderID = None
 #todo find out how many revolutions per arm length and replace none with that num
-extendingArmRevPerArmPercent = None / 100
+extendingArmRevPerArmPercent = 100 # / 100
 
 rotatingArmEncoderID = None
 
@@ -50,7 +50,7 @@ kAutoDriveSpeed = 0.2
 
 # Operator Interface
 kDriverControllerPort = 0
-kSnowveyorControllerPort = 1
+kArmControllerPort = 1
 
 # Physical parameters
 kDriveTrainMotorCount = 2

@@ -53,7 +53,7 @@ class RobotContainer:
     def __init__(self) -> None:
 
         self.driverController = wpilib.XboxController(constants.kDriverControllerPort)
-        # self.operatorController = wpilib.XboxController(constants.kSnowveyorControllerPort)
+        self.operatorController = wpilib.XboxController(constants.kArmControllerPort)
 
         self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
         self.leftTalon2 = ctre.WPI_TalonSRX(constants.leftTalon2)
@@ -61,7 +61,7 @@ class RobotContainer:
         self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
 
         #Arm motor controllers
-        self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev._rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
+        self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
         self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.rotatingArm = rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
@@ -117,8 +117,8 @@ class RobotContainer:
                                 rotatingArmLimitSwitchMin =None,
                                 rotatingArmLimitSwitchMax =None,
                                 grabbingArmEncoder=self.grabbingArmEncoder,
-                                extendingArmEncoder=None,
-                                rotatingArmEncoder=None
+                                extendingArmEncoder=self.extendingArmEncoder,
+                                rotatingArmEncoder=self.rotatingArmEncoder
                                 )
         
                                 

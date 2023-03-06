@@ -66,12 +66,23 @@ class ArmSubsystem(commands2.SubsystemBase):
     def setExtendingArmSpeed(self, speed):
         """Sets the speed of the extending arm"""
         self.extendingArm.set(speed)
+    
+    # tolerance of 5%
+    # Current percent, joystick direction, result speed
+    # 0-70,          positive,          positive
+    # 0-70           negative,          negative
+    # 70-80          positive,          0 (call setExtendingArmPercent(75, speed))
+    # 70-80          negative           negative
+    # 80+            positive           negative (call setExtendingArmPercent(75, speed))
+    # 80+            negative           negative 
 
-    def setExtendingArmSpeedwithAuto(self, speed):
+    def setExtendingArmSpeedWithAuto(self, speed):
         """Sets the speed of the extending arm"""
-        if self.rotatingArmEncoderDegrees > -7 and self.rotatingArmEncoderDegrees < 24:
-            if self.extendingArmEncoderPercent > 75:
-                self.setExtendingArmPercent(75, speed)
+        #& if the rotating arm is between -7 and 24 degrees
+         #& if the extending arm is greater than 75% of the way out
+        if self.rotatingArmEncoderDegrees > -7 and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
+                #& move down to 75 % extension
+                self.setExtendingArmPercent(70, .75) 
         else:
             self.extendingArm.set(speed)
 
@@ -83,13 +94,11 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the angle of the extending arm"""
         self.tolerance = 0
         if percent - self.tolerance > self.extendingArmEncoderPercent:
-            self.setGrabbingArmSpeed(speed)
+            self.extendingArm.set(speed)
         elif percent + self.tolerance < self.extendingArmEncoderPercent:
-            self.setGrabbingArmSpeed(-speed)
+            self.extendingArm.set(-speed)
         else:
-            self.setGrabbingArmSpeed(0)
-
-        pass
+            self.extendingArm.set(0)
     
     #^ test this code, it will automatically apply limits on the extending arm
     def setExtendingArmPercentWithAuto(self, percent, speed):
@@ -117,15 +126,16 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     def setRotatingArmSpeed(self, speed):
         """Sets the speed of the Rotating arm"""
-        self.RotatingArm.set(speed)
+        self.rotatingArm.set(speed)
 
     def setRotatingArmSpeedWithAuto(self, speed):
         """Sets the speed of the Rotating arm"""
-        if self.rotatingArmEncoderDegrees > -7 and self.rotatingArmEncoderDegrees < 24:
-            if self.extendingArmEncoderPercent > 75:
-                self.setExtendingArmPercent(75, speed)
+        if (self.rotatingArmEncoderDegrees > 68 and speed > 0 ):
+            self.setRotatingArmAngle(65, .75)
+        elif (self.rotatingArmEncoderDegrees <  -7 and speed < 0):
+            self.setRotatingArmAngle(-2, .75)
         else:
-            self.RotatingArm.set(speed)
+            self.rotatingArm.set(speed)
 
     #~ TODO: make it so that it zeroes when it hits the limit switch
     def setRotatingArmAngle(self, angle, speed):
@@ -133,22 +143,11 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the angle of the Rotating arm"""
         self.tolerance = 0
         if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeed(speed)
+            self.rotatingArm.set(speed)
         elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeed(-speed)
+            self.rotatingArm.set(-speed)
         else:
-            self.setGrabbingArmSpeed(0)
-
-    def setRotatingArmAngleWithAuto(self, angle, speed):
-        speed = abs(speed)
-        """Sets the angle of the Rotating arm"""
-        self.tolerance = 0
-        if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeedWithAuto(speed)
-        elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeedWithAuto(-speed)
-        else:
-            self.setGrabbingArmSpeed(0)
+            self.rotatingArm.set(0)
         
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""

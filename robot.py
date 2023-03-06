@@ -41,7 +41,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
 
         self.driverController = self.container.driverController
-        # self.operatorController = self.container.operatorController
+        self.operatorController = self.container.operatorController
 
         self.leftTalon = self.container.leftTalon
         self.leftTalon2 = self.container.leftTalon2
@@ -226,7 +226,11 @@ class MyRobot(commands2.TimedCommandRobot):
             self.rightTalon2.set(self.speed)
         else:
             self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
-            
+
+        # * arm control  
+        self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
+        self.arm.setExtendingArmSpeedWithAuto(self.operatorController.getRightY())
+        self.arm.setGrabbingArmSpeedWithAuto(self.operatorController.getLeftTriggerAxis() - self.operatorController.getRightTriggerAxis())
 
         # addDeadzone(
         # if self.moving:

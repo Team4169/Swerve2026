@@ -39,7 +39,7 @@ class MoveForwardToAprilTag(commands2.CommandBase):
             self.drive.driveMecanum(0, 0, 0)
         else:
             self.range = photonvision.PhotonUtils.calculateDistanceToTargetMeters(
-                constants.cameraHeight,constants.targetHeight,constants.cameraPitch,Units.degreesToRadians(target.getPitch()))
+                constants.cameraHeight,constants.targetHeight,constants.cameraPitch.Units.degreesToRadians(target.getPitch()))
             forwardSpeed = -self.drive.driveController.calculate(range, 1)
             rotationSpeed = -self.drive.turnController.calculate(target.getYaw(), 0)
             self.drive.driveMecanum(forwardSpeed,0,rotationSpeed)
