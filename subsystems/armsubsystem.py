@@ -63,19 +63,17 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Gets if the limit switch is pressed"""
         return self.extendingArmLimitSwitchMax.get() == constants.extendingArmMaxLimitSwitchPressedValue
     
+    # limit Switch gaurds https://docs.google.com/spreadsheets/d/1Ywz5rC-dYjaaNjmlx7t1RDW8TRrBJ6oTPnMUaNfTfJ0/edit#gid=1791774740
     def setExtendingArmSpeed(self, speed):
         """Sets the speed of the extending arm"""
-        self.extendingArm.set(speed)
+        if self.getExtendingArmLimitSwitchMaxPressed() and speed > 0:
+            self.extendingArm.set(0)
+        elif self.getExtendingArmLimitSwitchMinPressed() and speed < 0:
+            self.extendingArm.set(0)
+        else:
+            self.extendingArm.set(speed)
     
-    # tolerance of 5%
-    # Current percent, joystick direction, result speed
-    # 0-70,          positive,          positive
-    # 0-70           negative,          negative
-    # 70-80          positive,          0 (call setExtendingArmPercent(75, speed))
-    # 70-80          negative           negative
-    # 80+            positive           negative (call setExtendingArmPercent(75, speed))
-    # 80+            negative           negative 
-
+    #condition spreadsheet https://docs.google.com/spreadsheets/d/1Ywz5rC-dYjaaNjmlx7t1RDW8TRrBJ6oTPnMUaNfTfJ0/edit#gid=0
     def setExtendingArmSpeedWithAuto(self, speed):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
@@ -84,7 +82,7 @@ class ArmSubsystem(commands2.SubsystemBase):
                 #& move down to 75 % extension
                 self.setExtendingArmPercent(70, .75) 
         else:
-            self.extendingArm.set(speed)
+            self.setExtendingArmSpeed(speed)
 
     #~ TODO: apply the same logic to the other arm functions
     #~ TODO: ticks to angle and move untill angle is reached
@@ -94,11 +92,11 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the angle of the extending arm"""
         self.tolerance = 0
         if percent - self.tolerance > self.extendingArmEncoderPercent:
-            self.extendingArm.set(speed)
+            self.setExtendingArmSpeed(speed)
         elif percent + self.tolerance < self.extendingArmEncoderPercent:
-            self.extendingArm.set(-speed)
+            self.setExtendingArmSpeed(-speed)
         else:
-            self.extendingArm.set(0)
+            self.setExtendingArmSpeed(0)
     
     #^ test this code, it will automatically apply limits on the extending arm
     def setExtendingArmPercentWithAuto(self, percent, speed):
@@ -194,5 +192,6 @@ class ArmSubsystem(commands2.SubsystemBase):
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
             self.resetEncoders()
+            self.setGrabbingArmSpeed(0)
         else: 
             self.setGrabbingArmSpeed(-.1)
