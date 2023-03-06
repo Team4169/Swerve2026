@@ -21,8 +21,13 @@ rotatingArmID = None
 grabbingArmEncoderPort = 0
 positiveTicksPerDeg = 173/360
 negativeTicksPerDeg = 221500/360
+
 extendingArmEncoderID = None
+#todo find out how many revolutions per arm length and replace none with that num
+extendingArmRevPerArmPercent = None / 100
+
 rotatingArmEncoderID = None
+
 
 
 

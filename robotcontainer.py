@@ -62,11 +62,13 @@ class RobotContainer:
 
         #Arm motor controllers
         self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev._rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
-        self.extendingArm = None #rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.rotatingArm = None #rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.rotatingArm = rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         #Arm motor encoders
         self.grabbingArmEncoder = wpilib.Counter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
+        self.extendingArmEncoder = self.extendingArm.getEncoder()
+        self.rotatingArmEncoder = self.rotatingArm.getEncoder()
         # self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         # self.table = NetworkTables.getTable("limelight")

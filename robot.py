@@ -120,7 +120,10 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
         # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
         self.arm.grabbingLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
-        self.arm.grabbingTicks.set(self.arm.getGrabbingArmEncoderDistance())
+        self.arm.grabbingDegrees.set(self.arm.getGrabbingArmEncoderDistance())
+        self.arm.extendingArmRevolutions.set(self.arm.extendingArmEncoder.getPosition())
+        self.arm.rotatingArmRevolutions.set(self.arm.rotatingArmEncoder.getPosition())
+        
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
