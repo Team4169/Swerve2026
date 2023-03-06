@@ -17,13 +17,14 @@ from robotcontainer import photonCamera
 
 class MoveForwardToAprilTag(commands2.CommandBase):
     """
-    An auto command that moves the robot to the apriltag specified
+    An auto command that moves the robot to the apriltag specified if in view
     """
 
     def __init__(self, drive: DriveSubsystem, tagID):
         super().__init__()
         self.drive = drive
         self.tagID = tagID
+        self.range = 0
 
 
     def execute(self) -> None:
@@ -46,6 +47,7 @@ class MoveForwardToAprilTag(commands2.CommandBase):
 
     def isFinished(self) -> bool:
         if self.range <= 1:
+            self.drive.driveMecanum(0,0,0)
             return True
         return False
 
