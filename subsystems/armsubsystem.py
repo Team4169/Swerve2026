@@ -4,6 +4,7 @@ import wpilib.drive
 import constants
 import ntcore
 import rev
+import math
 
 # TODO step 5: move seat motor to 0 position with limit switch (reset)
 # TODO     move down untill we hit the limit switch, then reset the encoder
@@ -189,6 +190,16 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.setGrabbingArmSpeed(0)
     
     #^ test this function
+
+    def setGrabbingArmDistance(self,distance,speed):
+        dis = (distance/67)*100
+        setExtendingArmPercent(self, dis, speed)
+    def nameThis(self,distance,height,speed):
+        angle = math.degrees(math.arctan((height-13)/distance))
+        extend = math.sqrt(distance ** 2 + (height-13))-40
+        setRotatingArmAngle(self, angle, speed)
+        setExtendingArmDistance(self,extend,speed)
+
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
             self.resetEncoders()
