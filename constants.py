@@ -28,8 +28,13 @@ extendingArmRevPerArmPercent = 100 # / 100
 
 rotatingArmEncoderID = None
 
+# *Arm pickup systems
 
-
+testDistance  = 21 #! this would be in place for the actual distance from the AI code
+cameraDistanceFromArm = 20  #in meters (20 is inches), (39.37 is inches per meter)
+piviotDistanceFromGround = 5.957 # in inches
+armPickupHeight = 3.427 # in inches
+maxArmLength = 68 # in inches
 
 # Encoders
 kLeftEncoderPorts = (0, 1)
@@ -69,8 +74,6 @@ outtake = 12
 liftArm = 5
 rotateArm = 4
 
-grabbingArmOpenLimitSwitch = 1
-grabbingArmOpenLimitSwitchPressedValue = False
 
 # liftArmDownLimitSwitch = 2
 # liftArmDownLimitSwitchPressedValue = False

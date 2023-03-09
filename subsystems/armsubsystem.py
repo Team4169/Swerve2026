@@ -4,7 +4,7 @@ import wpilib.drive
 import constants
 import ntcore
 import rev
-
+import math
 # TODO step 5: move seat motor to 0 position with limit switch (reset)
 # TODO     move down untill we hit the limit switch, then reset the encoder
 
@@ -31,7 +31,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.rotatingArmLimitSwitchMin = rotatingArmLimitSwitchMin
         self.rotatingArmLimitSwitchMax = rotatingArmLimitSwitchMax
         self.grabbingArmLimitSwitchOpen = grabbingArmLimitSwitchOpen
-        self.grabbingArmLimitSwitchMax = grabbingArmLimitSwitchClosed
+        self.grabbingArmLimitSwitchClosed = grabbingArmLimitSwitchClosed
 
         #* encoders
         self.extendingArmEncoder = extendingArmEncoder
@@ -53,11 +53,11 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Extending Arm functions
     def getExtendingArmLimitSwitchMinPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.extendingArmLimitSwitchMin.get() == constants.extendingArmMinLimitSwitchPressedValue
+        return self.extendingArmLimitSwitchMin.get()
     
     def getExtendingArmLimitSwitchMaxPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.extendingArmLimitSwitchMax.get() == constants.extendingArmMaxLimitSwitchPressedValue
+        return self.extendingArmLimitSwitchMax.get()
     
     # limit Switch gaurds https://docs.google.com/spreadsheets/d/1Ywz5rC-dYjaaNjmlx7t1RDW8TRrBJ6oTPnMUaNfTfJ0/edit#gid=1791774740
     def setExtendingArmSpeed(self, speed):
@@ -120,11 +120,11 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Rotating Arm functions
     def getRotatingArmLimitSwitchMinPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMin.get() == constants.RotatingArmMinLimitSwitchPressedValue
+        return self.RotatingArmLimitSwitchMin.get()
     
     def getRotatingArmLimitSwitchMaxPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMax.get() == constants.RotatingArmMaxLimitSwitchPressedValue
+        return self.RotatingArmLimitSwitchMax.get()
     
     def setRotatingArmSpeed(self, speed):
         """Sets the speed of the Rotating arm"""
@@ -166,11 +166,11 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Grabbing Arm functions
     def getGrabbingArmLimitSwitchClosedPressed(self) -> bool:
         """Gets if either limit switch is pressed"""
-        return self.grabbingArmLimitSwitchOpen.get() == constants.grabbingArmOpenLimitSwitchPressedValue
+        return self.grabbingArmLimitSwitchClosed.get()
     
     def getGrabbingArmLimitSwitchOpenPressed(self) -> bool:
         """Gets if either limit switch is pressed"""
-        return self.grabbingArmLimitSwitchOpen.get() == constants.grabbingArmOpenLimitSwitchPressedValue
+        return self.grabbingArmLimitSwitchOpen.get()
     
     def setGrabbingArmSpeed(self, speed):
         """for some reason the encoder ticks are significantly different when going down versus when going up"""
@@ -212,3 +212,12 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.grabbingArmEncoder.reset()
         self.grabbingArmEncoderDegrees = 0
         self.previousGrabbingArmEncoderTicks = 0
+
+    #* Grabbing Arm functions
+    def getTargetAngle(self, distance):
+        """Gets the angle to the target"""
+        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.piviotDistanceFromGround-constants.armPickupHeight))-90
+    
+
+
+        

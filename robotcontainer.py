@@ -89,14 +89,13 @@ class RobotContainer:
         # self.rotateEncoder = self.rotateArm.getEncoder()
         # self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
-        self.grabbingArmOpenLimitSwitch = wpilib.DigitalInput(constants.grabbingArmOpenLimitSwitch)
-        # self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
-        # self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
-        # self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
-        #
-        # self.intake = ctre.WPI_VictorSPX(constants.intake)
-        # self.outtake = ctre.WPI_VictorSPX(constants.outtake)
-        # self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+        #^ forward is grabbing, we may need to switch this
+        self.grabbingArmOpenLimitSwitch = self.grabbingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.grabbingArmClosedLimitSwitch = self.grabbingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.extendingArmMaxLimitSwitch = self.extendingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.extendingArmMinLimitSwitch = self.extendingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.rotatingArmMaxLimitSwitch = self.rotatingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.rotatingArmMinLimitSwitch = self.rotatingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
 
         self.coastBool=False
 
@@ -110,12 +109,12 @@ class RobotContainer:
         self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
                                 extendingArm=self.extendingArm,
                                 rotatingArm=self.rotatingArm,
-                                grabbingArmLimitSwitchOpen = self.grabbingArmOpenLimitSwitch,
-                                grabbingArmLimitSwitchClosed =None,
-                                extendingArmLimitSwitchMin =None,
-                                extendingArmLimitSwitchMax =None,
-                                rotatingArmLimitSwitchMin =None,
-                                rotatingArmLimitSwitchMax =None,
+                                grabbingArmLimitSwitchOpen=self.grabbingArmOpenLimitSwitch,
+                                grabbingArmLimitSwitchClosed=self.grabbingArmClosedLimitSwitch,
+                                extendingArmLimitSwitchMin=self.extendingArmMinLimitSwitch,
+                                extendingArmLimitSwitchMax=self.extendingArmMaxLimitSwitch,
+                                rotatingArmLimitSwitchMin=self.rotatingArmMinLimitSwitch,
+                                rotatingArmLimitSwitchMax=self.rotatingArmMaxLimitSwitch,
                                 grabbingArmEncoder=self.grabbingArmEncoder,
                                 extendingArmEncoder=self.extendingArmEncoder,
                                 rotatingArmEncoder=self.rotatingArmEncoder

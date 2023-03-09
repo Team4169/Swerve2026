@@ -123,7 +123,15 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm.grabbingDegrees.set(self.arm.getGrabbingArmEncoderDistance())
         self.arm.extendingArmRevolutions.set(self.arm.extendingArmEncoder.getPosition())
         self.arm.rotatingArmRevolutions.set(self.arm.rotatingArmEncoder.getPosition())
-        
+    
+    #todo: decide which controller this is on
+        self.distance = constants.testDistance
+        self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.piviotDistanceFromGround - constants.armPickupHeight)**2)**.5
+        if self.driverController.getLeftTriggerAxis() > .1:
+            if self.hypot > constants.maxArmLength:
+                self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
+            else:
+                self.
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
@@ -254,71 +262,8 @@ class MyRobot(commands2.TimedCommandRobot):
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
-
+    
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
 # #!/usr/bin/env python3
-# """
-#     This is a demo program showing how to use Mecanum control with the
-#     MecanumDrive class.
-# """
-# import ctre
-# import wpilib
-# from wpilib.drive import MecanumDrive
-
-
-# class MyRobot(wpilib.TimedRobot):
-#     # Channels on the roboRIO that the motor controllers are plugged in to
-#     frontLeftChannel = 3
-#     rearLeftChannel = 7
-#     frontRightChannel = 9
-#     rearRightChannel = 4
-
-#     # The channel on the driver station that the joystick is connected to
-#     joystickChannel = 0
-
-#     def robotInit(self):
-#         """Robot initialization function"""
-#         self.frontLeftMotor = ctre.WPI_TalonSRX(self.frontLeftChannel)
-#         self.rearLeftMotor = ctre.WPI_TalonSRX(self.rearLeftChannel)
-#         self.frontRightMotor = ctre.WPI_TalonSRX(self.frontRightChannel)
-#         self.rearRightMotor = ctre.WPI_TalonSRX(self.rearRightChannel)
-
-#         # invert the left side motors
-#         self.frontRightMotor.setInverted(True)
-#         self.frontLeftMotor.setInverted(True)
-
-#         # you may need to change or remove this to match your robot
-#         # self.rearRightMotor.setInverted(True)
-
-#         self.drive = MecanumDrive(
-#             self.frontLeftMotor,
-#             self.rearLeftMotor,
-#             self.frontRightMotor,
-#             self.rearRightMotor,
-#         )
-#         # Define the Xbox Controller.
-#         self.stick = wpilib.XboxController(self.joystickChannel)
-
-#     def teleopInit(self):
-#         self.drive.setSafetyEnabled(True)
-
-#     def teleopPeriodic(self):
-#         """Runs the motors with Mecanum drive."""
-#         # Use the joystick X axis for lateral movement, Y axis for forward movement, and Z axis for rotation.
-#         # This sample does not use field-oriented drive, so the gyro input is set to zero.
-#         # This Stick configuration is created by K.E. on our team.  Left stick Y axis is speed, Left Stick X axis is strafe, and Right Stick Y axis is turn.
-#         self.drive.driveCartesian(
-#             self.stick.getLeftX(),
-#             self.stick.getLeftY(),
-#             self.stick.getRightY(),
-#         )
-
-#         """Alternatively, to match the driver station enumeration, you may use  ---> self.drive.driveCartesian(
-#             self.stick.getRawAxis(1), self.stick.getRawAxis(3), self.stick.getRawAxis(2), 0
-#         )"""
-
-
-# if __name__ == "__main__":
-#     wpilib.run(MyRobot)
