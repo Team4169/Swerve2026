@@ -39,8 +39,8 @@ from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
-# from subsystems.snowveyorsubsystem import SnowveyorSubsystem
-# from subsystems.climbingsubsystem import ClimbingSubsystem
+# #from subsystems.snowveyorsubsystem import SnowveyorSubsystem
+# #from subsystems.climbingsubsystem import ClimbingSubsystem
 
 class RobotContainer:
     """
@@ -90,12 +90,12 @@ class RobotContainer:
         # self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
         #^ forward is grabbing, we may need to switch this
-        self.grabbingArmOpenLimitSwitch = self.grabbingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
-        self.grabbingArmClosedLimitSwitch = self.grabbingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
-        self.extendingArmMaxLimitSwitch = self.extendingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
-        self.extendingArmMinLimitSwitch = self.extendingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
-        self.rotatingArmMaxLimitSwitch = self.rotatingArm.getForwardLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
-        self.rotatingArmMinLimitSwitch = self.rotatingArm.getReverseLimitSwitch(rev.LimitSwitchPolarity.kNormallyOpen)
+        self.grabbingArmOpenLimitSwitch = self.grabbingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.grabbingArmClosedLimitSwitch = self.grabbingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.extendingArmMaxLimitSwitch = self.extendingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.extendingArmMinLimitSwitch = self.extendingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.rotatingArmMaxLimitSwitch = self.rotatingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.rotatingArmMinLimitSwitch = self.rotatingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
 
         self.coastBool=False
 

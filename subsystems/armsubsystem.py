@@ -129,7 +129,12 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     def setRotatingArmSpeed(self, speed):
         """Sets the speed of the Rotating arm"""
-        self.rotatingArm.set(speed)
+        if self.getRotatingArmLimitSwitchMaxPressed() and speed > 0:
+            self.rotatingArm.set(0)
+        elif self.getRotatingArmLimitSwitchMinPressed() and speed < 0:
+            self.rotatingArm.set(0)
+        else:
+            self.rotatingArm.set(speed)
 
     def setRotatingArmSpeedWithAuto(self, speed):
         """Sets the speed of the Rotating arm"""
@@ -138,7 +143,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         elif (self.rotatingArmEncoderDegrees <  -7 and speed < 0):
             self.setRotatingArmAngle(-2, .75)
         else:
-            self.rotatingArm.set(speed)
+            self.rotatingArm.setRotatingArmSpeed(speed)
 
     #~ TODO: make it so that it zeroes when it hits the limit switch
     def setRotatingArmAngle(self, angle, speed):
@@ -146,11 +151,11 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the angle of the Rotating arm"""
         self.tolerance = 0
         if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.rotatingArm.set(speed)
+            self.rotatingArm.setRotatingArmSpeed(speed)
         elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.rotatingArm.set(-speed)
+            self.rotatingArm.setRotatingArmSpeed(-speed)
         else:
-            self.rotatingArm.set(0)
+            self.rotatingArm.setRotatingArmSpeed(0)
     
     def resetRotatingArmEncoder(self):
         self.rotatingArmEncoder.setPosition(0)
@@ -173,10 +178,19 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Gets if either limit switch is pressed"""
         return self.grabbingArmLimitSwitchOpen.get()
     
+    def setGrabbingArmSpeedWithLimitSwitches(self, speed):
+        """Sets the speed of the grabbing arm"""
+        if self.getGrabbingArmLimitSwitchClosedPressed() and speed < 0:
+            self.grabbingArm.set(0)
+        elif self.getGrabbingArmLimitSwitchOpenPressed() and speed > 0:
+            self.grabbingArm.set(0)
+        else:
+            self.grabbingArm.set(speed)
+    
     def setGrabbingArmSpeed(self, speed):
         """for some reason the encoder ticks are significantly different when going down versus when going up"""
         # & Sets the speed
-        self.grabbingArm.set(speed)
+        self.grabbingArm.setGrabbingArmSpeedWithLimitSwitches(speed)
         #& Updates the current encoder location
         self.current = self.grabbingArmEncoder.get()
         #& Updates the smartdashboard

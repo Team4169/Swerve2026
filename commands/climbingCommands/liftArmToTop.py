@@ -2,7 +2,7 @@ import commands2
 
 import constants
 
-from subsystems.climbingsubsystem import ClimbingSubsystem
+#from subsystems.climbingsubsystem import ClimbingSubsystem
 from .moveLiftArmPastLocation import MoveLiftArmPastLocation
 from .moveLiftArmToLimitSwitch import MoveLiftArmToLimitSwitch
 

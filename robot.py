@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import typing
 import wpilib
 from wpimath.geometry import Rotation2d 
@@ -23,11 +22,6 @@ class MyRobot(commands2.TimedCommandRobot):
 
     autonomousCommand: typing.Optional[commands2.Command] = None
 
-    def output(self, text, value):
-        pass
-      # print(text + ': ' + str(value))
-      # self.container.drive.sd.putValue(text, str(value))
-
     def robotInit(self) -> None:
         
         """
@@ -48,22 +42,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.rightTalon = self.container.rightTalon
         self.rightTalon2 = self.container.rightTalon2
 
-        # self.neoMotor = self.container.neoMotor
-
-        #self.liftArm = self.container.liftArm
-        #self.rotateArm = self.container.rotateArm
-
-        # self.rotateEncoder = self.container.rotateEncoder
-        # self.liftEncoder = self.container.liftEncoder
-
-        # self.liftArmUpxtSwitch = self.container.liftArmUpLimitSwitch
-        # self.liftArmDownLimitSwitch = self.container.liftArmDownLimitSwitch
-        #self.rotateArmBackLimitSwitch = self.container.rotateArmBackLimitSwitch
-        #self.rotateArmRobotLimitSwitch = self.container.rotateArmRobotLimitSwitch
-
-        # self.intake = self.container.intake
-        # self.outtake = self.container.outtake
-        # self.snowveyor = self.container.snowveyor
         self.arm = self.container.arm
         
         self.drive = self.container.drive
@@ -86,7 +64,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
-        #write auto code here
+
 
     def teleopInit(self) -> None:
 
@@ -113,10 +91,8 @@ class MyRobot(commands2.TimedCommandRobot):
  
 
     def teleopPeriodic(self):
-        #self.neoMotor.set(self.driverController.getRightTriggerAxis()/4)  # sets neo motor running at power = .1 out of 1
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
-        
         # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
         # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
         self.arm.grabbingLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
@@ -132,12 +108,7 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
             # else:
             #     self.
-        # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
-        # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
-        # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
-        # self.output("newdriveencodervalueright", self.container.drive.rightTalon.getSelectedSensorPosition())
-        # self.output("climb mode",self.climbMode)
-
+        
         if self.driverController.getLeftBumper():
             self.output("straight mode", True)
             self.direction = 0
@@ -147,40 +118,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.leftX = addDeadzone(self.driverController.getLeftX())
         self.leftY = addDeadzone(self.driverController.getLeftY())
         self.rightX = addDeadzone(self.driverController.getRightX())
-        #There are 2 different ways of programming mecanum, this is the from the first
-        #note the direction of the motors on the right must be reversed 
-        self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
         
-        # self.speed = addDeadzone(self.driverController.getLeftY()) * -1 # TODO: Clean up
-        # self.mag = math.sqrt(self.leftX**2 + self.leftY**2)
-        # self.angle = math.atan2(self.leftY, self.leftX)
+        self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
 
-        # self.frontLeftBackRight = math.sin(self.angle+ .25*math.pi) * self.mag
-        # self.frontRightBackLeft = math.sin(self.angle - .25 * math.pi) * self.mag
-        # #code that sets the motors to their correct speeds
-        # self.leftTalon.set(self.frontLeftBackRight)
-        # self.leftTalon2.set(self.frontRightBackLeft)
-        # self.rightTalon.set(self.frontRightBackLeft)
-        # self.rightTalon2.set(self.frontLeftBackRight)
-
-    #this is from the second
-    #note the direction of the motors on the right must be reversed
-        # print(self.container.drive.gyro.getYaw())
-        self.gyroRad = self.container.drive.gyro.getYaw() * (math.pi/180)
-        self.rotX = self.leftX * math.cos(-self.gyroRad) - self.leftY * math.sin(-self.gyroRad)
-        self.rotY = self.leftX * math.sin(-self.gyroRad) + self.leftY * math.cos(-self.gyroRad)
-
-        self.denom = max(abs(self.leftY) + abs(self.leftX) + abs(self.rightX), 1);
-
-        self.frontLeftMotor = (self.rotY + self.rotX + self.rightX) / self.denom
-        self.backLeftMotor = (self.rotY - self.rotX + self.rightX) / self.denom
-        self.frontRightMotor = (self.rotY - self.rotX - self.rightX) / self.denom
-        self.backRightMotor = (self.rotY + self.rotX - self.rightX) / self.denom
-
-        # self.leftTalon.set(self.frontLeftMotor)
-        # self.leftTalon2.set(self.backLeftMotor)
-        # self.rightTalon.set(self.frontRightMotor)
-        # self.rightTalon2.set(self.backRightMotor)
         if self.driverController.getBButton():
             self.arm.setGrabbingArmSpeed(0.1)
         elif self.driverController.getXButton():
@@ -191,17 +131,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.arm.setGrabbingArmAngle(45, 0.09)
         else:
             self.arm.setGrabbingArmSpeed(0)
-
-        #     self.leftTalon.set(.2)
-        #     self.rightTalon2.set(.2)
-
-        #     # self.rightTalon.set(0.129409522551)
-        #     # self.leftTalon2.set(0.129409522551)
             
-        # else:
-        #     self.leftTalon.set(0)
-        #     self.rightTalon2.set(0)
-        #XXX: This is test for each individual motor
+        #^: This is test for each individual motor
         # if self.driverController.getAButton():
         #     self.leftTalon2.set(0.5)
         # else:
@@ -240,10 +171,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm.setExtendingArmSpeedWithAuto(self.operatorController.getRightY())
         self.arm.setGrabbingArmSpeedWithAuto(self.operatorController.getLeftTriggerAxis() - self.operatorController.getRightTriggerAxis())
 
-        # addDeadzone(
-        # if self.moving:
-
-
         if self.operatorController.getAButton():
             self.arm.zeroExtendingArm()
         if self.operatorController.getBButton():
@@ -251,12 +178,6 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.operatorController.getYButton():
             self.arm.zeroExtendingArm()
         
-        #
-        # elif self.operatorController.getRightBumper():
-        #     self.snowveyor.tankDrive(-1,1)
-
-
-        #self.drive.arcadeDrive(self.speed, self.direction)
 
 
     def testInit(self) -> None:

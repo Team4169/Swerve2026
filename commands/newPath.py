@@ -5,7 +5,7 @@ import constants
 from .drivedistance import DriveDistance
 from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
-from subsystems.snowveyorsubsystem import SnowveyorSubsystem
+#from subsystems.snowveyorsubsystem import SnowveyorSubsystem
 from .reset_gyro import ResetGyro
 from .SnowVeyerCommands.PickUp import pickUp
 from .SnowVeyerCommands.DropOff import dropOff
