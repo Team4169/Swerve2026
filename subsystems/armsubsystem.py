@@ -67,6 +67,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.extendingArm.set(0)
         elif self.getExtendingArmLimitSwitchMinPressed() and speed < 0:
             self.extendingArm.set(0)
+            self.resetExtendingArmEncoder()
         else:
             self.extendingArm.set(speed)
     
@@ -133,6 +134,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.rotatingArm.set(0)
         elif self.getRotatingArmLimitSwitchMinPressed() and speed < 0:
             self.rotatingArm.set(0)
+            self.resetRotatingArmEncoder()
         else:
             self.rotatingArm.set(speed)
 
@@ -184,6 +186,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.grabbingArm.set(0)
         elif self.getGrabbingArmLimitSwitchOpenPressed() and speed > 0:
             self.grabbingArm.set(0)
+            self.resetGrabbingArmEncoder()
         else:
             self.grabbingArm.set(speed)
     
@@ -219,17 +222,17 @@ class ArmSubsystem(commands2.SubsystemBase):
 
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
-            self.resetGrabbingArmEncoders()
+            self.resetGrabbingArmEncoder()
             self.setGrabbingArmSpeed(0)
         else: 
             self.setGrabbingArmSpeed(-.1)
     
-    def resetGrabbingArmEncoders(self) -> None:
+    def resetGrabbingArmEncoder(self) -> None:
         self.grabbingArmEncoder.reset()
         self.grabbingArmEncoderDegrees = 0
         self.previousGrabbingArmEncoderTicks = 0
 
-    #* Grabbing Arm functions
+    #* Object pickup functions
     def getTargetAngle(self, distance):
         """Gets the angle to the target"""
         return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.piviotDistanceFromGround-constants.armPickupHeight))-90

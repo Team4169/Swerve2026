@@ -70,7 +70,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.drive.resetEncoders()
         self.drive.gyro.reset()
-        self.arm.resetGrabbingArmEncoders()
+        self.arm.resetGrabbingArmEncoder()
 
 
         # This makes sure that the autonomous stops running when
