@@ -5,6 +5,7 @@ import constants
 import ntcore
 import rev
 import math
+
 # TODO step 5: move seat motor to 0 position with limit switch (reset)
 # TODO     move down untill we hit the limit switch, then reset the encoder
 
@@ -201,6 +202,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.setGrabbingArmSpeed(0)
     
     #^ test this function
+
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
             self.resetGrabbingArmEncoders()

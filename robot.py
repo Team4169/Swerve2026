@@ -130,8 +130,8 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.driverController.getLeftTriggerAxis() > .1:
             if self.hypot > constants.maxArmLength:
                 self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
-            else:
-                self.
+            # else:
+            #     self.
         # self.output("current brake mode", self.container.climb.rotateArm.getIdleMode())
         # self.output("liftencoder value new", self.container.climb.liftEncoder.getPosition())
         # self.output("newdriveencodervalueleft", self.container.drive.leftTalon.getSelectedSensorPosition())
