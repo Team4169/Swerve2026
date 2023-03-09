@@ -206,7 +206,9 @@ class ArmSubsystem(commands2.SubsystemBase):
     def setGrabbingArmDistance(self,distance,speed):
         dis = (distance/67)*100
         setExtendingArmPercent(self, dis, speed)
-    def nameThis(self,distance,height,speed):
+    def setArmtoPoint(self,distance,height,speed):
+        #Calculations for placing object on platform depending on distance and height
+        #13 is the height of the robot(I think)
         angle = math.degrees(math.arctan((height-13)/distance))
         extend = math.sqrt(distance ** 2 + (height-13))-40
         setRotatingArmAngle(self, angle, speed)
