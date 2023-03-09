@@ -92,7 +92,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.drive.resetEncoders()
         self.drive.gyro.reset()
-        self.arm.resetEncoders()
+        self.arm.resetGrabbingArmEncoders()
 
 
         # This makes sure that the autonomous stops running when
@@ -236,14 +236,13 @@ class MyRobot(commands2.TimedCommandRobot):
         # if self.moving:
 
 
-        # if self.operatorController.getLeftTriggerAxis() > 0.2:
-        #     self.snowveyor.tankDrive(1,0)
-        #
-        # elif self.operatorController.getRightTriggerAxis() > 0.2:
-        #     self.snowveyor.tankDrive(1,-1)
-        #
-        # elif self.operatorController.getLeftBumper():
-        #     self.snowveyor.tankDrive(-1,0)
+        if self.operatorController.getAButton():
+            self.arm.zeroExtendingArm()
+        if self.operatorController.getBButton():
+            self.arm.zeroRotatingArm()
+        if self.operatorController.getYButton():
+            self.arm.zeroExtendingArm()
+        
         #
         # elif self.operatorController.getRightBumper():
         #     self.snowveyor.tankDrive(-1,1)

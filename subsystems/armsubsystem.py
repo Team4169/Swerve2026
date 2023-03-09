@@ -45,10 +45,6 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / 360
         self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() * constants.extendingArmRevPerArmPercent
 
-    def resetEncoders(self) -> None:
-        self.grabbingArmEncoder.reset()
-        self.grabbingArmEncoderDegrees = 0
-        self.previousGrabbingArmEncoderTicks = 0
 
         # self.left1.setSelectedSensorPosition(0, 0, 10)
         # self.right2.setSelectedSensorPosition(0, 0, 10)
@@ -88,16 +84,16 @@ class ArmSubsystem(commands2.SubsystemBase):
     #~ TODO: apply the same logic to the other arm functions
     #~ TODO: ticks to angle and move untill angle is reached
     #~ TODO: make it so that it zeroes when it hits the limit switch
-    def setExtendingArmPercent(self, percent, speed):
-        speed = abs(speed)
-        """Sets the angle of the extending arm"""
-        self.tolerance = 0
-        if percent - self.tolerance > self.extendingArmEncoderPercent:
-            self.setExtendingArmSpeed(speed)
-        elif percent + self.tolerance < self.extendingArmEncoderPercent:
-            self.setExtendingArmSpeed(-speed)
-        else:
-            self.setExtendingArmSpeed(0)
+    # def setExtendingArmPercent(self, percent, speed):
+    #     speed = abs(speed)
+    #     """Sets the angle of the extending arm"""
+    #     self.tolerance = 0
+    #     if percent - self.tolerance > self.extendingArmEncoderPercent:
+    #         self.setExtendingArmSpeed(speed)
+    #     elif percent + self.tolerance < self.extendingArmEncoderPercent:
+    #         self.setExtendingArmSpeed(-speed)
+    #     else:
+    #         self.setExtendingArmSpeed(0)
     
     #^ test this code, it will automatically apply limits on the extending arm
     def setExtendingArmPercentWithAuto(self, percent, speed):
@@ -110,9 +106,17 @@ class ArmSubsystem(commands2.SubsystemBase):
         else:
             self.setGrabbingArmSpeedWithAuto(0)
 
+    def resetExtendingArmEncoder(self):
+        """Resets the extending arm encoder"""
+        self.extendingArmEncoder.setPosition(0)
+
     def zeroExtendingArm(self):
         """Zeroes the extending arm"""
-        pass
+        if self.getExtendingArmLimitSwitchMinPressed():
+            self.resetExtendingArmEncoder()
+            self.setExtendingArmSpeed(0)
+        else: 
+            self.setExtendingArmSpeed(-.1)
     
 # * Rotating Arm functions
     def getRotatingArmLimitSwitchMinPressed(self) -> bool:
@@ -147,10 +151,18 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.rotatingArm.set(-speed)
         else:
             self.rotatingArm.set(0)
-        
+    
+    def resetRotatingArmEncoder(self):
+        self.rotatingArmEncoder.setPosition(0)
+
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""
-        pass
+        if self.getRotatingArmLimitSwitchMinPressed():
+            self.resetRotatingArmEncoder()
+            self.setRotatingArmSpeed(0)
+        else: 
+            self.setRotatingArmSpeed(-.1)
+
     
 # * Grabbing Arm functions
     def getGrabbingArmLimitSwitchClosedPressed(self) -> bool:
@@ -202,7 +214,12 @@ class ArmSubsystem(commands2.SubsystemBase):
 
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
-            self.resetEncoders()
+            self.resetGrabbingArmEncoders()
             self.setGrabbingArmSpeed(0)
         else: 
             self.setGrabbingArmSpeed(-.1)
+    
+    def resetGrabbingArmEncoders(self) -> None:
+        self.grabbingArmEncoder.reset()
+        self.grabbingArmEncoderDegrees = 0
+        self.previousGrabbingArmEncoderTicks = 0
