@@ -42,7 +42,8 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.grabbingArmEncoderDegrees = 0
         self.previousGrabbingArmEncoderTicks = 0
 
-        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / 360
+        
+        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() * constants.rotatingArmRevPerArmDegree
         self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() * constants.extendingArmRevPerArmPercent
 
 
@@ -76,7 +77,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
-        if self.rotatingArmEncoderDegrees > -7 and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
+        if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
                 #& move down to 75 % extension
                 self.setExtendingArmPercent(70, .75) 
         else:
@@ -142,7 +143,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the Rotating arm"""
         if (self.rotatingArmEncoderDegrees > 68 and speed > 0 ):
             self.setRotatingArmAngle(65, .75)
-        elif (self.rotatingArmEncoderDegrees <  -7 and speed < 0):
+        elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed < 0):
             self.setRotatingArmAngle(-2, .75)
         else:
             self.rotatingArm.setRotatingArmSpeed(speed)
@@ -160,7 +161,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.rotatingArm.setRotatingArmSpeed(0)
     
     def resetRotatingArmEncoder(self):
-        self.rotatingArmEncoder.setPosition(0)
+        self.rotatingArmEncoder.setPosition(constants.lowerArmAngleLimit * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
 
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""

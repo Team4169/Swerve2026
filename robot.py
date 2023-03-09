@@ -104,9 +104,16 @@ class MyRobot(commands2.TimedCommandRobot):
         self.distance = constants.testDistance
         self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.piviotDistanceFromGround - constants.armPickupHeight)**2)**.5
         if self.driverController.getLeftTriggerAxis() > .1:
-            if self.hypot > constants.maxArmLength:
-                self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
-            # else:
+            if self.hypot > constants.maxArmLength - 5: #5 is a buffer
+                self.drive.driveMecanum(.25, 0, 0)
+                # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
+            elif self.hypot < constants.minArmLength + 5:
+                self.drive.driveMecanum(-.25, 0, 0)
+            else:
+                self.drive.driveMecanum(0, 0, 0)
+                if (math.atan2((constants.piviotDistanceFromGround - constants.armPickupHeight)/(self.distance + constants.cameraDistanceFromArm)) * 180/math.pi) < constants.lowerArmAngleLimit:
+                    self.arm.setRotatingArmAngle(90, .75)
+                # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
             #     self.
         
         if self.driverController.getLeftBumper():

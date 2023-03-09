@@ -26,15 +26,17 @@ negativeTicksPerDeg = 221500/360
 
 #todo find out how many revolutions per arm length and replace none with that num
 extendingArmRevPerArmPercent = 100 # / 100
+rotatingArmRevPerArmDegree = 100 # / 360
 
 
 # *Arm pickup systems
-
 testDistance  = 21 #! this would be in place for the actual distance from the AI code
 cameraDistanceFromArm = 20  #in meters (20 is inches), (39.37 is inches per meter)
 piviotDistanceFromGround = 5.957 # in inches
 armPickupHeight = 3.427 # in inches
 maxArmLength = 68 # in inches
+minArmLength = 35 # in inches
+lowerArmAngleLimit = -7
 
 
 
