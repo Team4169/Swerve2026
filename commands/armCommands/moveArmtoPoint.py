@@ -5,10 +5,9 @@ import commands2
 
 
 class MoveArmToPoint(commands2.CommandBase):
-    def __init__(self, distance:float, height:float,speed:float, arm: ArmSubsystem) -> None:
+    def __init__(self, distance:float, speed:float, arm: ArmSubsystem) -> None:
         super().__init__()
         self.distance = distance
-        self.height = height
         self.speed = speed
         self.arm = arm
 
@@ -16,7 +15,8 @@ class MoveArmToPoint(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        pass
+        angle = self.arm.getTargetAngle(distance)
+        self.arm.setRotatingArmAngle(angle,speed)
     def end(self, interrupted: bool) -> None:
         self.climb.setLiftArm(0)
 
