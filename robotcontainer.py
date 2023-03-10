@@ -248,9 +248,23 @@ class RobotContainer:
     #
     #
     def getAutonomousCommand(self) -> commands2.Command:
-        y = constants.startPos[self.posInitSD.get()]
-        b = constants.endPos[self.posEndSD.get()]
-        a = constants.balanceDistance
-        self.driveDistance = math.sqrt((math.abs(y - b) ** 2 + a ** 2))
-        self.angle = math.arctan(math.abs(y - b) / a)
         return self.chooser.getSelected()
+    def getDistanceAuto(self,cone:bool):
+        y = constants.startPos[self.posInitSD.get()] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()] + constants.cubeToConeDistance
+        if cone:
+            y+= constants.cubeToConeDistance
+            b+= constants.cubeToConeDistance
+
+        a = constants.balanceDistance
+        driveDistance = math.sqrt((math.abs(y - b) ** 2 + a ** 2))
+        return driveDistance
+    def getAngleAuto(self,cone:bool):
+        y = constants.startPos[self.posInitSD.get()] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()] + constants.cubeToConeDistance
+        if cone:
+            y += constants.cubeToConeDistance
+            b += constants.cubeToConeDistance
+        a = constants.balanceDistance
+        angle = math.arctan(math.abs(y - b) / a)
+        return angle

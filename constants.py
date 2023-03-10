@@ -83,7 +83,8 @@ maxBalanceAngle = 15
 balanceSensitivity = -2
 maxBalanceSpeed = .3
 
-#TODO:Figure out actual positions
-startPos = [0,0,0]
-endPos = [0,0,0]
-balanceDistance = 0
+#Bottom (leftmost) cube drop off is origin
+startPos = [3.4,1.7,0]
+endPos = [2.43,1.73,0.93]
+balanceDistance = 0.8
+cubeToConeDistance = 0.58

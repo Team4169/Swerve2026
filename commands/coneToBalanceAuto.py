@@ -16,10 +16,9 @@ from .reset_gyro import ResetGyro
 2.Extend arm and deposit cone
 3.Un Extend
 4.Turn around
-5.Go to Cone
-6.Pick Up cone
-7.Turn around, drive to drop off
-8.Drop off cone
+5.Drive to Balance
+6.Face streight
+7.Get up and balance 
 
 '''
 
@@ -32,14 +31,15 @@ class Auto2023(commands2.SequentialCommandGroup):
     #y is initial y value, a is x coord of dest, b is y cord of dest
     def __init__(self, drive: DriveSubsystem):
         super().__init__(
-
             ResetGyro(drive),
-            #TODO:Find height of top cone rung and good distance from robot
+            # Drop off cone
+            #Unextend Arm
+            #UnRotate Arm
             MoveCommand(-5,0,drive),
             MoveCommand(0,180, drive),
             ResetGyro(drive),
-            MoveCommand(0,container.angle,drive),
-            MoveCommand(container.driveDistance,0,drive),
-            MoveCommand(0,-container.angle,drive),
+            MoveCommand(0,container.getAngle(True),drive),
+            MoveCommand(container.getDistance(True),0,drive),
+            MoveCommand(0,-container.getAngle(True),drive),
             #Get on balance
         )
