@@ -94,3 +94,8 @@ deadzone = .1
 maxBalanceAngle = 15
 balanceSensitivity = -2
 maxBalanceSpeed = .3
+
+#TODO:Figure out actual positions
+startPos = [0,0,0]
+endPos = [0,0,0]
+balanceDistance = 0

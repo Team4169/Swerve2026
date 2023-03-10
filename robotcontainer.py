@@ -120,9 +120,11 @@ class RobotContainer:
                                 extendingArmEncoder=self.extendingArmEncoder,
                                 rotatingArmEncoder=self.rotatingArmEncoder
                                 )
-        
-                                
 
+        inst = ntcore.NetworkTableInstance.getDefault()
+        self.sd = inst.getTable("SmartDashboard")
+        self.posInitSD = table.getDoubleTopic("posInit").subscribe(0)
+        self.posEndSD = table.getDoubleTopic("posEnd").subscribe(0)
 
 
 
@@ -247,4 +249,9 @@ class RobotContainer:
     #
     #
     def getAutonomousCommand(self) -> commands2.Command:
+        y = constants.startPos[self.posInitSD.get()]
+        b = constants.endPos[self.posEndSD.get()]
+        a = constants.balanceDistance
+        self.driveDistance = math.sqrt((math.abs(y - b) ** 2 + a ** 2))
+        self.angle = math.arctan(math.abs(y - b) / a)
         return self.chooser.getSelected()

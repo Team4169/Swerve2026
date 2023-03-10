@@ -1,5 +1,5 @@
 import commands2
-
+import robotcontainer as container
 import constants
 
 from .drivedistance import DriveDistance
@@ -29,24 +29,17 @@ class Auto2023(commands2.SequentialCommandGroup):
     An auto that drops off cone and grabs another cone
     """
 
-    def __init__(self, drive: DriveSubsystem): #def __init__(self, drive: DriveSubsystem, snowveyor: SnowveyorSubsystem):
+    #y is initial y value, a is x coord of dest, b is y cord of dest
+    def __init__(self, drive: DriveSubsystem):
         super().__init__(
-            # Drive forward the specified distance
+
             ResetGyro(drive),
             #TODO:Find height of top cone rung and good distance from robot
-            arm.setArmtoPoint(3,height,0.5),
-            #OpenClaw()
-            arm.setExtendingArmPercent(0,0.5),
-            arm.setRotatingArmAngle(0,0.5),
             MoveCommand(-5,0,drive),
             MoveCommand(0,180, drive),
             ResetGyro(drive),
-            MoveCommand(2,0,drive),
-            arm.setArmtoPoint(0.7,0.06,0.3),
-
-
-            MoveCommand
-            # MoveCommand(5,240, drive),
-
-            #MoveCommand(5, 360, drive)
+            MoveCommand(0,container.angle,drive),
+            MoveCommand(container.driveDistance,0,drive),
+            MoveCommand(0,-container.angle,drive),
+            #Get on balance
         )
