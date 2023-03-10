@@ -39,8 +39,8 @@ from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
-# from subsystems.snowveyorsubsystem import SnowveyorSubsystem
-# from subsystems.climbingsubsystem import ClimbingSubsystem
+# #from subsystems.snowveyorsubsystem import SnowveyorSubsystem
+# #from subsystems.climbingsubsystem import ClimbingSubsystem
 
 class RobotContainer:
     """
@@ -89,14 +89,13 @@ class RobotContainer:
         # self.rotateEncoder = self.rotateArm.getEncoder()
         # self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
-        self.grabbingArmOpenLimitSwitch = wpilib.DigitalInput(constants.grabbingArmOpenLimitSwitch)
-        # self.liftArmDownLimitSwitch = wpilib.DigitalInput(constants.liftArmDownLimitSwitch)
-        # self.rotateArmBackLimitSwitch = wpilib.DigitalInput(constants.rotateArmBackLimitSwitch)
-        # self.rotateArmRobotLimitSwitch = wpilib.DigitalInput(constants.rotateArmRobotLimitSwitch)
-        #
-        # self.intake = ctre.WPI_VictorSPX(constants.intake)
-        # self.outtake = ctre.WPI_VictorSPX(constants.outtake)
-        # self.snowveyor = wpilib.drive.DifferentialDrive(self.intake, self.outtake)
+        #^ forward is grabbing, we may need to switch this
+        self.grabbingArmOpenLimitSwitch = self.grabbingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.grabbingArmClosedLimitSwitch = self.grabbingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.extendingArmMaxLimitSwitch = self.extendingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.extendingArmMinLimitSwitch = self.extendingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.rotatingArmMaxLimitSwitch = self.rotatingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.rotatingArmMinLimitSwitch = self.rotatingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
 
         self.coastBool=False
 
@@ -110,12 +109,12 @@ class RobotContainer:
         self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
                                 extendingArm=self.extendingArm,
                                 rotatingArm=self.rotatingArm,
-                                grabbingArmLimitSwitchOpen = self.grabbingArmOpenLimitSwitch,
-                                grabbingArmLimitSwitchClosed =None,
-                                extendingArmLimitSwitchMin =None,
-                                extendingArmLimitSwitchMax =None,
-                                rotatingArmLimitSwitchMin =None,
-                                rotatingArmLimitSwitchMax =None,
+                                grabbingArmLimitSwitchOpen=self.grabbingArmOpenLimitSwitch,
+                                grabbingArmLimitSwitchClosed=self.grabbingArmClosedLimitSwitch,
+                                extendingArmLimitSwitchMin=self.extendingArmMinLimitSwitch,
+                                extendingArmLimitSwitchMax=self.extendingArmMaxLimitSwitch,
+                                rotatingArmLimitSwitchMin=self.rotatingArmMinLimitSwitch,
+                                rotatingArmLimitSwitchMax=self.rotatingArmMaxLimitSwitch,
                                 grabbingArmEncoder=self.grabbingArmEncoder,
                                 extendingArmEncoder=self.extendingArmEncoder,
                                 rotatingArmEncoder=self.rotatingArmEncoder

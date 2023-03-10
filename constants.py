@@ -13,35 +13,32 @@ rightTalon = 9
 rightTalon2 = 4
 
 # Arm motors
-grabbingArmID = 2
-extendingArmID = 100 # todo find out what these are
-rotatingArmID = 101  # todo
+
+extendingArmID = 11 
+rotatingArmID = 12 
+grabbingArmID = 13
 
 # Arm encoders
 grabbingArmEncoderPort = 0
 positiveTicksPerDeg = 173/360
 negativeTicksPerDeg = 221500/360
 
-extendingArmEncoderID = None
+
 #todo find out how many revolutions per arm length and replace none with that num
 extendingArmRevPerArmPercent = 100 # / 100
-
-rotatingArmEncoderID = None
-
+rotatingArmRevPerArmDegree = 100 # / 360
 
 
+# *Arm pickup systems
+testDistance  = 21 #! this would be in place for the actual distance from the AI code
+cameraDistanceFromArm = 20  #in meters (20 is inches), (39.37 is inches per meter)
+piviotDistanceFromGround = 5.957 # in inches
+armPickupHeight = 3.427 # in inches
+maxArmLength = 68 # in inches
+minArmLength = 35 # in inches
+lowerArmAngleLimit = -7
 
-# Encoders
-kLeftEncoderPorts = (0, 1)
-kRightEncoderPorts = (2, 3)
-kLeftEncoderReversed = False;
-kRightEncoderReversed = True
 
-kEncoderCPR = 1024
-kWheelDiameterInches = 6
-# Assumes the encoders are directly mounted on the wheel shafts
-# kEncoderDistancePerPulse = (kWheelDiameterInches * math.pi) / kEncoderCPR
-kEncoderDistancePerPulse = 1 / 924 * 12 #in inches
 
 # Autonomous
 kAutoDriveDistanceInches = 60
@@ -69,15 +66,6 @@ outtake = 12
 liftArm = 5
 rotateArm = 4
 
-grabbingArmOpenLimitSwitch = 1
-grabbingArmOpenLimitSwitchPressedValue = False
-
-# liftArmDownLimitSwitch = 2
-# liftArmDownLimitSwitchPressedValue = False
-# rotateArmBackLimitSwitch = 3
-# rotateArmBackLimitSwitchPressedValue = False
-# rotateArmRobotLimitSwitch = 1
-# rotateArmRobotLimitSwitchPressedValue = False
 
 liftArmSlowSpeed = .1
 liftArmFastSpeed = .5

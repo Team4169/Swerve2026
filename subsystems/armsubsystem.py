@@ -32,7 +32,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.rotatingArmLimitSwitchMin = rotatingArmLimitSwitchMin
         self.rotatingArmLimitSwitchMax = rotatingArmLimitSwitchMax
         self.grabbingArmLimitSwitchOpen = grabbingArmLimitSwitchOpen
-        self.grabbingArmLimitSwitchMax = grabbingArmLimitSwitchClosed
+        self.grabbingArmLimitSwitchClosed = grabbingArmLimitSwitchClosed
 
         #* encoders
         self.extendingArmEncoder = extendingArmEncoder
@@ -42,7 +42,8 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.grabbingArmEncoderDegrees = 0
         self.previousGrabbingArmEncoderTicks = 0
 
-        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / 360
+        
+        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() * constants.rotatingArmRevPerArmDegree
         self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() * constants.extendingArmRevPerArmPercent
 
 
@@ -54,11 +55,11 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Extending Arm functions
     def getExtendingArmLimitSwitchMinPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.extendingArmLimitSwitchMin.get() == constants.extendingArmMinLimitSwitchPressedValue
+        return self.extendingArmLimitSwitchMin.get()
     
     def getExtendingArmLimitSwitchMaxPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.extendingArmLimitSwitchMax.get() == constants.extendingArmMaxLimitSwitchPressedValue
+        return self.extendingArmLimitSwitchMax.get()
     
     # limit Switch gaurds https://docs.google.com/spreadsheets/d/1Ywz5rC-dYjaaNjmlx7t1RDW8TRrBJ6oTPnMUaNfTfJ0/edit#gid=1791774740
     def setExtendingArmSpeed(self, speed):
@@ -67,6 +68,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.extendingArm.set(0)
         elif self.getExtendingArmLimitSwitchMinPressed() and speed < 0:
             self.extendingArm.set(0)
+            self.resetExtendingArmEncoder()
         else:
             self.extendingArm.set(speed)
     
@@ -75,7 +77,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
-        if self.rotatingArmEncoderDegrees > -7 and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
+        if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
                 #& move down to 75 % extension
                 self.setExtendingArmPercent(70, .75) 
         else:
@@ -121,24 +123,30 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Rotating Arm functions
     def getRotatingArmLimitSwitchMinPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMin.get() == constants.RotatingArmMinLimitSwitchPressedValue
+        return self.RotatingArmLimitSwitchMin.get()
     
     def getRotatingArmLimitSwitchMaxPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMax.get() == constants.RotatingArmMaxLimitSwitchPressedValue
+        return self.RotatingArmLimitSwitchMax.get()
     
     def setRotatingArmSpeed(self, speed):
         """Sets the speed of the Rotating arm"""
-        self.rotatingArm.set(speed)
+        if self.getRotatingArmLimitSwitchMaxPressed() and speed > 0:
+            self.rotatingArm.set(0)
+        elif self.getRotatingArmLimitSwitchMinPressed() and speed < 0:
+            self.rotatingArm.set(0)
+            self.resetRotatingArmEncoder()
+        else:
+            self.rotatingArm.set(speed)
 
     def setRotatingArmSpeedWithAuto(self, speed):
         """Sets the speed of the Rotating arm"""
         if (self.rotatingArmEncoderDegrees > 68 and speed > 0 ):
             self.setRotatingArmAngle(65, .75)
-        elif (self.rotatingArmEncoderDegrees <  -7 and speed < 0):
+        elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed < 0):
             self.setRotatingArmAngle(-2, .75)
         else:
-            self.rotatingArm.set(speed)
+            self.rotatingArm.setRotatingArmSpeed(speed)
 
     #~ TODO: make it so that it zeroes when it hits the limit switch
     def setRotatingArmAngle(self, angle, speed):
@@ -146,14 +154,14 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the angle of the Rotating arm"""
         self.tolerance = 0
         if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.rotatingArm.set(speed)
+            self.rotatingArm.setRotatingArmSpeed(speed)
         elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.rotatingArm.set(-speed)
+            self.rotatingArm.setRotatingArmSpeed(-speed)
         else:
-            self.rotatingArm.set(0)
+            self.rotatingArm.setRotatingArmSpeed(0)
     
     def resetRotatingArmEncoder(self):
-        self.rotatingArmEncoder.setPosition(0)
+        self.rotatingArmEncoder.setPosition(constants.lowerArmAngleLimit * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
 
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""
@@ -167,16 +175,26 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Grabbing Arm functions
     def getGrabbingArmLimitSwitchClosedPressed(self) -> bool:
         """Gets if either limit switch is pressed"""
-        return self.grabbingArmLimitSwitchOpen.get() == constants.grabbingArmOpenLimitSwitchPressedValue
+        return self.grabbingArmLimitSwitchClosed.get()
     
     def getGrabbingArmLimitSwitchOpenPressed(self) -> bool:
         """Gets if either limit switch is pressed"""
-        return self.grabbingArmLimitSwitchOpen.get() == constants.grabbingArmOpenLimitSwitchPressedValue
+        return self.grabbingArmLimitSwitchOpen.get()
+    
+    def setGrabbingArmSpeedWithLimitSwitches(self, speed):
+        """Sets the speed of the grabbing arm"""
+        if self.getGrabbingArmLimitSwitchClosedPressed() and speed < 0:
+            self.grabbingArm.set(0)
+        elif self.getGrabbingArmLimitSwitchOpenPressed() and speed > 0:
+            self.grabbingArm.set(0)
+            self.resetGrabbingArmEncoder()
+        else:
+            self.grabbingArm.set(speed)
     
     def setGrabbingArmSpeed(self, speed):
         """for some reason the encoder ticks are significantly different when going down versus when going up"""
         # & Sets the speed
-        self.grabbingArm.set(speed)
+        self.grabbingArm.setGrabbingArmSpeedWithLimitSwitches(speed)
         #& Updates the current encoder location
         self.current = self.grabbingArmEncoder.get()
         #& Updates the smartdashboard
@@ -203,25 +221,23 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     #^ test this function
 
-    def setGrabbingArmDistance(self,distance,speed):
-        dis = (distance/67)*100
-        setExtendingArmPercent(self, dis, speed)
-    def setArmtoPoint(self,distance,height,speed):
-        #Calculations for placing object on platform depending on distance and height
-        #13 is the height of the robot(I think)
-        angle = math.degrees(math.arctan((height-13)/distance))
-        extend = math.sqrt(distance ** 2 + (height-13))-40
-        setRotatingArmAngle(self, angle, speed)
-        setExtendingArmDistance(self,extend,speed)
-
     def zeroGrabbingArm(self):
         if self.getGrabbingArmLimitSwitchOpenPressed():
-            self.resetGrabbingArmEncoders()
+            self.resetGrabbingArmEncoder()
             self.setGrabbingArmSpeed(0)
         else: 
             self.setGrabbingArmSpeed(-.1)
     
-    def resetGrabbingArmEncoders(self) -> None:
+    def resetGrabbingArmEncoder(self) -> None:
         self.grabbingArmEncoder.reset()
         self.grabbingArmEncoderDegrees = 0
         self.previousGrabbingArmEncoderTicks = 0
+
+    #* Object pickup functions
+    def getTargetAngle(self, distance):
+        """Gets the angle to the target"""
+        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.piviotDistanceFromGround-constants.armPickupHeight))-90
+    
+
+
+        
