@@ -122,8 +122,8 @@ class RobotContainer:
 
         inst = ntcore.NetworkTableInstance.getDefault()
         self.sd = inst.getTable("SmartDashboard")
-        self.posInitSD = table.getDoubleTopic("posInit").subscribe(0)
-        self.posEndSD = table.getDoubleTopic("posEnd").subscribe(0)
+        self.posInitSD = self.sd.getDoubleTopic("posInit").subscribe(0)
+        self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(0)
 
 
 

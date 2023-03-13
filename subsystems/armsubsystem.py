@@ -13,14 +13,9 @@ class ArmSubsystem(commands2.SubsystemBase):
     def __init__(self, extendingArm, rotatingArm, grabbingArm, extendingArmLimitSwitchMin, extendingArmLimitSwitchMax, rotatingArmLimitSwitchMin, rotatingArmLimitSwitchMax, grabbingArmLimitSwitchOpen, grabbingArmLimitSwitchClosed, extendingArmEncoder, rotatingArmEncoder, grabbingArmEncoder) -> None:
         super().__init__()
         # commands2.SubsystemBase.__init__(self)
-        # * smartdashboard
+        # ~ smartdashboard
         self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
         
-        self.grabbingDegrees = self.sd.getDoubleTopic("grabbingDegrees").publish()
-        self.extendingArmRevolutions = self.sd.getDoubleTopic("ExtendArmRevs").publish()
-        self.rotatingArmRevolutions = self.sd.getDoubleTopic("RotArmRevs").publish()
-        self.grabbingLimitSwitchOpenVal = self.sd.getDoubleTopic("GrabbingLimitOpen").publish()
-
         #* Arm motors
         self.extendingArm = extendingArm
         self.rotatingArm = rotatingArm
@@ -34,13 +29,28 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.grabbingArmLimitSwitchOpen = grabbingArmLimitSwitchOpen
         self.grabbingArmLimitSwitchClosed = grabbingArmLimitSwitchClosed
 
+        #~ smartDashboard limit switches
+        self.extendingArmLimitSwitchMinVal = self.sd.getDoubleTopic("ExtendArmLimitMin").publish()
+        self.extendingArmLimitSwitchMaxVal = self.sd.getDoubleTopic("ExtendArmLimitMax").publish()
+        self.rotatingArmLimitSwitchMinVal = self.sd.getDoubleTopic("RotArmLimitMin").publish()
+        self.rotatingArmLimitSwitchMaxVal = self.sd.getDoubleTopic("RotArmLimitMax").publish()
+        self.grabbingArmLimitSwitchOpenVal = self.sd.getDoubleTopic("GrabbingLimitOpen").publish()
+        self.grabbingArmLimitSwitchClosedVal = self.sd.getDoubleTopic("GrabbingLimitClosed").publish()
+
+
         #* encoders
         self.extendingArmEncoder = extendingArmEncoder
         self.rotatingArmEncoder = rotatingArmEncoder
         self.grabbingArmEncoder = grabbingArmEncoder
 
-        self.grabbingArmEncoderDegrees = 0
-        self.previousGrabbingArmEncoderTicks = 0
+        self.grabbingArmEncoderDegrees = 0.0
+        self.previousGrabbingArmEncoderTicks = 0.0
+
+        #~ smartDashboard encoders
+
+        self.grabbingDegrees = self.sd.getDoubleTopic("grabbingDegrees").publish()
+        self.extendingArmRevolutions = self.sd.getDoubleTopic("ExtendArmRevs").publish()
+        self.rotatingArmRevolutions = self.sd.getDoubleTopic("RotArmRevs").publish()
 
         
         self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() * constants.rotatingArmRevPerArmDegree
@@ -123,11 +133,11 @@ class ArmSubsystem(commands2.SubsystemBase):
 # * Rotating Arm functions
     def getRotatingArmLimitSwitchMinPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMin.get()
+        return self.rotatingArmLimitSwitchMin.get()
     
     def getRotatingArmLimitSwitchMaxPressed(self) -> bool:
         """Gets if the limit switch is pressed"""
-        return self.RotatingArmLimitSwitchMax.get()
+        return self.rotatingArmLimitSwitchMax.get()
     
     def setRotatingArmSpeed(self, speed):
         """Sets the speed of the Rotating arm"""
@@ -146,19 +156,19 @@ class ArmSubsystem(commands2.SubsystemBase):
         elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed < 0):
             self.setRotatingArmAngle(-2, .75)
         else:
-            self.rotatingArm.setRotatingArmSpeed(speed)
+            self.setRotatingArmSpeed(speed)
 
     #~ TODO: make it so that it zeroes when it hits the limit switch
     def setRotatingArmAngle(self, angle, speed):
         speed = abs(speed)
         """Sets the angle of the Rotating arm"""
         self.tolerance = 0
-        if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.rotatingArm.setRotatingArmSpeed(speed)
-        elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.rotatingArm.setRotatingArmSpeed(-speed)
+        if angle - self.tolerance > self.rotatingArmEncoderDegrees:
+            self.setRotatingArmSpeed(speed)
+        elif angle + self.tolerance < self.rotatingArmEncoderDegrees:
+            self.setRotatingArmSpeed(-speed)
         else:
-            self.rotatingArm.setRotatingArmSpeed(0)
+            self.setRotatingArmSpeed(0)
     
     def resetRotatingArmEncoder(self):
         self.rotatingArmEncoder.setPosition(constants.lowerArmAngleLimit * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
@@ -194,7 +204,7 @@ class ArmSubsystem(commands2.SubsystemBase):
     def setGrabbingArmSpeed(self, speed):
         """for some reason the encoder ticks are significantly different when going down versus when going up"""
         # & Sets the speed
-        self.grabbingArm.setGrabbingArmSpeedWithLimitSwitches(speed)
+        self.setGrabbingArmSpeedWithLimitSwitches(speed)
         #& Updates the current encoder location
         self.current = self.grabbingArmEncoder.get()
         #& Updates the smartdashboard
@@ -219,6 +229,12 @@ class ArmSubsystem(commands2.SubsystemBase):
         else:
             self.setGrabbingArmSpeed(0)
     
+    def grabCube(self):
+        self.setGrabbingArmAngle(119, .75)
+    
+    def grabCone(self):
+        self.setGrabbingArmAngle(88 , .75)
+
     #^ test this function
 
     def zeroGrabbingArm(self):
@@ -230,13 +246,13 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     def resetGrabbingArmEncoder(self) -> None:
         self.grabbingArmEncoder.reset()
-        self.grabbingArmEncoderDegrees = 0
+        self.grabbingArmEncoderDegrees = 67.5
         self.previousGrabbingArmEncoderTicks = 0
 
     #* Object pickup functions
     def getTargetAngle(self, distance):
         """Gets the angle to the target"""
-        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.piviotDistanceFromGround-constants.armPickupHeight))-90
+        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.pivotDistanceFromGround-constants.armPickupHeight))-90
     
 
 
