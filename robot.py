@@ -9,7 +9,7 @@ import constants
 from robotcontainer import RobotContainer
 from deadzone import addDeadzone
 import ntcore
-
+import robotpy_apriltag
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -51,13 +51,14 @@ class MyRobot(commands2.TimedCommandRobot):
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
 
+
     def disabledPeriodic(self) -> None:
         """This function is called periodically when disabled"""
 
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
         self.autonomousCommand = self.container.getAutonomousCommand()
-        self.output("ato com", self.autonomousCommand)
+        # self.output("ato com", self.autonomousCommand)
         #
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
@@ -95,14 +96,24 @@ class MyRobot(commands2.TimedCommandRobot):
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
         # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
         # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
-        self.arm.grabbingLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
-        self.arm.grabbingDegrees.set(self.arm.getGrabbingArmEncoderDistance())
+        
+        #~ smartDashboard limit switch setting
+        self.arm.grabbingArmLimitSwitchClosedVal.set(self.arm.getGrabbingArmLimitSwitchClosedPressed())
+        self.arm.grabbingArmLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
+        self.arm.extendingArmLimitSwitchMinVal.set(self.arm.getExtendingArmLimitSwitchMinPressed())
+        self.arm.extendingArmLimitSwitchMaxVal.set(self.arm.getExtendingArmLimitSwitchMaxPressed())
+        self.arm.rotatingArmLimitSwitchMaxVal.set(self.arm.getRotatingArmLimitSwitchMaxPressed())
+        self.arm.rotatingArmLimitSwitchMinVal.set(self.arm.getRotatingArmLimitSwitchMinPressed())
+        
+        
+
+        self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees)
         self.arm.extendingArmRevolutions.set(self.arm.extendingArmEncoder.getPosition())
         self.arm.rotatingArmRevolutions.set(self.arm.rotatingArmEncoder.getPosition())
     
     #todo: decide which controller this is on
         self.distance = constants.testDistance
-        self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.piviotDistanceFromGround - constants.armPickupHeight)**2)**.5
+        self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.pivotDistanceFromGround - constants.armPickupHeight)**2)**.5
         if self.driverController.getLeftTriggerAxis() > .1:
             if self.hypot > constants.maxArmLength - 5: #5 is a buffer
                 self.drive.driveMecanum(.25, 0, 0)
@@ -111,16 +122,21 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.drive.driveMecanum(-.25, 0, 0)
             else:
                 self.drive.driveMecanum(0, 0, 0)
-                if (math.atan2((constants.piviotDistanceFromGround - constants.armPickupHeight)/(self.distance + constants.cameraDistanceFromArm)) * 180/math.pi) < constants.lowerArmAngleLimit:
-                    self.arm.setRotatingArmAngle(90, .75)
+                targetAngle = -math.atan((constants.pivotDistanceFromGround - constants.armPickupHeight)/(self.distance + constants.cameraDistanceFromArm)) * 180/math.pi
+                if targetAngle < constants.lowerArmAngleLimit:
+                    self.arm.setRotatingArmSpeed(0)
+                    self.driveMeacanum(-.25, 0, 0)
+                else:
+                    self.arm.setRotatingArmAngle(targetAngle, .25)
+                    self.arm.setExtendingArmPercentWithAuto((self.hypot / constants.maxArmLength) * 100)
                 # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
             #     self.
         
         if self.driverController.getLeftBumper():
-            self.output("straight mode", True)
+            # self.output("straight mode", True)
             self.direction = 0
         else:
-            self.output("straight mode", False)
+            # self.output("straight mode", False)
             self.direction = self.driverController.getLeftX()
         self.leftX = addDeadzone(self.driverController.getLeftX())
         self.leftY = addDeadzone(self.driverController.getLeftY())
@@ -161,7 +177,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         #     self.leftTalon.set(0)
         self.container.drive.balanceSensitivitySub.get()
-        
+        self.gyroRad = self.container.drive.gyro.getYaw() * (math.pi/180)
         if self.driverController.getAButton():
             self.pitchAngle = self.container.drive.gyro.getPitch()
             self.speed = constants.maxBalanceSpeed*2/(1 + math.e**(-constants.balanceSensitivity*(self.pitchAngle/constants.maxBalanceAngle)))-constants.maxBalanceSpeed #min(max(-abs(self.pitchAngle) + , 0), 1)
@@ -176,7 +192,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # * arm control  
         self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         self.arm.setExtendingArmSpeedWithAuto(self.operatorController.getRightY())
-        self.arm.setGrabbingArmSpeedWithAuto(self.operatorController.getLeftTriggerAxis() - self.operatorController.getRightTriggerAxis())
+        self.arm.setGrabbingArmSpeed(self.operatorController.getLeftTriggerAxis() - self.operatorController.getRightTriggerAxis())
 
         if self.operatorController.getAButton():
             self.arm.zeroExtendingArm()
@@ -184,6 +200,10 @@ class MyRobot(commands2.TimedCommandRobot):
             self.arm.zeroRotatingArm()
         if self.operatorController.getYButton():
             self.arm.zeroExtendingArm()
+        if self.operatorController.getLeftBumper():
+            self.arm.grabCone()
+        if self.operatorController.getRightBumper():
+            self.arm.grabCube()
         
 
 
