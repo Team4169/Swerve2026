@@ -1,8 +1,8 @@
-#from subsystems.climbingsubsystem import ClimbingSubsystem
+from subsystems.armsubsystem import ArmSubsystem
 import commands2
 
 
-class grabCone(commands2.CommandBase):
+class dropObject(commands2.CommandBase):
     def __init__(self, angle, arm: ArmSubsystem) -> None:
         super().__init__()
         self.angle = angle
@@ -13,7 +13,7 @@ class grabCone(commands2.CommandBase):
 
     def execute(self) -> None:
         speed = 0.3
-        angle = 88
+        angle = 90 #This is a random guess fix later
         self.arm.setGrabbingArmAngle(self.angle,speed)
 
     def end(self, interrupted: bool) -> None:

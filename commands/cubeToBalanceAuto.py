@@ -31,6 +31,8 @@ class Auto2023(commands2.SequentialCommandGroup):
     def __init__(self, drive: DriveSubsystem):
         super().__init__(
             ResetGyro(drive),
+
+            setExtendingArm(),
             # Drop off cone
             #Unextend Arm
             #UnRotate Arm
