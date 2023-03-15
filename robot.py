@@ -72,6 +72,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.drive.resetEncoders()
         self.drive.gyro.reset()
         self.arm.resetGrabbingArmEncoder()
+        self.arm.resetExtendingArmEncoder()
+        self.arm.zeroRotatingArm()
 
 
         # This makes sure that the autonomous stops running when
@@ -94,6 +96,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopPeriodic(self):
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
+        self.arm.updateDegreesAndPercent()
         # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
         # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
         
@@ -104,10 +107,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm.extendingArmLimitSwitchMaxVal.set(self.arm.getExtendingArmLimitSwitchMaxPressed())
         self.arm.rotatingArmLimitSwitchMaxVal.set(self.arm.getRotatingArmLimitSwitchMaxPressed())
         self.arm.rotatingArmLimitSwitchMinVal.set(self.arm.getRotatingArmLimitSwitchMinPressed())
-        
+
+        self.arm.rotatingArmEncoderDegreesVal.set(self.arm.rotatingArmEncoderDegrees)
         
 
-        self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees)
+        self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees )
         self.arm.extendingArmRevolutions.set(self.arm.extendingArmEncoder.getPosition())
         self.arm.rotatingArmRevolutions.set(self.arm.rotatingArmEncoder.getPosition())
     
@@ -190,6 +194,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
 
         # * arm control  
+        #Todo: make sure the "foreward" is positive
+        # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         self.arm.setExtendingArmSpeedWithAuto(self.operatorController.getRightY())
         self.arm.setGrabbingArmSpeed(self.operatorController.getLeftTriggerAxis() - self.operatorController.getRightTriggerAxis())

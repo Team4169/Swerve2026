@@ -20,13 +20,15 @@ grabbingArmID = 13
 
 # Arm encoders
 grabbingArmEncoderPort = 0
+#todo this may also need to be changed
 positiveTicksPerDeg = 173/360
 negativeTicksPerDeg = 221500/360
 
 
 #todo find out how many revolutions per arm length and replace none with that num
+#! extending arm give negative power as "foreward"
 extendingArmRevPerArmPercent = 100 # / 100
-rotatingArmRevPerArmDegree = 100 # / 360
+rotatingArmRevPerArmDegree = - 91 / 87 # / 360
 
 
 # *Arm pickup systems
