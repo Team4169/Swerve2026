@@ -254,7 +254,15 @@ class ArmSubsystem(commands2.SubsystemBase):
     def getTargetAngle(self, distance):
         """Gets the angle to the target"""
         return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.pivotDistanceFromGround-constants.armPickupHeight))-90
-    
+
+    def dropOffAngle(self,distance,height):
+        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.pivotDistanceFromGround-height))-90
+
+    def dropOffAngleAuto(self,distance,height):
+        return 180 / math.pi * math.atan((distance) / (constants.pivotDistanceFromGround - height)) - 90
+
+    def dropOffExtentionAuto(self,distance,height):
+        return math.sqrt((distance ** 2)+ (height ** 2))
 
 
         
