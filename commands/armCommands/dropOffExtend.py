@@ -1,19 +1,21 @@
 from subsystems.armsubsystem import ArmSubsystem
 import commands2
+from .setExtendingArm import setExtendingArm
 
 
-
-class setExtendingArm(commands2.CommandBase):
-    def __init__(self, distance, arm: ArmSubsystem) -> None:
+class dropOffExtend(commands2.CommandBase):
+    def __init__(self, distance, height, arm: ArmSubsystem) -> None:
         super().__init__()
         self.distance = distance
+        self.height = height
         self.arm= arm
 
     def initialize(self):
         pass
 
     def execute(self) -> None:
-        percent = (20/self.distance) * 100
+        d = self.arm.dropOffExtentionAuto(self.distance,self.height)
+        percent = (20/d) * 100
         speed = 0.3 #expirement with this
         self.arm.setExtendingArmPercentWithAuto(percent,speed)
 

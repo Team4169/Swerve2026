@@ -1,15 +1,12 @@
 import commands2
 import robotcontainer as container
 import constants
-
-from .drivedistance import DriveDistance
+from .armCommands import *
 from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem as arm
 from .reset_gyro import ResetGyro
 
-#from .SnowVeyerCommands.pickUp import pickUp
-#from .SnowVeyerCommands.dropOff import dropOff
 
 '''
 1.Holding Cone
@@ -23,23 +20,23 @@ from .reset_gyro import ResetGyro
 '''
 
 
-class Auto2023(commands2.SequentialCommandGroup):
+class coneToBalanceAuto(commands2.SequentialCommandGroup):
     """
-    An auto that drops off cone and grabs another cone
+    An auto that drops off cone and goes onto balance
     """
 
-    #y is initial y value, a is x coord of dest, b is y cord of dest
     def __init__(self, drive: DriveSubsystem):
         super().__init__(
             ResetGyro(drive),
-            # Drop off cone
-            #Unextend Arm
-            #UnRotate Arm
+            dropOff(constants.dropOffDistance,constants.coneTargetHeights[container.target]),
+            setExtendingArm(0,arm),
+            setRotatingArm(0,arm),
             MoveCommand(-5,0,drive),
             MoveCommand(0,180, drive),
             ResetGyro(drive),
             MoveCommand(0,container.getAngle(True),drive),
             MoveCommand(container.getDistance(True),0,drive),
             MoveCommand(0,-container.getAngle(True),drive),
-            #Get on balance
+            MoveCommand(0.5,0,drive),
+            balanceCommand(drive)
         )
