@@ -15,33 +15,11 @@ from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
 from commands.coneToBalanceAuto import coneToBalanceAuto
 from commands.cubeToBalanceAuto import cubeToBalanceAuto
-# from commands.moveForwardToVisionTarget import MoveForwardToVisionTarget
-# from commands.centerRobotToTarget import CenterRobotToTarget
-# from commands.lucautocommandInverted import LucAutoCommand2
-# from commands.newPath import newPath
-# from commands.newPathInverted import newPathInverted
-# from commands.zeroBall import zeroBall
-#
-# from commands.SnowVeyerCommands.DropOff import dropOff
-# from commands.SnowVeyerCommands.PickUp import pickUp
-# from commands.SnowVeyerCommands.intake import Intake
-# from commands.SnowVeyerCommands.outtake import Outtake
-#
-#
-# from commands.climbingCommands.moveRotateArm import MoveRotateArm
-# from commands.climbingCommands.liftArmToTop import LiftArmToTop
-# from commands.climbingCommands.moveLiftArm import MoveLiftArm
-# from commands.climbingCommands.moveLiftArmToLimitSwitch import MoveLiftArmToLimitSwitch
-# from commands.climbingCommands.moveLiftArmPastLocation import MoveLiftArmPastLocation
-# from commands.climbingCommands.liftArmToTop import LiftArmToTop
-# from commands.climbingCommands.coastRotateArm import coastRotateArm
 
 from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
-# #from subsystems.snowveyorsubsystem import SnowveyorSubsystem
-# #from subsystems.climbingsubsystem import ClimbingSubsystem
 
 class RobotContainer:
     """
@@ -70,25 +48,6 @@ class RobotContainer:
         self.grabbingArmEncoder = wpilib.Counter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
         self.extendingArmEncoder = self.extendingArm.getEncoder()
         self.rotatingArmEncoder = self.rotatingArm.getEncoder()
-        # self.neoMotor = rev.CANSparkMax(constants.neoMotor, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-
-        # self.table = NetworkTables.getTable("limelight")
-        # tx = self.table.getNumber('tx', None)
-        # ty = self.table.getNumber('ty', None)
-        # ta = self.table.getNumber('ta', None)
-        # ts = self.table.getNumber('ts', None)
-        # tv = self.table.getNumber('tv', None)
-
-        # self.liftArm = rev.CANSparkMax(constants.liftArm, rev.CANSparkMaxLowLevel.MotorType.kBrushed)
-        # self.rotateArm = rev.CANSparkMax(constants.rotateArm, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        
-        #self.liftArm.setIdleMode(self.liftArm.IdleMode(1))
-        #self.rotateArm.setIdleMode(self.rotateArm.IdleMode(1))
-
-        #self.liftArm.setInverted(True)
-
-        # self.rotateEncoder = self.rotateArm.getEncoder()
-        # self.liftEncoder = self.liftArm.getEncoder(rev.SparkMaxRelativeEncoder.Type.kQuadrature)
 
         #^ forward is grabbing, we may need to switch this
         self.grabbingArmOpenLimitSwitch = self.grabbingArm.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
@@ -127,129 +86,18 @@ class RobotContainer:
         self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(1)
         self.targetSD = self.sd.getDoubleTopic("Target").subscribe(1)
 
-
-
-
-        # self.snowveyor = SnowveyorSubsystem(intake=self.intake,
-        #                                     outtake=self.outtake,
-        #                                     snowveyor=self.snowveyor)
-        #
-        # self.climb = ClimbingSubsystem(liftArm=self.liftArm,
-        #                                rotateArm=self.rotateArm,
-        #                                liftEncoder=self.liftEncoder,
-        #                                rotateEncoder=self.rotateEncoder,
-        #                                liftArmUpLimitSwitch=self.liftArmUpLimitSwitch,
-        #                                liftArmDownLimitSwitch=self.liftArmDownLimitSwitch,
-        #                                rotateArmBackLimitSwitch=self.rotateArmBackLimitSwitch,
-        #                                rotateArmRobotLimitSwitch=self.rotateArmRobotLimitSwitch)
-
-        # Autonomous routines
-
-        # A simple auto routine that drives forward a specified distance, and then stops.
-        # self.simpleAuto = DriveDistance(
-        #     constants.kAutoDriveDistanceInches, constants.kAutoDriveSpeed, self.drive
-        # )
-
-        # A complex auto routine that drives forward, and then drives backward.
-        # self.complexAuto = ComplexAuto(self.drive)
-
-        # A complex auto routine that drives forward, and then drives backward.
-        #  self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
         self.coneToBalance =coneToBalanceAuto(self.drive)
         self.cubeToBalance = cubeToBalanceAuto(self.drive)
-        # self.moveForwardToVisionTarget = MoveForwardToVisionTarget(self.drive, self.neoMotor)
-        # self.centerRobotToTarget = CenterRobotToTarget(self.drive, self.neoMotor)
-        # self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
-        # #simpler auto routine that drives to the second ball and places 2 into the smaller hub
-        # self.newPath = newPath(self.drive, self.snowveyor)
-        # self.newPathInverted = newPathInverted(self.drive, self.snowveyor)
-        # self.zeroBall = zeroBall(self.drive, self.snowveyor)
-        # Chooser
+        #chooser
         self.chooser = wpilib.SendableChooser()
-        #
-        # # Add commands to the autonomous command chooser
-        # # self.chooser.setDefaultOption("Complex Auto", self.complexAuto)
+
         self.chooser.setDefaultOption("Cube to Balance", self.cubeToBalance)
-        # # self.chooser.addOption("Simple Auto", self.simpleAuto)
         self.chooser.addOption("Cone to Balance", self.coneToBalance)
-        # self.chooser.addOption("Luc AutoInverted", self.lucAutoCommand2)
-        # self.chooser.addOption("SimplePath", self.newPath)
-        # self.chooser.addOption("SimplePathInverted", self.newPathInverted)
-        # self.chooser.addOption("zeroBall", self.zeroBall)
+
         # # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
 
-        # self.configureButtonBindings()
 
-        # set up default drive command
-        # self.drive.setDefaultCommand(
-        #     DefaultDrive(
-        #         self.drive,
-        #         lambda: -self.driverController.getRightY(),
-        #         lambda: self.driverController.getLeftY(),
-        #     )
-        # )
-        #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kY).whenPressed(
-        #    MoveForwardToVisionTarget(self.drive, self.neoMotor))
-        #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kB).whenPressed(
-        #    CenterRobotToTarget(self.drive, self.neoMotor))
-
-    # def bindClimbMode(self):
-    #     """
-    #     Use this method to define your button->command mappings. Buttons can be created by
-    #     instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
-    #     and then passing it to a JoystickButton.
-    #     """
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
-    #         MoveLiftArm(-.5, self.climb)
-    #     )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-    #         MoveLiftArm(1, self.climb)
-    #     )
-    #     # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-    #     #     MoveLiftArm(.5, self.climb)
-    #     # )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
-    #         MoveLiftArm(-1, self.climb)
-    #     )
-    #     # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-    #     #     MoveLiftArm(.5, self.climb)
-    #     # )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
-    #         MoveRotateArm(.3, self.climb)
-    #     )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
-    #         MoveRotateArm(-.3, self.climb)
-    #     )
-    #     commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whenHeld(
-    #        coastRotateArm(self.coastBool, self.climb)
-    #     )
-    #
-    # def unbindClimbMode(self):
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whenHeld(
-    #         DoNothing()
-    #     )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-    #         DoNothing()
-    #     )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whenHeld(
-    #         DoNothing()
-    #     )
-    #     # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whenHeld(
-    #     #     DoNothing()
-    #     # )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whenHeld(
-    #         DoNothing()
-    #     )
-    #     commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whenHeld(
-    #         DoNothing()
-    #     )
-    #     commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whenPressed(
-    #         DoNothing()
-    #     )
-    #
-    #
-    #
     def getAutonomousCommand(self) -> commands2.Command:
         self.target = self.targetSD.get()-1
         return self.chooser.getSelected()

@@ -162,27 +162,7 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.arm.setGrabbingArmSpeed(0)
             
-    #^: This is test for each individual motor
-        # if self.driverController.getAButton():
-        #     self.leftTalon2.set(0.5)
-        # else:
-        #     self.leftTalon2.set(0)
-        
-        # if self.driverController.getBButton():
-        #     self.rightTalon2.set(0.5)
-        # else:
-        #     self.rightTalon2.set(0)
 
-        # if self.driverController.getYButton():
-        #     self.rightTalon.set(0.5)
-        # else:
-        #     self.rightTalon.set(0)
-        
-        # if self.driverController.getXButton():
-        #     self.leftTalon.set(0.5)
-        # else:
-
-        #     self.leftTalon.set(0)
     #^ balancing with the A button
         self.container.drive.balanceSensitivitySub.get()
         self.gyroRad = self.container.drive.gyro.getYaw() * (math.pi/180)
