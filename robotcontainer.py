@@ -13,7 +13,8 @@ import constants
 # from commands.drivedistance import DriveDistance
 from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
-from commands.lucautocommand import LucAutoCommand
+from commands.coneToBalanceAuto import coneToBalanceAuto
+from commands.cubeToBalanceAuto import cubeToBalanceAuto
 # from commands.moveForwardToVisionTarget import MoveForwardToVisionTarget
 # from commands.centerRobotToTarget import CenterRobotToTarget
 # from commands.lucautocommandInverted import LucAutoCommand2
@@ -153,7 +154,8 @@ class RobotContainer:
 
         # A complex auto routine that drives forward, and then drives backward.
         #  self.lucAutoCommand = LucAutoCommand(self.drive, self.snowveyor)
-        self.lucAutoCommand = LucAutoCommand(self.drive)
+        self.coneToBalance =coneToBalanceAuto(self.drive)
+        self.cubeToBalance = cubeToBalanceAuto(self.drive)
         # self.moveForwardToVisionTarget = MoveForwardToVisionTarget(self.drive, self.neoMotor)
         # self.centerRobotToTarget = CenterRobotToTarget(self.drive, self.neoMotor)
         # self.lucAutoCommand2 = LucAutoCommand2(self.drive, self.snowveyor)
@@ -166,9 +168,9 @@ class RobotContainer:
         #
         # # Add commands to the autonomous command chooser
         # # self.chooser.setDefaultOption("Complex Auto", self.complexAuto)
-        self.chooser.setDefaultOption("Luc Auto", self.lucAutoCommand)
+        self.chooser.setDefaultOption("Cube to Balance", self.cubeToBalance)
         # # self.chooser.addOption("Simple Auto", self.simpleAuto)
-        self.chooser.addOption("Luc Auto", self.lucAutoCommand)
+        self.chooser.addOption("Cone to Balance", self.coneToBalance)
         # self.chooser.addOption("Luc AutoInverted", self.lucAutoCommand2)
         # self.chooser.addOption("SimplePath", self.newPath)
         # self.chooser.addOption("SimplePathInverted", self.newPathInverted)
@@ -250,8 +252,8 @@ class RobotContainer:
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()
     def getDistanceAuto(self,cone:bool):
-        y = constants.startPos[self.posInitSD.get()] + constants.cubeToConeDistance
-        b = constants.endPos[self.posEndSD.get()] + constants.cubeToConeDistance
+        y = constants.startPos[self.posInitSD.get()+1] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()+1] + constants.cubeToConeDistance
         if cone:
             y+= constants.cubeToConeDistance
             b+= constants.cubeToConeDistance
