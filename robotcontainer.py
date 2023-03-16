@@ -123,8 +123,8 @@ class RobotContainer:
 
         inst = ntcore.NetworkTableInstance.getDefault()
         self.sd = inst.getTable("SmartDashboard")
-        self.posInitSD = self.sd.getDoubleTopic("posInit").subscribe(0)
-        self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(0)
+        self.posInitSD = self.sd.getDoubleTopic("posInit").subscribe(1)
+        self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(1)
 
 
 
@@ -252,8 +252,8 @@ class RobotContainer:
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()
     def getDistanceAuto(self,cone:bool):
-        y = constants.startPos[self.posInitSD.get()+1] + constants.cubeToConeDistance
-        b = constants.endPos[self.posEndSD.get()+1] + constants.cubeToConeDistance
+        y = constants.startPos[self.posInitSD.get()-1] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()-1] + constants.cubeToConeDistance
         if cone:
             y+= constants.cubeToConeDistance
             b+= constants.cubeToConeDistance
