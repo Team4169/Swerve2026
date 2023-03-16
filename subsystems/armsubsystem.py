@@ -89,9 +89,12 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
-        if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and self.rotatingArmEncoderDegrees < 24 and self.extendingArmEncoderPercent > 75 and speed >= 0:
+        if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and \
+            self.rotatingArmEncoderDegrees < 24 and \
+            self.extendingArmEncoderPercent > 70:
+                
                 #& move down to 75 % extension
-                self.setExtendingArmPercent(70, .75) 
+                self.setExtendingArmPercentWithAuto(70, .25) 
         else:
             self.setExtendingArmSpeed(speed)
 
@@ -110,6 +113,7 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     def setExtendingArmPercentWithAuto(self, percent, speed):
         speed = -abs(speed)
+        self.tolerance = .5
         """Sets the angle of the extending arm"""
         if percent - self.tolerance > self.extendingArmEncoderPercent:
             self.setGrabbingArmSpeedWithAuto(speed)
@@ -174,6 +178,9 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     def resetRotatingArmEncoder(self):
         self.rotatingArmEncoder.setPosition(constants.lowerArmAngleLimit * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
+
+    def initializeDegreesOnStart(self):
+        self.rotatingArmEncoder.setPosition(constants.startingRotatingDegrees * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
 
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""

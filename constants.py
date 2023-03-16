@@ -24,6 +24,8 @@ grabbingArmEncoderPort = 0
 positiveTicksPerDeg = 173/360
 negativeTicksPerDeg = 221500/360
 
+#todo: find the degrees that this should be 
+startingRotatingDegrees = 50
 
 #todo find out how many revolutions per arm length and replace none with that num
 #! extending arm give negative power as "foreward"

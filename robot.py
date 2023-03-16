@@ -77,6 +77,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.sendLEDCommand(1, self.team)
         self.drive.resetEncoders()
         self.drive.gyro.reset()
+        self.arm.initializeDegreesOnStart()
         # self.arm.resetGrabbingArmEncoder()
         # self.arm.resetExtendingArmEncoder()
         
@@ -202,9 +203,11 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # * arm control  
         #Todo: make sure the "foreward" is positive
+    
+    #^: arm functions
         # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         self.arm.setRotatingArmSpeedWithAuto(addDeadzone(self.operatorController.getLeftY() / 2))
-        self.arm.setExtendingArmSpeedWithAuto(addDeadzone(self.operatorController.getRightY() / 2))
+        self.arm.setExtendingArmSpeed(addDeadzone(self.operatorController.getRightY() / 2))
         self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) / 2))
 
         if self.operatorController.getAButton():
