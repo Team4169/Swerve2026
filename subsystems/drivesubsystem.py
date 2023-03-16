@@ -61,40 +61,9 @@ class DriveSubsystem(commands2.SubsystemBase):
             self.rightTalon,
             self.rightTalon2,
         )
-        # self.drive = wpilib.drive.DifferentialDrive(
-        #     wpilib.MotorControllerGroup(self.leftTalon, self.leftTalon2),
-        #     wpilib.MotorControllerGroup(self.rightTalon, self.rightTalon2)
-        #     )
 
-        # The left-side drive encoder
-        # NOTE FROM NOAH - I commented the encoders out, will use the talon interface to get encoders
-        # self.leftEncoder = wpilib.Encoder(
-        #     *constants.kLeftEncoderPorts,
-        #     reverseDirection=constants.kLeftEncoderReversed
-        # )
-        #
-        # # The right-side drive encoder
-        #self.rightEncoder = wpilib.Encoder(
-        #     *constants.kRightEncoderPorts,
-        #     reverseDirection=constants.kRightEncoderReversed
-        # )
-        # self.leftTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-        # self.rightTalon.configSelectedFeedbackSensor(ctre.FeedbackDevice.QuadEncoder, 0, 0)
-
-        # Sets the distance per pulse for the encoders
-        # NOTE FROM NOAH - Expirement with these two following lines later, for now commenting them out
-        # self.leftEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
-        # self.rightEncoder.setDistancePerPulse(constants.kEncoderDistancePerPulse)
     def driveMecanum(self, x, y, z, angle=Rotation2d(0.0)):   
         self.drive.driveCartesian(x, y, z, angle)
-    # def arcadeDrive(self, fwd: float, rot: float) -> None:
-    #     """
-    #     Drives the robot using arcade controls.
-
-    #     :param fwd: the commanded forward movement
-    #     :param rot: the commanded rotation
-    #     """
-    #     self.drive.arcadeDrive(fwd, rot)
 
     def resetEncoders(self) -> None:
         self.leftTalon.setSelectedSensorPosition(0, 0, 10)
@@ -113,12 +82,6 @@ class DriveSubsystem(commands2.SubsystemBase):
         # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
         return self.leftTalon.getSelectedSensorPosition() * -1
 
-    # def setMaxOutput(self, maxOutput: float):
-    #     """
-    #     Sets the max output of the drive. Useful for scaling the
-    #     drive to drive more slowly.
-    #     """
-    #     self.drive.setMaxOutput(maxOutput)
 
     def validateDriveSpeed(self, speed):
         if speed > self.maxDriveSpeed:
