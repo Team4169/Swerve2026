@@ -28,7 +28,7 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
     def __init__(self, drive: DriveSubsystem):
         super().__init__(
             ResetGyro(drive),
-            dropOff(constants.dropOffDistance,constants.targetHeight),
+            dropOff(constants.dropOffDistance,constants.coneTargetHeights[container.target]),
             setExtendingArm(0,arm),
             setRotatingArm(0,arm),
             MoveCommand(-5,0,drive),

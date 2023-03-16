@@ -125,6 +125,7 @@ class RobotContainer:
         self.sd = inst.getTable("SmartDashboard")
         self.posInitSD = self.sd.getDoubleTopic("posInit").subscribe(1)
         self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(1)
+        self.targetSD = self.sd.getDoubleTopic("Target").subscribe(1)
 
 
 
@@ -250,6 +251,7 @@ class RobotContainer:
     #
     #
     def getAutonomousCommand(self) -> commands2.Command:
+        self.target = self.targetSD.get()-1
         return self.chooser.getSelected()
     def getDistanceAuto(self,cone:bool):
         y = constants.startPos[self.posInitSD.get()-1] + constants.cubeToConeDistance

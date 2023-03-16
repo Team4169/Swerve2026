@@ -91,4 +91,6 @@ endPos = [2.43,1.73,0.93]
 balanceDistance = 0.8
 cubeToConeDistance = 0.58
 dropOffDistance = 1 #Test This Distance
-constants.targetHeight = 1 #Find actual distance
+cubeTargetHeights = [1,1,1]
+coneTargetHeights = [1,1,1]
+# ^Find Actual Heights
