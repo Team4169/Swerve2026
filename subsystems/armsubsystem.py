@@ -107,8 +107,9 @@ class ArmSubsystem(commands2.SubsystemBase):
     #         self.setExtendingArmSpeed(0)
     
     #^ test this code, it will automatically apply limits on the extending arm
+    
     def setExtendingArmPercentWithAuto(self, percent, speed):
-        speed = abs(speed)
+        speed = -abs(speed)
         """Sets the angle of the extending arm"""
         if percent - self.tolerance > self.extendingArmEncoderPercent:
             self.setGrabbingArmSpeedWithAuto(speed)
@@ -153,13 +154,13 @@ class ArmSubsystem(commands2.SubsystemBase):
 
     def setRotatingArmSpeedWithAuto(self, speed):
         """Sets the speed of the Rotating arm"""
-        if (self.rotatingArmEncoderDegrees > 68 and speed < 0 ):
-            self.setRotatingArmAngle(65, .1)
+        if (self.rotatingArmEncoderDegrees > 65 and speed < 0 ):
+            self.setRotatingArmSpeed(0)
         # elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed > 0):
         #     self.setRotatingArmAngle(-7, .1)
         else:
             self.setRotatingArmSpeed(speed)
-        
+  
     def setRotatingArmAngle(self, angle, speed):
         new_speed = -abs(speed)
         """Sets the angle of the Rotating arm"""
@@ -222,11 +223,12 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.previousGrabbingArmEncoderTicks = self.current
 
     def setGrabbingArmAngle(self, angle, speed):
+        new_speed = -abs(speed)
         self.tolerance = .5 #? should this be in the constants file?
         if angle - self.tolerance > self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeed(speed)
+            self.setGrabbingArmSpeed(new_speed)
         elif angle + self.tolerance < self.grabbingArmEncoderDegrees:
-            self.setGrabbingArmSpeed(-speed)
+            self.setGrabbingArmSpeed(-new_speed)
         else:
             self.setGrabbingArmSpeed(0)
     
