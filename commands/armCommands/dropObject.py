@@ -3,9 +3,8 @@ import commands2
 
 
 class dropObject(commands2.CommandBase):
-    def __init__(self, angle, arm: ArmSubsystem) -> None:
+    def __init__(self, arm: ArmSubsystem) -> None:
         super().__init__()
-        self.angle = angle
         self.arm= arm
 
     def initialize(self):

@@ -31,16 +31,16 @@ class Auto2023(commands2.SequentialCommandGroup):
     def __init__(self, drive: DriveSubsystem):
         super().__init__(
             ResetGyro(drive),
-
-            setExtendingArm(),
-            # Drop off cone
-            #Unextend Arm
-            #UnRotate Arm
+            dropOff(constants.dropOffDistance,constants.targetHeight),
+            setExtendingArm(0,arm),
+            setRotatingArm(0,arm),
             MoveCommand(-5,0,drive),
             MoveCommand(0,180, drive),
             ResetGyro(drive),
             MoveCommand(0,container.getAngle(False),drive),
             MoveCommand(container.getDistance(False),0,drive),
             MoveCommand(0,-container.getAngle(False),drive),
+            MoveCommand(0.5,0,drive),
+
             #Get on balance
         )
