@@ -7,6 +7,7 @@ import ntcore
 import wpimath.controller
 import navx
 import rev
+import math
 from wpimath.geometry import Rotation2d 
 class DriveSubsystem(commands2.SubsystemBase):
     def __init__(self, leftTalon, leftTalon2, rightTalon, rightTalon2) -> None:
@@ -21,8 +22,15 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.maxDriveSpeed = 0.2
         self.maxTurnSpeed = 0.2
 
-        # smartdashboard
+        #~ smartdashboard
         self.sd = ntcore.NetworkTableInstance.getDefault().getTable("SmartDashboard")
+
+        self.posInitSD = self.sd.getIntegerTopic("posInit").subscribe(1)
+        self.posEndSD = self.sd.getIntegerTopic("posEnd").subscribe(1)
+        self.targetSD = self.sd.getIntegerTopic("Target").subscribe(1)
+        
+        self.target = self.targetSD.get()-1
+
 
         # Create PID Controller for Turning
         self.TurnkI = self.sd.getDoubleTopic("TurnkI").subscribe(0.0)
@@ -96,3 +104,25 @@ class DriveSubsystem(commands2.SubsystemBase):
         if turnSpeed < -1 * self.maxTurnSpeed:
             return -1 * self.maxTurnSpeed
         return turnSpeed
+    
+    def getDistanceAuto(self,cone:bool):
+        y = constants.startPos[self.posInitSD.get()-1] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()-1] + constants.cubeToConeDistance
+        if cone:
+            y+= constants.cubeToConeDistance
+            b+= constants.cubeToConeDistance
+
+        a = constants.balanceDistance
+        driveDistance = math.sqrt((abs(y - b) ** 2 + a ** 2))
+        return driveDistance
+    
+    def getAngleAuto(self,cone:bool):
+        y = constants.startPos[self.posInitSD.get()] + constants.cubeToConeDistance
+        b = constants.endPos[self.posEndSD.get()] + constants.cubeToConeDistance
+        if cone:
+            y += constants.cubeToConeDistance
+            b += constants.cubeToConeDistance
+        a = constants.balanceDistance
+        angle = math.atan(abs(y - b) / a)
+        return angle
+

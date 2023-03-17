@@ -116,11 +116,11 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.tolerance = .5
         """Sets the angle of the extending arm"""
         if percent - self.tolerance > self.extendingArmEncoderPercent:
-            self.setGrabbingArmSpeedWithAuto(speed)
+            self.setExtendingArmSpeedWithAuto(speed)
         elif percent + self.tolerance < self.extendingArmEncoderPercent:
-            self.setGrabbingArmSpeedWithAuto(-speed)
+            self.setExtendingArmSpeedWithAuto(-speed)
         else:
-            self.setGrabbingArmSpeedWithAuto(0)
+            self.setExtendingArmSpeedWithAuto(0)
 
     def resetExtendingArmEncoder(self):
         """Resets the extending arm encoder"""

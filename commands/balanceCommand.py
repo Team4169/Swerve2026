@@ -3,8 +3,11 @@ import commands2
 from subsystems.drivesubsystem import DriveSubsystem
 import robotcontainer as container
 
+import math
 
-class BalanceCommand(commands2.CommandBase):
+import constants
+
+class balanceCommand(commands2.CommandBase):
     def __init__(self, drive: DriveSubsystem) -> None:
         super().__init__()
         self.drive = drive

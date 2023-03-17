@@ -7,15 +7,15 @@ class dropOffAngle(commands2.CommandBase):
         super().__init__()
         self.distance = distance
         self.height = height
-        self.arm= arm
+        self.arm = arm
 
     def initialize(self):
         pass
 
     def execute(self) -> None:
         speed = 0.3
-        angle = self.arm.dropOffAngleAuto(self.distance,self.height)
-        self.arm.setRotatingArmAngle(angle,speed)
+        self.angle = self.arm.dropOffAngleAuto(self.distance, self.height)
+        self.arm.setRotatingArmAngle(self.angle, speed)
 
     def end(self, interrupted: bool) -> None:
         self.arm.setRotatingArmSpeed(0)

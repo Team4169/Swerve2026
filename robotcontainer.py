@@ -11,7 +11,7 @@ import constants
 
 # from commands.complexauto import ComplexAuto
 # from commands.drivedistance import DriveDistance
-from commands.defaultdrive import DefaultDrive
+# from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
 from commands.coneToBalanceAuto import coneToBalanceAuto
 from commands.cubeToBalanceAuto import cubeToBalanceAuto
@@ -20,6 +20,10 @@ from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
+
+import math
+
+
 
 class RobotContainer:
     """
@@ -82,12 +86,10 @@ class RobotContainer:
 
         inst = ntcore.NetworkTableInstance.getDefault()
         self.sd = inst.getTable("SmartDashboard")
-        self.posInitSD = self.sd.getDoubleTopic("posInit").subscribe(1)
-        self.posEndSD = self.sd.getDoubleTopic("posEnd").subscribe(1)
-        self.targetSD = self.sd.getDoubleTopic("Target").subscribe(1)
-
-        self.coneToBalance =coneToBalanceAuto(self.drive)
-        self.cubeToBalance = cubeToBalanceAuto(self.drive)
+        
+        
+        self.coneToBalance =coneToBalanceAuto(self.drive, self.arm)
+        self.cubeToBalance = cubeToBalanceAuto(self.drive, self.arm)
         #chooser
         self.chooser = wpilib.SendableChooser()
 
@@ -96,27 +98,7 @@ class RobotContainer:
 
         # # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
-
+        
 
     def getAutonomousCommand(self) -> commands2.Command:
-        self.target = self.targetSD.get()-1
         return self.chooser.getSelected()
-    def getDistanceAuto(self,cone:bool):
-        y = constants.startPos[self.posInitSD.get()-1] + constants.cubeToConeDistance
-        b = constants.endPos[self.posEndSD.get()-1] + constants.cubeToConeDistance
-        if cone:
-            y+= constants.cubeToConeDistance
-            b+= constants.cubeToConeDistance
-
-        a = constants.balanceDistance
-        driveDistance = math.sqrt((math.abs(y - b) ** 2 + a ** 2))
-        return driveDistance
-    def getAngleAuto(self,cone:bool):
-        y = constants.startPos[self.posInitSD.get()] + constants.cubeToConeDistance
-        b = constants.endPos[self.posEndSD.get()] + constants.cubeToConeDistance
-        if cone:
-            y += constants.cubeToConeDistance
-            b += constants.cubeToConeDistance
-        a = constants.balanceDistance
-        angle = math.arctan(math.abs(y - b) / a)
-        return angle

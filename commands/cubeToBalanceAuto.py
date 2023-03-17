@@ -1,10 +1,13 @@
 import commands2
-import robotcontainer as container
 import constants
-from .armCommands import *
+from .armCommands.dropOff import dropOff
+from .armCommands.setExtendingArm import setExtendingArm
+from .armCommands.setRotatingArm import setRotatingArm
+from .balanceCommand import balanceCommand
+
 from .movecommand import MoveCommand
 from subsystems.drivesubsystem import DriveSubsystem
-from subsystems.armsubsystem import ArmSubsystem as arm
+from subsystems.armsubsystem import ArmSubsystem
 from .reset_gyro import ResetGyro
 
 #from .SnowVeyerCommands.pickUp import pickUp
@@ -27,18 +30,18 @@ class cubeToBalanceAuto(commands2.SequentialCommandGroup):
     An auto that drops off cone and goes onto balance
     """
 
-    def __init__(self, drive: DriveSubsystem):
+    def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
         super().__init__(
             ResetGyro(drive),
-            dropOff(constants.dropOffDistance,constants.cubeTargetHeights[container.target]),
+            dropOff(constants.dropOffDistance,constants.cubeTargetHeights[drive.target], arm),
             setExtendingArm(0,arm),
             setRotatingArm(0,arm),
             MoveCommand(-5,0,drive),
             MoveCommand(0,180, drive),
             ResetGyro(drive),
-            MoveCommand(0,container.getAngle(False),drive),
-            MoveCommand(container.getDistance(False),0,drive),
-            MoveCommand(0,-container.getAngle(False),drive),
+            MoveCommand(0,drive.getAngleAuto(False),drive),
+            MoveCommand(drive.getDistanceAuto(False),0,drive),
+            MoveCommand(0,-drive.getAngleAuto(False),drive),
             MoveCommand(0.5,0,drive),
             balanceCommand(drive)
         )

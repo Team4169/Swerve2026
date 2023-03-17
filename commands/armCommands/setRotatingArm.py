@@ -1,6 +1,7 @@
 #from subsystems.climbingsubsystem import ClimbingSubsystem
 import commands2
 
+from subsystems.armsubsystem import ArmSubsystem
 
 class setRotatingArm(commands2.CommandBase):
     def __init__(self, angle, arm: ArmSubsystem) -> None:

@@ -15,12 +15,12 @@ class dropOffExtend(commands2.CommandBase):
 
     def execute(self) -> None:
         d = self.arm.dropOffExtentionAuto(self.distance,self.height)
-        percent = (20/d) * 100
+        self.percent = (20/d) * 100
         speed = 0.3 #expirement with this
-        self.arm.setExtendingArmPercentWithAuto(percent,speed)
+        self.arm.setExtendingArmPercentWithAuto(self.percent,speed)
 
     def end(self, interrupted: bool) -> None:
-        self.arm.setGrabbingArmSpeedWithAuto(0)
+        self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (percent + self.arm.tolerance >= self.arm.extendingArmEncoderPercent)
+        return (self.percent + self.arm.tolerance >= self.arm.extendingArmEncoderPercent)

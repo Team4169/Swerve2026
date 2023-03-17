@@ -17,7 +17,7 @@ class grabCube(commands2.CommandBase):
         self.arm.setGrabbingArmAngle(self.angle,speed)
 
     def end(self, interrupted: bool) -> None:
-        self.arm.setGrabbingArmSpeedWithAuto(0)
+        self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
         return (self.angle - self.arm.tolerance <= self.arm.grabbingArmEncoderDegrees or self.angle + self.arm.tolerance >= self.arm.grabbingArmEncoderDegrees)

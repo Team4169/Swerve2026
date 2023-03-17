@@ -1,12 +1,13 @@
 import commands2
 
-import constants
 
 from .dropOffExtend import dropOffExtend
 from .dropOffAngle import dropOffAngle
 from .dropObject import dropObject
 
-class LiftArmToBottom(commands2.SequentialCommandGroup):
+from subsystems.armsubsystem import ArmSubsystem
+
+class dropOff(commands2.SequentialCommandGroup):
     """
     A complex auto command that drives forward, releases a hatch, and then drives backward.
     """
