@@ -87,11 +87,10 @@ balanceSensitivity = -2
 maxBalanceSpeed = .3
 
 #Bottom (leftmost) cube drop off is origin
-startPos = [3.4,1.7,0]
-endPos = [2.43,1.73,0.93]
-balanceDistance = 0.8
-cubeToConeDistance = 0.58
-dropOffDistance = 1 #Test This Distance
-cubeTargetHeights = [1,1,1]
-coneTargetHeights = [1,1,1]
-# ^Find Actual Heights
+startPos = [0,67,133] # 0 67 133
+endPos = [37,68,96] # 37 68 96
+balanceDistance = 31
+cubeToConeDistance = 22.8
+dropOffDistance = 10 #Test This Distance
+cubeTargetHeights = [2,23,35]
+coneTargetHeights = [2,37,50]
