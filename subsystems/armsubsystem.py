@@ -33,7 +33,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.rotatingArmLimitSwitchMaxVal = self.sd.getDoubleTopic("RotArmLimitMax").publish()
         self.grabbingArmLimitSwitchOpenVal = self.sd.getDoubleTopic("GrabbingLimitOpen").publish()
         self.grabbingArmLimitSwitchClosedVal = self.sd.getDoubleTopic("GrabbingLimitClosed").publish()
-
+        self.extindingArmPercentVal = self.sd.getDoubleTopic("extendingPercent").publish()
 
         #* encoders
         self.extendingArmEncoder = extendingArmEncoder
@@ -83,12 +83,13 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.resetExtendingArmEncoder()
         else:
             self.extendingArm.set(speed)
-    
     #condition spreadsheet https://docs.google.com/spreadsheets/d/1Ywz5rC-dYjaaNjmlx7t1RDW8TRrBJ6oTPnMUaNfTfJ0/edit#gid=0
     def setExtendingArmSpeedWithAuto(self, speed):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
+
+
         if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and \
             self.rotatingArmEncoderDegrees < 24 and \
             self.extendingArmEncoderPercent > 70:
