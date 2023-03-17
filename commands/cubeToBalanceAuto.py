@@ -40,7 +40,7 @@ class cubeToBalanceAuto(commands2.SequentialCommandGroup):
             MoveCommand(0,180, drive),
             ResetGyro(drive),
             MoveCommand(0,drive.getAngleAuto(False),drive),
-            MoveCommand(drive.getDistanceAuto(False),0,drive),
+            MoveCommand(drive.getDistanceAuto(False)/12,0,drive),
             MoveCommand(0,-drive.getAngleAuto(False),drive),
             MoveCommand(0.5,0,drive),
             balanceCommand(drive)

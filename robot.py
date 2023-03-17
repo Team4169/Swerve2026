@@ -117,6 +117,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm.rotatingArmLimitSwitchMinVal.set(self.arm.getRotatingArmLimitSwitchMinPressed())
 
         self.arm.rotatingArmEncoderDegreesVal.set(self.arm.rotatingArmEncoderDegrees)
+        self.arm.extindingArmPercentVal.set(self.arm.extendingArmEncoderPercent)
         
 
         self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees )
@@ -189,7 +190,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         self.arm.setRotatingArmSpeedWithAuto(addDeadzone(self.operatorController.getLeftY() / 2))
         self.arm.setExtendingArmSpeed(addDeadzone(self.operatorController.getRightY() / 2))
-        self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) / 2))
+        self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) *(3/4)))
 
         if self.operatorController.getAButton():
             self.arm.zeroExtendingArm()

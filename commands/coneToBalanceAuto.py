@@ -43,7 +43,7 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
             MoveCommand(0,180, drive),
             ResetGyro(drive),
             MoveCommand(0,drive.getAngleAuto(True),drive),
-            MoveCommand(drive.getDistanceAuto(True),0,drive),
+            MoveCommand(drive.getDistanceAuto(True)/12,0,drive),
             MoveCommand(0,-drive.getAngleAuto(True),drive),
             MoveCommand(0.5,0,drive),
             balanceCommand(drive)

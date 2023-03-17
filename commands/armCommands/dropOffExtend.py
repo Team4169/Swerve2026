@@ -23,4 +23,4 @@ class dropOffExtend(commands2.CommandBase):
         self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (self.percent + self.arm.tolerance >= self.arm.extendingArmEncoderPercent)
+        return (abs(self.percent -self.arm.extendingArmEncoderPercent) <= self.arm.tolerance)
