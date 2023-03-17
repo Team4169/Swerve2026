@@ -21,4 +21,4 @@ class dropOffAngle(commands2.CommandBase):
         self.arm.setRotatingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (self.angle - self.arm.tolerance <= self.arm.rotatingArmEncoderDegrees or self.angle + self.arm.tolerance >= self.arm.rotatingArmEncoderDegrees)
+        return (abs(self.angle -self.arm.rotatingArmEncoderDegrees) <= self.arm.tolerance)

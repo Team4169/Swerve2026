@@ -19,4 +19,4 @@ class dropObject(commands2.CommandBase):
         self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (self.angle - self.arm.tolerance <= self.arm.grabbingArmEncoderDegrees or self.angle + self.arm.tolerance >= self.arm.grabbingArmEncoderDegrees)
+        return (abs(self.angle - self.arm.grabbingArmEncoderDegrees) <= self.arm.tolerance)
