@@ -51,9 +51,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.previousLEDCommand = 0
         self.team = "red" #^ change this to blue if we are on the blue team
 
-
-
-
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
 
@@ -99,7 +96,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.climbMode = False
         self.direction = 0
 
- 
+        self.pitchPost = self.container.sd.getDoubleTopic("april_pitch").publish()
+        self.yawPost = self.container.sd.getDoubleTopic("april_yaw").publish()
+        self.skewPost = self.container.sd.getDoubleTopic("april_skew").publish()
+        self.idPost = self.container.sd.getDoubleTopic("april_id").publish()
 
     def teleopPeriodic(self):
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
@@ -203,6 +203,14 @@ class MyRobot(commands2.TimedCommandRobot):
             self.arm.grabCube()
         
 
+        result = self.container.camera.getLatestResult()
+
+        targets = result.getTargets()
+        for i in targets:
+            self.idPost.set(i.getFiducialId())
+            self.pitchPost.set(i.getPitch() * math.pi / 180)
+            self.yawPost.set(i.getYaw() * math.pi / 180)
+            self.skewPost.set(i.getSkew() * math.pi / 180)
 
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode

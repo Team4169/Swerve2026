@@ -3,18 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="23ad8137-12da-44aa-a17d-6d5fa04e4b10" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/SnowVeyerCommands/DropOff.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/SnowVeyerCommands/DropOff.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/SnowVeyerCommands/PickUp.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/SnowVeyerCommands/PickUp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/centerRobotToTarget.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/centerRobotToTarget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/moveForwardToVisionTarget.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/moveForwardToVisionTarget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/movecommand.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/movecommand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/movecommandTimed.py" beforeDir="false" afterPath="$PROJECT_DIR$/commands/movecommandTimed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/robotcontainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/robotcontainer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subsystems/climbingsubsystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/subsystems/climbingsubsystem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subsystems/drivesubsystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/subsystems/drivesubsystem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subsystems/snowveyorsubsystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/subsystems/snowveyorsubsystem.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +25,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/commands" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">

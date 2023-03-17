@@ -22,8 +22,7 @@ from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
 
 import math
-
-
+import photonvision
 
 class RobotContainer:
     """
@@ -98,7 +97,8 @@ class RobotContainer:
 
         # # Put the chooser on the dashboard
         wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
-        
 
+        self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
+ftgw
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()
