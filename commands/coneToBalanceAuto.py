@@ -36,7 +36,8 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
     
     def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
         super().__init__ (
-            MoveCommand(-5,0,drive)
+            MoveCommandSpeed(-5,0,drive)
+            # MoveCommand(-5, 0, drive)
             # ResetGyro(drive),
             # moveTillGyro(drive, arm),
             # balanceCommand(drive)
