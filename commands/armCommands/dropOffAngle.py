@@ -10,7 +10,9 @@ class dropOffAngle(commands2.CommandBase):
         self.arm = arm
 
     def initialize(self):
-        pass
+        # self.arm.shouldMove = True
+        print('in dropoff')
+        
 
     def execute(self) -> None:
         speed = 0.3

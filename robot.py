@@ -59,6 +59,8 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically when disabled"""
 
     def autonomousInit(self) -> None:
+        self.drive.gyro.reset()
+        self.arm.initializeDegreesOnStart()
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
         self.autonomousCommand = self.container.getAutonomousCommand()
         
@@ -72,10 +74,11 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def teleopInit(self) -> None:
+        # self.arm.initializeDegreesOnStart()
         self.sendLEDCommand(1, self.team)
         self.drive.resetEncoders()
         self.drive.gyro.reset()
-        self.arm.initializeDegreesOnStart()
+        
         # self.arm.resetGrabbingArmEncoder()
         # self.arm.resetExtendingArmEncoder()
         
@@ -96,19 +99,21 @@ class MyRobot(commands2.TimedCommandRobot):
         self.climbMode = False
         self.direction = 0
 
-        self.pitchPost = self.container.sd.getDoubleTopic("april_pitch").publish()
+        self.areaPost = self.container.sd.getDoubleTopic("april_area").publish()
         self.yawPost = self.container.sd.getDoubleTopic("april_yaw").publish()
-        self.skewPost = self.container.sd.getDoubleTopic("april_skew").publish()
         self.idPost = self.container.sd.getDoubleTopic("april_id").publish()
 
     def teleopPeriodic(self):
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
         self.arm.updateDegreesAndPercent()
-        # self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
-        # self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
+        # self.drive.encoderTicks.set(self.drive.)
+        self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
+        self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
         
         #~ smartDashboard limit switch setting
+        self.arm.shouldMoveVal.set(self.arm.shouldMove)
+
         self.arm.grabbingArmLimitSwitchClosedVal.set(self.arm.getGrabbingArmLimitSwitchClosedPressed())
         self.arm.grabbingArmLimitSwitchOpenVal.set(self.arm.getGrabbingArmLimitSwitchOpenPressed())
         self.arm.extendingArmLimitSwitchMinVal.set(self.arm.getExtendingArmLimitSwitchMinPressed())
@@ -142,29 +147,29 @@ class MyRobot(commands2.TimedCommandRobot):
                     self.driveMeacanum(-.25, 0, 0)
                 else:
                     self.arm.setRotatingArmAngle(targetAngle, .25)
-                    self.arm.setExtendingArmPercentWithAuto((self.hypot / constants.maxArmLength) * 100)
+                    # self.arm.setExtendingArmPercentWithAuto((self.hypot / constants.maxArmLength) * 100)
                 # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
             #     self.
     #
     #^ start of driving code
-        self.leftX = addDeadzone(self.driverController.getLeftX() / 2) #/2 is to slow down the robot
-        self.leftY = addDeadzone(self.driverController.getLeftY() / 2)
-        self.rightX = addDeadzone(self.driverController.getRightX() / 2)
+        self.leftX = addDeadzone(self.driverController.getLeftX() * (constants.moveRestriction)) #/2 is to slow down the robot
+        self.leftY = addDeadzone(self.driverController.getLeftY() * (constants.moveRestriction))
+        self.rightX = addDeadzone(self.driverController.getRightX() * (constants.moveRestriction))
         
         self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
 
-        if self.driverController.getBButton():
-            self.arm.setGrabbingArmSpeed(0.1)
-        elif self.driverController.getXButton():
-            self.arm.setGrabbingArmSpeed(-0.1)
-        elif self.driverController.getYButton():
-            self.arm.setGrabbingArmAngle(90, 0.09)
-        elif self.driverController.getAButton():
-            self.arm.setGrabbingArmAngle(45, 0.09)
-        else:
-            self.arm.setGrabbingArmSpeed(0)
+        # if self.driverController.getBButton():
+        #     self.arm.setGrabbingArmSpeed(0.1)
+        # elif self.driverController.getXButton():
+        #     self.arm.setGrabbingArmSpeed(-0.1)
+        # elif self.driverController.getYButton():
+        #     self.arm.setGrabbingArmAngle(90, 0.09)
+        # elif self.driverController.getAButton():
+        #     self.arm.setGrabbingArmAngle(45, 0.09)
+        # else:
+        #     self.arm.setGrabbingArmSpeed(0)
             
-
+        self.flipped = 1
     #^ balancing with the A button
         self.container.drive.balanceSensitivitySub.get()
         self.gyroRad = self.container.drive.gyro.getYaw() * (math.pi/180)
@@ -176,21 +181,72 @@ class MyRobot(commands2.TimedCommandRobot):
                 self.sendLEDCommand(7)
             
             #self.drive.driveMecanum(self.speed, 0 , 0, Rotation2d(self.gyroRad)
-            self.leftTalon.set(self.speed)
+            self.leftTalon.set(self.speed) 
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)
             self.rightTalon2.set(self.speed)
+        elif self.driverController.getYButton() or self.driverController.getBButton():
+            result = self.container.camera.getLatestResult()
+
+            targetYaw = -0.487
+            targetArea =    0.0497
+
+            targets = result.getTargets()
+            targetinfo = []
+            for i in targets:
+                self.idPost.set(i.getFiducialId())
+                self.areaPost.set(i.getPitch())
+                self.yawPost.set(i.getYaw())
+                targetinfo.append({"id": i.getFiducialId(), "area" : i.getArea() * math.pi / 180, "yaw" : i.getYaw() * math.pi / 180})
+
+            xout = 0
+            yout = 0
+
+            newtargetinfo = []
+            if len(targetinfo) > 0:
+                for i in targetinfo:
+                    if i["id"] in [1, 2, 3, 6, 7, 8]:
+                        newtargetinfo.append(i.copy())
+                        
+            if len(newtargetinfo) > 0:
+                '''
+                if self.driverController.getYButton():
+                    self.arm.setRotatingArmAngle(27.8, .5)
+                    self.arm.setExtendingArmPercentWithAuto(100, .5)
+                if self.driverController.getBButton():
+                    self.arm.setRotatingArmAngle(28, .5)
+                    self.arm.setExtendingArmPercentWithAuto(18, .5)
+                '''
+
+                if newtargetinfo[0]["yaw"] > targetYaw:
+                    xout = -0.2
+                else:
+                    xout = 0.2
+
+                if newtargetinfo[0]["area"] > targetArea:
+                    yout = -0.2
+                else:
+                    yout = 0.2
+                '''
+                if abs(newtargetinfo[0]["yaw"] - targetYaw) < 0.02:
+                    xout = 0
+                if abs(newtargetinfo[0]["area"] - targetArea) < 0.02:
+                    yout = 0
+                '''
+                    
+            self.drive.driveMecanum(xout, yout, 0)
         else:
-            self.drive.driveMecanum( -self.leftY, self.leftX, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
+            self.drive.driveMecanum( -self.leftY * self.flipped, self.leftX * self.flipped, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
 
         # * arm control  
         #Todo: make sure the "foreward" is positive
     
     #^: arm functions
         # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
-        self.arm.setRotatingArmSpeedWithAuto(addDeadzone(self.operatorController.getLeftY() / 2))
-        self.arm.setExtendingArmSpeed(addDeadzone(self.operatorController.getRightY() / 2))
-        self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) *(3/4)))
+        if not self.driverController.getBButton():
+            self.arm.setRotatingArmSpeedWithAuto(addDeadzone(self.operatorController.getLeftY() / (2)))
+            self.arm.setExtendingArmSpeedWithAuto(addDeadzone(self.operatorController.getRightY() / (4/3)))
+            self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) *(3/4)))
 
         if self.operatorController.getAButton():
             self.arm.zeroExtendingArm()
@@ -202,16 +258,6 @@ class MyRobot(commands2.TimedCommandRobot):
             self.arm.grabCone()
         if self.operatorController.getRightBumper():
             self.arm.grabCube()
-        
-
-        result = self.container.camera.getLatestResult()
-
-        targets = result.getTargets()
-        for i in targets:
-            self.idPost.set(i.getFiducialId())
-            self.pitchPost.set(i.getPitch() * math.pi / 180)
-            self.yawPost.set(i.getYaw() * math.pi / 180)
-            self.skewPost.set(i.getSkew() * math.pi / 180)
 
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode

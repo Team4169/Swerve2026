@@ -22,4 +22,4 @@ class setExtendingArm(commands2.CommandBase):
         self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (abs(self.percent - self.arm.extendingArmEncoderPercent) <= self.arrm.tolerance)
+        return (abs(self.percent - self.arm.extendingArmEncoderPercent) <= self.arm.tolerance)

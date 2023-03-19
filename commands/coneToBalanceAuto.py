@@ -8,8 +8,10 @@ from .armCommands.setRotatingArm import setRotatingArm
 from .balanceCommand import balanceCommand
 
 from .movecommand import MoveCommand
+from .movecommandSpeed import MoveCommandSpeed
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
+from .MoveTillGyro import moveTillGyro
 from .reset_gyro import ResetGyro
 
 
@@ -31,20 +33,22 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
     """
     An auto that drops off cone and goes onto balance
     """
-
+    
     def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
-        super().__init__(
-            MoveCommand(-5,0,drive),
-            ResetGyro(drive),
-            dropOff(constants.dropOffDistance,constants.coneTargetHeights[drive.target], arm),
-            setExtendingArm(0,arm),
-            setRotatingArm(0,arm),
-            MoveCommand(-5,0,drive),
-            MoveCommand(0,180, drive),
-            ResetGyro(drive),
-            MoveCommand(0,drive.getAngleAuto(True),drive),
-            MoveCommand(drive.getDistanceAuto(True)/12,0,drive),
-            MoveCommand(0,-drive.getAngleAuto(True),drive),
-            MoveCommand(0.5,0,drive),
-            balanceCommand(drive)
-        )
+        super().__init__ (
+            MoveCommand(-5,0,drive)
+            # ResetGyro(drive),
+            # moveTillGyro(drive, arm),
+            # balanceCommand(drive)
+            #dropOff(constants.dropOffDistance,constants.coneTargetHeights[drive.target], arm),
+            #setExtendingArm(0,arm),
+            # setRotatingArm(0,arm),
+            # MoveCommand(-5,0,drive),
+            # MoveCommand(0,180, drive),
+            # ResetGyro(drive),
+            # MoveCommand(0,drive.getAngleAuto(True),drive),
+            # MoveCommand(drive.getDistanceAuto(True)/12,0,drive),
+            # MoveCommand(0,-drive.getAngleAuto(True),drive),
+            # MoveCommand(0.5,0,drive),
+            # balanceCommand(drive)
+            )

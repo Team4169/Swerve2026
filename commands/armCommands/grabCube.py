@@ -13,7 +13,7 @@ class grabCube(commands2.CommandBase):
 
     def execute(self) -> None:
         speed = 0.3
-        angle = 119 #This is a random guess fix later
+        self.angle = 119 #This is a random guess fix later
         self.arm.setGrabbingArmAngle(self.angle,speed)
 
     def end(self, interrupted: bool) -> None:

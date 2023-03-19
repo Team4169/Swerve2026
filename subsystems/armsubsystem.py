@@ -57,6 +57,8 @@ class ArmSubsystem(commands2.SubsystemBase):
 
         # self.left1.setSelectedSensorPosition(0, 0, 10)
         # self.right2.setSelectedSensorPosition(0, 0, 10)
+        self.shouldMove = False
+        self.shouldMoveVal = self.sd.getBooleanTopic("shouldMove").publish()
         """Resets the drive encoders to currently read a position of 0."""
 #* periodic functions
     def updateDegreesAndPercent(self):
@@ -88,15 +90,15 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
-
-
-        if self.rotatingArmEncoderDegrees > constants.lowerArmAngleLimit and \
-            self.rotatingArmEncoderDegrees < 24 and \
-            self.extendingArmEncoderPercent > 70:
-                
+        # print(self.rotatingArmEncoderDegrees >= constants.lowerArmAngleLimit, self.rotatingArmEncoderDegrees <= 24, self.extendingArmEncoderPercent > 70)
+        if self.rotatingArmEncoderDegrees <= 24 and \
+            self.extendingArmEncoderPercent > 72:
+                print("should move down")
+                self.shouldMove = True
                 #& move down to 75 % extension
-                self.setExtendingArmPercentWithAuto(70, .25) 
+                self.setExtendingArmPercentWithAuto(69, .25) 
         else:
+            self.shouldMove = False
             self.setExtendingArmSpeed(speed)
 
     # def setExtendingArmPercent(self, percent, speed):
@@ -112,16 +114,16 @@ class ArmSubsystem(commands2.SubsystemBase):
     
     #^ test this code, it will automatically apply limits on the extending arm
     
-    def setExtendingArmPercentWithAuto(self, percent, speed):
+    def setExtendingArmPercentWithAuto(self, percent, speed):   
         speed = -abs(speed)
         self.tolerance = .5
         """Sets the angle of the extending arm"""
         if percent - self.tolerance > self.extendingArmEncoderPercent:
-            self.setExtendingArmSpeedWithAuto(speed)
+            self.setExtendingArmSpeed(speed)
         elif percent + self.tolerance < self.extendingArmEncoderPercent:
-            self.setExtendingArmSpeedWithAuto(-speed)
+            self.setExtendingArmSpeed(-speed)
         else:
-            self.setExtendingArmSpeedWithAuto(0)
+            self.setExtendingArmSpeed(0)
 
     def resetExtendingArmEncoder(self):
         """Resets the extending arm encoder"""
@@ -133,7 +135,7 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.resetExtendingArmEncoder()
             self.setExtendingArmSpeed(0)
         else: 
-            self.setExtendingArmSpeed(-.1)
+            self.setExtendingArmSpeed(.1)
     
 # * Rotating Arm functions
     def getRotatingArmLimitSwitchMinPressed(self) -> bool:
@@ -162,7 +164,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         if (self.rotatingArmEncoderDegrees > 65 and speed < 0 ):
             self.setRotatingArmSpeed(0)
         # elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed > 0):
-        #     self.setRotatingArmAngle(-7, .1)
+        #     self.setRotatingArmAngle(-6, .1)
         else:
             self.setRotatingArmSpeed(speed)
   

@@ -3,14 +3,15 @@ import commands2
 from subsystems.drivesubsystem import DriveSubsystem
 
 
-class MoveCommand(commands2.CommandBase):
-    def __init__(self, distance: float, heading: float, drive: DriveSubsystem) -> None:
+class MoveCommandSpeed(commands2.CommandBase):
+    def __init__(self, distance: float, heading: float, speed: float,drive: DriveSubsystem) -> None:
         super().__init__()
         # Feature to add - difference tolerance per command instance. Currently uses the default from DriveSubsystem
         # Feature to add - different max speed for each command. Currently uses method of DriveSubsystem.
         self.drive = drive
-        self.distance = distance * self.drive.tpf
+        self.distance = distance * -self.drive.tpf
         self.heading = heading
+        self.speed = speed
         # print("distance goal", distance)
         # print("turn goal", heading)
         self.goal_threshold_ticks = 25 # I believe 50 ticks per second, confirm.
@@ -28,16 +29,8 @@ class MoveCommand(commands2.CommandBase):
         # self.drive.sd.putValue("distance goal new", self.distance)
         # self.drive.sd.putValue("turn goal", self.heading)
         # self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
-        if self.distance:
-            drivespeed = self.drive.driveController.calculate(self.drive.leftTalon.getSelectedSensorPosition(), self.distance)
-            # self.drive.sd.putValue("calculated drive speed",drivespeed)
-            drivespeed = self.drive.validateDriveSpeed(drivespeed)
-            # self.drive.sd.putValue("final calculated drive speed",drivespeed)
-        else:
-            drivespeed = 0
-        turnspeed = self.drive.turnController.calculate(self.drive.gyro.getYaw(), self.heading)
-        turnspeed = self.drive.validateTurnSpeed(turnspeed)
-        self.drive.driveMecanum(drivespeed, 0,  0)
+
+        self.drive.driveMecanum(self.speed, 0,  0)
 
     def end(self, interrupted: bool) -> None:
         self.drive.driveMecanum(0, 0, 0)

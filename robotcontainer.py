@@ -99,6 +99,7 @@ class RobotContainer:
         wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
 
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
-ftgw
+
     def getAutonomousCommand(self) -> commands2.Command:
-        return self.chooser.getSelected()
+        #return self.chooser.getSelected()
+        return self.coneToBalance

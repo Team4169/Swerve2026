@@ -17,6 +17,8 @@ class setRotatingArm(commands2.CommandBase):
         self.arm.setRotatingArmAngle(self.angle,speed)
 
     def end(self, interrupted: bool) -> None:
+        print("end_extending_arm")
+        self.arm.shouldMove = True
         self.arm.setRotatingArmSpeed(0)
 
     def isFinished(self) -> bool:

@@ -18,7 +18,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.rightTalon = rightTalon
         self.rightTalon2 = rightTalon2
 
-        self.tpf = -900
+        self.tpf = 4600/5
         self.maxDriveSpeed = 0.2
         self.maxTurnSpeed = 0.2
 
@@ -27,9 +27,10 @@ class DriveSubsystem(commands2.SubsystemBase):
 
         self.posInitSD = self.sd.getIntegerTopic("posInit").subscribe(1)
         self.posEndSD = self.sd.getIntegerTopic("posEnd").subscribe(1)
-        self.targetSD = self.sd.getIntegerTopic("Target").subscribe(1)
+        #self.targetSD = self.sd.getIntegerTopic("Target").subscribe(1)
         
-        self.target = self.targetSD.get()-1
+        #self.target = self.targetSD.get()-1
+        self.target = 1
 
 
         # Create PID Controller for Turning
@@ -49,6 +50,7 @@ class DriveSubsystem(commands2.SubsystemBase):
 
         #driver contstants for balancing
         self.balanceSensitivitySub = self.sd.getDoubleTopic("balanceSensitivity").subscribe(-2.0)
+        # self.encoderTicks = self.sd.getDoubleTopic("encoder ticks").subscribe(0)
 
         # gyro
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
@@ -82,7 +84,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         """Gets the average distance of the TWO encoders."""
         # self.sd.putValue("Left Encoder Value", self.leftTalon.getSelectedSensorPosition())
         # self.sd.putValue("Right Encoder Value", self.rightTalon.getSelectedSensorPosition())
-        return (self.leftTalon.getSelectedSensorPosition()  * 12 / self.tpf)
+        return (self.leftTalon.getSelectedSensorPosition()  / self.tpf)
 
     def getAverageEncoderTicks(self) -> float:
         """Gets the average distance of the TWO encoders."""

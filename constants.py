@@ -12,6 +12,7 @@ leftTalon2 = 7
 rightTalon = 9
 rightTalon2 = 4
 
+moveRestriction = .75
 # Arm motors
 
 extendingArmID = 11 
@@ -83,14 +84,14 @@ rotateArmCloseToBackTicks = 100
 deadzone = .1
 
 maxBalanceAngle = 15
-balanceSensitivity = -2
+balanceSensitivity = -2.2
 maxBalanceSpeed = .3
 
 #Bottom (leftmost) cube drop off is origin
 startPos = [0,67,133] # 0 67 133
-endPos = [37,68,96] # 37 68 96
+endPos = [37,68,110] # 37 68 96
 balanceDistance = 31
 cubeToConeDistance = 22.8
-dropOffDistance = 10 #Test This Distance
+dropOffDistance = 19 #Test This Distance
 cubeTargetHeights = [2,23,35]
 coneTargetHeights = [2,37,50]
