@@ -19,7 +19,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         self.rightTalon2 = rightTalon2
 
         self.tpf = 4600/5
-        self.maxDriveSpeed = 0.2
+        self.maxDriveSpeed = 0.4
         self.maxTurnSpeed = 0.2
 
         #~ smartdashboard
