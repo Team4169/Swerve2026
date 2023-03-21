@@ -29,7 +29,7 @@ class MoveCommand(commands2.CommandBase):
         # self.drive.sd.putValue("turn goal", self.heading)
         # self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
         if self.distance:
-            drivespeed = self.drive.driveController.calculate(self.drive.leftTalon.getSelectedSensorPosition(), self.distance)
+            drivespeed = self.drive.driveController.calculate(self.drive.rightTalon.getSelectedSensorPosition(), self.distance)
             # self.drive.sd.putValue("calculated drive speed",drivespeed)
             drivespeed = self.drive.validateDriveSpeed(drivespeed)
             # self.drive.sd.putValue("final calculated drive speed",drivespeed)

@@ -74,6 +74,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def teleopInit(self) -> None:
+        wpilib.CameraServer.launch()
         # self.arm.initializeDegreesOnStart()
         self.sendLEDCommand(1, self.team)
         self.drive.resetEncoders()

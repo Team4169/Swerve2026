@@ -14,7 +14,7 @@ from subsystems.armsubsystem import ArmSubsystem
 from .MoveTillGyro import moveTillGyro
 from .reset_gyro import ResetGyro
 from .resetEncoders import ResetEncoders
-
+from .rotateCommand import rotateCommand
 
 '''
 1.Holding Cone
@@ -38,8 +38,13 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
     def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
         super().__init__ (
             ResetEncoders(drive),
-            moveTillGyro(10,0,drive),
-            balanceCommand(drive)
+            ResetGyro(drive),
+            rotateCommand(180, .3 , drive),
+            # moveTillGyro(1.5,.5,drive),
+            # moveTillGyro(-14,.3,drive),
+            
+
+            # balanceCommand(drive)
 
             # MoveCommand(-5, 0, drive)
             # ResetGyro(drive),
