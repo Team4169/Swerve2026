@@ -21,9 +21,9 @@ class MyRobot(commands2.TimedCommandRobot):
     """
 
     autonomousCommand: typing.Optional[commands2.Command] = None
-
+    
     def robotInit(self) -> None:
-        
+        self.sd = wpilib.SmartDashboard
         """
         This function is run when the robot is first started up and should be used for any
         initialization code.
@@ -45,11 +45,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm = self.container.arm
         
         self.drive = self.container.drive
-
+        self.sd.putBoolean("team",  True)
         #~ LED commands and variables
         self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
         self.previousLEDCommand = 0
-        self.team = "red" #^ change this to blue if we are on the blue team
+        self.team = ntcore.NetworkTableInstance.getDefault().getTable("FMSinfo").getBoolean("isRedAlliance", True)# self.sd.getBoolean("team", True) #^ change this to blue if we are on the blue team
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
@@ -59,6 +59,7 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically when disabled"""
 
     def autonomousInit(self) -> None:
+        
         self.drive.gyro.reset()
         self.arm.initializeDegreesOnStart()
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
@@ -75,10 +76,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopInit(self) -> None:
         wpilib.CameraServer.launch()
+        self.sd.putNumber("moveRestriction", constants.moveRestriction)
         # self.arm.initializeDegreesOnStart()
         self.sendLEDCommand(1, self.team)
         self.drive.resetEncoders()
         self.drive.gyro.reset()
+        self.time = 0
+        
         
         # self.arm.resetGrabbingArmEncoder()
         # self.arm.resetExtendingArmEncoder()
@@ -99,18 +103,26 @@ class MyRobot(commands2.TimedCommandRobot):
         self.outtake = 0
         self.climbMode = False
         self.direction = 0
-
         self.areaPost = self.container.sd.getDoubleTopic("april_area").publish()
         self.yawPost = self.container.sd.getDoubleTopic("april_yaw").publish()
         self.idPost = self.container.sd.getDoubleTopic("april_id").publish()
 
     def teleopPeriodic(self):
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
+        
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
+
+        self.sd.putNumber("gyroYaw", self.drive.gyro.getYaw())
+        self.sd.putNumber("gyroPitch", self.drive.gyro.getPitch())
+
         self.arm.updateDegreesAndPercent()
         # self.drive.encoderTicks.set(self.drive.)
+        self.sd.putNumber("left talon", self.leftTalon.getSelectedSensorPosition())
+        self.sd.putNumber("right talon", self.rightTalon.getSelectedSensorPosition())
+        
         self.drive.encoderRightOut.set(self.rightTalon.getSelectedSensorPosition())
         self.drive.encoderLeftOut.set(self.leftTalon.getSelectedSensorPosition())
+        
         
         #~ smartDashboard limit switch setting
         self.arm.shouldMoveVal.set(self.arm.shouldMove)
@@ -122,14 +134,29 @@ class MyRobot(commands2.TimedCommandRobot):
         self.arm.rotatingArmLimitSwitchMaxVal.set(self.arm.getRotatingArmLimitSwitchMaxPressed())
         self.arm.rotatingArmLimitSwitchMinVal.set(self.arm.getRotatingArmLimitSwitchMinPressed())
 
+        self.sd.putBoolean("grabbingArmLimitSwitchClosed", self.arm.getGrabbingArmLimitSwitchClosedPressed())
+        self.sd.putBoolean("grabbingArmLimitSwitchOpen", self.arm.getGrabbingArmLimitSwitchOpenPressed())
+        self.sd.putBoolean("extendingArmLimitSwitchMin", self.arm.getExtendingArmLimitSwitchMinPressed())
+        self.sd.putBoolean("extendingArmLimitSwitchMax", self.arm.getExtendingArmLimitSwitchMaxPressed())
+        self.sd.putBoolean("rotatingArmLimitSwitchMax", self.arm.getRotatingArmLimitSwitchMaxPressed())
+        self.sd.putBoolean("rotatingArmLimitSwitchMin", self.arm.getRotatingArmLimitSwitchMinPressed())
+
+
         self.arm.rotatingArmEncoderDegreesVal.set(self.arm.rotatingArmEncoderDegrees)
         self.arm.extindingArmPercentVal.set(self.arm.extendingArmEncoderPercent)
         
+        self.sd.putNumber("rotatingArmEncoderDegrees", self.arm.rotatingArmEncoderDegrees)
+        self.sd.putNumber("extendingArmEncoderPercent", self.arm.extendingArmEncoderPercent)
+        self.sd.putNumber("grabbingArmEncoderDegrees", self.arm.grabbingArmEncoderDegrees)
 
-        self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees )
+        self.arm.grabbingDegrees.set(self.arm.grabbingArmEncoderDegrees)
         self.arm.extendingArmRevolutions.set(self.arm.extendingArmEncoder.getPosition())
         self.arm.rotatingArmRevolutions.set(self.arm.rotatingArmEncoder.getPosition())
     
+        self.sd.putNumber("grabbingArmEncoderDegrees", self.arm.grabbingArmEncoderDegrees)
+        self.sd.putNumber("extendingArmEncoderRevolutions", self.arm.extendingArmEncoder.getPosition())
+        self.sd.putNumber("rotatingArmEncoderRevolutions", self.arm.rotatingArmEncoder.getPosition())
+
     #todo: decide which controller this is on
     #^ untested auto cone pickup code
         self.distance = constants.testDistance
@@ -153,9 +180,9 @@ class MyRobot(commands2.TimedCommandRobot):
             #     self.
     #
     #^ start of driving code
-        self.leftX = addDeadzone(self.driverController.getLeftX() * (constants.moveRestriction)) #/2 is to slow down the robot
-        self.leftY = addDeadzone(self.driverController.getLeftY() * (constants.moveRestriction))
-        self.rightX = addDeadzone(self.driverController.getRightX() * (constants.moveRestriction))
+        self.leftX = addDeadzone(self.driverController.getLeftX() * (self.sd.getNumber("moverestriction", constants.moveRestriction))) #/2 is to slow down the robot
+        self.leftY = addDeadzone(self.driverController.getLeftY() * (self.sd.getNumber("moverestriction", constants.moveRestriction)))
+        self.rightX = addDeadzone(self.driverController.getRightX() * (self.sd.getNumber("moverestriction", constants.moveRestriction)))
         
         self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
 

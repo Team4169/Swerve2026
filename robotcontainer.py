@@ -15,11 +15,14 @@ import constants
 # from commands.halvedrivespeed import HalveDriveSpeed
 from commands.coneToBalanceAuto import coneToBalanceAuto
 from commands.cubeToBalanceAuto import cubeToBalanceAuto
+from commands.armCommands.dropOffAngle import dropOffAngle
+from commands.armCommands.dropOffExtend import dropOffExtend
+from commands.armCommands.dropObject import dropObject
 
 from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
-from subsystems.armsubsystem import ArmSubsystem
+from subsystems.armsubsystem import ArmSubsystem 
 
 import math
 import photonvision
@@ -89,6 +92,10 @@ class RobotContainer:
         
         self.coneToBalance =coneToBalanceAuto(self.drive, self.arm)
         self.cubeToBalance = cubeToBalanceAuto(self.drive, self.arm)
+        self.dropOffAngle = dropOffAngle(constants.dropOffDistance,constants.coneTargetHeights[self.drive.target], self.arm)
+        self.dropOffExtend = dropOffExtend(constants.dropOffDistance,constants.coneTargetHeights[self.drive.target], self.arm)
+        self.dropObject = dropObject(self.arm)
+
         #chooser
         self.chooser = wpilib.SendableChooser()
 
@@ -96,10 +103,14 @@ class RobotContainer:
         self.chooser.addOption("Cone to Balance", self.coneToBalance)
 
         # # Put the chooser on the dashboard
-        wpilib.SmartDashboard.putData("Autonomousff", self.chooser)
+        self.shuffle = wpilib.SmartDashboard
+        self.shuffle.putData("Autonomousff", self.chooser)
+        
+        self.shuffle.putData("dropOffAngle", self.dropOffAngle)
+        self.shuffle.putData("dropOffExtend", self.dropOffExtend)
+        self.shuffle.putData("dropObject", self.dropObject)
 
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
-
     def getAutonomousCommand(self) -> commands2.Command:
-        #return self.chooser.getSelected()
-        return self.coneToBalance
+        return self.chooser.getSelected()
+        # return self.coneToBalance
