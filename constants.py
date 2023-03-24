@@ -27,7 +27,6 @@ negativeTicksPerDeg = 221500/360
 #todo: find the degrees that this should be 
 startingRotatingDegrees = 50
 
-#todo find out how many revolutions per arm length and replace none with that num
 #! extending arm give negative power as "foreward"
 extendingArmRevPerArmPercent = -103.47 / 100
 rotatingArmRevPerArmDegree = - 91 / 87 # / 360
@@ -92,6 +91,6 @@ startPos = [0,67,133] # 0 67 133
 endPos = [37,68,110] # 37 68 96
 balanceDistance = 31
 cubeToConeDistance = 22.8
-dropOffDistance = 19 #Test This Distance
+dropOffDistance = 58 #Test This Distance
 cubeTargetHeights = [2,23,35]
 coneTargetHeights = [2,37,50]

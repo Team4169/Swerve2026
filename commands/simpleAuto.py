@@ -8,7 +8,7 @@ from .armCommands.setRotatingArm import setRotatingArm
 from .balanceCommand import balanceCommand
 
 from .movecommand import MoveCommand
-from .movecommandSpeed import MoveCommandSpeed
+from .movecommandSpeed import movecommandSpeed
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
 from .MoveTillGyro import moveTillGyro
@@ -30,7 +30,7 @@ from .rotateCommand import rotateCommand
 
 
 
-class coneToBalanceAuto(commands2.SequentialCommandGroup):
+class simpleAuto(commands2.SequentialCommandGroup):
     """
     An auto that drops off cone and goes onto balance
     """
@@ -39,9 +39,13 @@ class coneToBalanceAuto(commands2.SequentialCommandGroup):
         super().__init__ (
             ResetEncoders(drive),
             ResetGyro(drive),
-            rotateCommand(180, .3 , drive),
-            # moveTillGyro(1.5,.5,drive),
-            # moveTillGyro(-14,.3,drive),
+            # movecommandSpeed(0.16,.5,drive),
+            # dropOff(constants.dropOffDistance,constants.cubeTargetHeights[2], arm),
+            # movecommandSpeed(-12,.3,drive)
+            #rotateCommand(180, .3 , drive),
+            
+            moveTillGyro(1.5,.5,drive),
+            moveTillGyro(-14,.3,drive),
             
 
             # balanceCommand(drive)

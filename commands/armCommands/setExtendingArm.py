@@ -14,7 +14,13 @@ class setExtendingArm(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        self.percent = (self.distance/constants.maxArmLength) * 100
+        self.distance-=constants.minArmLength
+        if self.distance<0:
+            self.distance = 0
+
+        self.percent = (self.distance/(constants.maxArmLength-constants.minArmLength)) * 100
+        if self.percent > 100:
+            self.percent = 100
         speed = 0.3 #expirement with this
         self.arm.setExtendingArmPercentWithAuto(self.percent,speed)
 

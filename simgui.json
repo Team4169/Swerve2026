@@ -18,7 +18,10 @@
       "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Autonomousff": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/dropObject": "Command",
+      "/SmartDashboard/dropOffAngle": "Command",
+      "/SmartDashboard/dropOffExtend": "Command"
     },
     "windows": {
       "/SmartDashboard/Autonomousff": {

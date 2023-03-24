@@ -5,7 +5,7 @@ from .armCommands.setExtendingArm import setExtendingArm
 from .armCommands.setRotatingArm import setRotatingArm
 from .balanceCommand import balanceCommand
 
-from .movecommand import MoveCommand
+from .movecommandSpeed import movecommandSpeed
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
 from .reset_gyro import ResetGyro
@@ -32,16 +32,20 @@ class cubeToBalanceAuto(commands2.SequentialCommandGroup):
 
     def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
         super().__init__(
-            ResetGyro(drive),
-            dropOff(constants.dropOffDistance,constants.cubeTargetHeights[drive.target], arm),
-            setExtendingArm(0,arm),
-            setRotatingArm(0,arm),
-            MoveCommand(-5,0,drive),
-            MoveCommand(0,180, drive),
-            ResetGyro(drive),
-            MoveCommand(0,drive.getAngleAuto(False),drive),
-            MoveCommand(drive.getDistanceAuto(False)/12,0,drive),
-            MoveCommand(0,-drive.getAngleAuto(False),drive),
-            MoveCommand(0.5,0,drive),
-            balanceCommand(drive)
+            movecommandSpeed(0.16,.5,drive),
+            dropOff(constants.dropOffDistance,constants.cubeTargetHeights[2], arm),
+            movecommandSpeed(-12,.3,drive)
+            #rotateCommand(180, .3 , drive),
+            # ResetGyro(drive),
+            # dropOff(constants.dropOffDistance,constants.cubeTargetHeights[drive.target], arm),
+            # setExtendingArm(0,arm),
+            # setRotatingArm(0,arm),
+            # MoveCommand(-5,0,drive),
+            # MoveCommand(0,180, drive),
+            # ResetGyro(drive),
+            # MoveCommand(0,drive.getAngleAuto(False),drive),
+            # MoveCommand(drive.getDistanceAuto(False)/12,0,drive),
+            # MoveCommand(0,-drive.getAngleAuto(False),drive),
+            # MoveCommand(0.5,0,drive),
+            # balanceCommand(drive)
         )

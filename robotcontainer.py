@@ -13,12 +13,12 @@ import constants
 # from commands.drivedistance import DriveDistance
 # from commands.defaultdrive import DefaultDrive
 # from commands.halvedrivespeed import HalveDriveSpeed
-from commands.coneToBalanceAuto import coneToBalanceAuto
+from commands.simpleAuto import simpleAuto
 from commands.cubeToBalanceAuto import cubeToBalanceAuto
 from commands.armCommands.dropOffAngle import dropOffAngle
 from commands.armCommands.dropOffExtend import dropOffExtend
 from commands.armCommands.dropObject import dropObject
-
+from commands.movecommandSpeed import movecommandSpeed
 from commands.doNothing import DoNothing
 
 from subsystems.drivesubsystem import DriveSubsystem
@@ -90,22 +90,23 @@ class RobotContainer:
         self.sd = inst.getTable("SmartDashboard")
         
         
-        self.coneToBalance =coneToBalanceAuto(self.drive, self.arm)
+        self.simpleAuto = simpleAuto(self.drive, self.arm)
         self.cubeToBalance = cubeToBalanceAuto(self.drive, self.arm)
-        self.dropOffAngle = dropOffAngle(constants.dropOffDistance,constants.coneTargetHeights[self.drive.target], self.arm)
-        self.dropOffExtend = dropOffExtend(constants.dropOffDistance,constants.coneTargetHeights[self.drive.target], self.arm)
+        self.moveTest = movecommandSpeed(2, .5, self.drive)
+        self.dropOffAngle = dropOffAngle(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
+        self.dropOffExtend = dropOffExtend(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
         self.dropObject = dropObject(self.arm)
 
         #chooser
         self.chooser = wpilib.SendableChooser()
 
-        self.chooser.setDefaultOption("Cube to Balance", self.cubeToBalance)
-        self.chooser.addOption("Cone to Balance", self.coneToBalance)
+        self.chooser.setDefaultOption("cubeAuto", self.cubeToBalance )
+        self.chooser.addOption("simple auto", self.simpleAuto)
 
         # # Put the chooser on the dashboard
         self.shuffle = wpilib.SmartDashboard
         self.shuffle.putData("Autonomousff", self.chooser)
-        
+        self.shuffle.putData("moveTest", self.moveTest)
         self.shuffle.putData("dropOffAngle", self.dropOffAngle)
         self.shuffle.putData("dropOffExtend", self.dropOffExtend)
         self.shuffle.putData("dropObject", self.dropObject)

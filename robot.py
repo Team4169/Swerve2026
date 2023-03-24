@@ -78,7 +78,7 @@ class MyRobot(commands2.TimedCommandRobot):
         wpilib.CameraServer.launch()
         self.sd.putNumber("moveRestriction", constants.moveRestriction)
         # self.arm.initializeDegreesOnStart()
-        self.sendLEDCommand(1, self.team)
+        self.sendLEDCommand(3, self.team)
         self.drive.resetEncoders()
         self.drive.gyro.reset()
         self.time = 0
@@ -286,7 +286,13 @@ class MyRobot(commands2.TimedCommandRobot):
             self.arm.grabCone()
         if self.operatorController.getRightBumper():
             self.arm.grabCube()
-
+        #~ light control
+        if self.operatorController.getLeftY() > constants.deadzone or self.operatorController.getLeftY() < -constants.deadzone:
+            self.sendLEDCommand(1, self.team)
+        elif self.operatorController.getRightY() < constants.deadzone and self.operatorController.getRightY() > -constants.deadzone and self.operatorController.getLeftY() < constants.deadzone and self.operatorController.getLeftY() > -constants.deadzone:
+            self.sendLEDCommand(3, self.team)
+        else:
+            self.sendLEDCommand(2, self.team)
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()

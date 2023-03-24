@@ -4,23 +4,22 @@ import math
 from subsystems.drivesubsystem import DriveSubsystem
 
 
-class MoveCommandSpeed(commands2.CommandBase):
-    def __init__(self, distance: float, heading: float, drive: DriveSubsystem) -> None:
+class movecommandSpeed(commands2.CommandBase):
+    def __init__(self, distance: float, maxspeed: float, drive: DriveSubsystem) -> None:
         super().__init__()
         # Feature to add - difference tolerance per command instance. Currently uses the default from DriveSubsystem
         # Feature to add - different max speed for each command. Currently uses method of DriveSubsystem.
         self.drive = drive
         self.targetTicks = distance * self.drive.tpf
-        self.heading = heading
         # print("distance goal", distance)
         # print("turn goal", heading)
         self.goal_threshold_ticks = 100 # I believe 50 ticks per second, confirm.
         # self.addRequirements(drive)
+        self.maxspeed = maxspeed
 
     def initialize(self) -> None:
         self.drive.resetEncoders()
         # This increases everytime the robot remains in the target
-        self.in_threshold = 0
         # self.drive.driveController.setSetpoint(self.distance)
         # self.drive.turnController.setSetpoint(self.heading)
 
@@ -31,7 +30,7 @@ class MoveCommandSpeed(commands2.CommandBase):
         k = 3
         sign = abs(self.distanceToTarget)/self.distanceToTarget
         #self.speed = self.drive.maxDriveSpeed
-        self.speed = -0.5 * self.drive.maxDriveSpeed * (math.tanh((4 * (self.distanceToTargetFeet) - sign * k)/5) + sign * 1)
+        self.speed = 0.5 * self.maxspeed * (math.tanh((4 * (self.distanceToTargetFeet) - sign * k)/5) + sign * 1)
         if self.distanceToTargetFeet >= -0.2 and self.distanceToTargetFeet <= 0.2:
             self.speed = 0
 
@@ -50,8 +49,9 @@ class MoveCommandSpeed(commands2.CommandBase):
 
     def end(self, interrupted: bool) -> None:
         self.drive.driveMecanum(0, 0, 0)
+            
+
 
     def isFinished(self) -> bool:
-        print(f"tickies: {self.drive.rightTalon.getSelectedSensorPosition()}, {self.drive.leftTalon.getSelectedSensorPosition()}, {self.targetTicks}, {self.speed}")
+        # self.arm.shouldMove = True
         return (abs(self.drive.rightTalon.getSelectedSensorPosition() - self.targetTicks) < abs(self.goal_threshold_ticks))
-
