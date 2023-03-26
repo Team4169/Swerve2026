@@ -11,6 +11,7 @@ from deadzone import addDeadzone
 import ntcore
 import robotpy_apriltag
 import time
+import numpy
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -221,49 +222,69 @@ class MyRobot(commands2.TimedCommandRobot):
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)
             self.rightTalon2.set(self.speed)
-        # elif self.driverController.getBButton():
-        #     self.pastDetections.append({"x" : self.container.sd.getDoubleTopic("x").subscribe(0.0).get(), 
-        #                                 "y": self.container.sd.getDoubleTopic("y").subscribe(0.0).get(),
-        #                                 "dist": self.container.sd.getDoubleTopic("dist").subscribe(0.0).get(),
-        #                                 "see": self.container.sd.getDoubleTopic("see").subscribe(0.0).get(),
-        #                                 "time": time.time(),
-        #                                 })
+        elif self.driverController.getBButton():
+            self.pastDetections.append({"x" : self.container.sd.getDoubleTopic("x").subscribe(0.0).get(), 
+                                        "y": self.container.sd.getDoubleTopic("y").subscribe(0.0).get(),
+                                        "dist": self.container.sd.getDoubleTopic("dist").subscribe(0.0).get(),
+                                        "see": self.container.sd.getDoubleTopic("see").subscribe(0.0).get(),
+                                        "time": time.time(),
+                                        })
             
-        #     self.distSum = 0
-        #     self.count = 0
-        #     self.xSum = 0
-        #     self.newPastDetections = self.pastDetections.copy()
+            #self.distSum = 0
+            #self.count = 0
+            #self.xSum = 0
+            self.newPastDetections = self.pastDetections.copy()
+            self.xdata = []
+            self.ydata = []
+            self.distdata = []
 
-        #     for i in self.pastDetections:
-        #         if time.time() - i["time"] < 0.2:
-        #             self.distSum += i["dist"]
-        #             self.xSum += i["x"]
-        #             self.count += 1
-        #         else:
-        #             self.newPastDetections.remove(i)
-        #     self.pastDetections = self.newPastDetections.copy()
+            for i in self.pastDetections:
+                if time.time() - i["time"] < 0.2:
+                    #self.distSum += i["dist"]
+                    self.xdata.append(i["x"])
+                    self.distdata.append(i["dist"])
+                    self.ydata.append(i["y"])
+                    #self.xSum += i["x"]
+                    #self.count += 1
+                else:
+                    self.newPastDetections.remove(i)
+            self.pastDetections = self.newPastDetections.copy()
 
-        #     self.dist = self.distSum / self.count
-        #     self.x = self.xSum / self.count
+            #self.dist = self.distSum / self.count
+            #self.x = self.xSum / self.count
 
-        #     # self.arm.setExtendingArmPercentWithAuto(50, .3)
-        #     # self.arm.setRotatingArmAngle(, .5)
+            #     # self.arm.setExtendingArmPercentWithAuto(50, .3)
+            # self.arm.setRotatingArmAngle(, .5)
+            # self.xstd = numpy.std(self.xdata)
+            # self.diststd = numpy.std(self.distdata)
+            # self.xdatamod = []
+            # self.distdatamod = []
+            # for data in self.xdata:
+            #     if data <= .5 * self.xstd + numpy.mean(self.xdata) and data >= numpy.mean(self.xdata) - .5 * self.xstd:
+            #         self.xdatamod.append(data)
+            # for data in self.distdata:
+            #     if data <= 1.5 * self.diststd + numpy.mean(self.distdata) and data >= numpy.mean(self.distdata) - 1.5 * self.diststd:
+            #         self.distdatamod.append(data)
+            self.x = numpy.mean(self.xdata)
+            self.dist = numpy.mean(self.ydata)
+                
+            print(self.x, self.dist)
+            xOut = 0
+            yOut = 0
+            if abs(self.x - 280) > 30:
+                if self.x < 280:
+                    xOut = -0.15
+                else:
+                    xOut = 0.15
+                print("rotate")
+            elif abs(self.dist - 385) > 15: # 1100, 100
+                if self.dist < 385:
+                    yOut = -0.18
+                else:
+                    yOut = 0.18
+                print("forward")
 
-        #     xOut = 0
-        #     yOut = 0
-        #     if abs(self.x - 320) > 25:
-        #         if self.x < 320:
-        #             xOut = 0.3
-        #         else:
-        #             xOut = -0.3
-        #     else:
-        #         if abs(self.dist - 1500) > 50:
-        #             if self.dist < 1500:
-        #                 yOut = 0.15
-        #             else:
-        #                 yOut = -0.15
-
-        #     self.drive.driveMecanum(0, yOut, xOut)
+            self.drive.driveMecanum(yOut, 0, xOut)
             # print("a")
 
         # elif self.driverController.getYButton() or self.driverController.getBButton():
