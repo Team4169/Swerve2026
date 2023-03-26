@@ -6,16 +6,16 @@ from .setExtendingArm import setExtendingArm
 class dropOffExtend(commands2.CommandBase):
     def __init__(self, distance, height, arm: ArmSubsystem) -> None:
         super().__init__()
-        self.distance = distance
-        self.height = height
+        self.percent = distance
+        # self.height = height
         self.arm= arm
 
     def initialize(self):
         pass
 
     def execute(self) -> None:
-        d = self.arm.dropOffExtentionAuto(self.distance,self.height)
-        self.percent = (20/d) * 100
+        # d = self.arm.dropOffExtentionAuto(self.distance,self.height)
+        # self.percent = (20/d) * 100
         speed = 0.3 #expirement with this
         self.arm.setExtendingArmPercentWithAuto(self.percent,speed)
 
@@ -23,4 +23,4 @@ class dropOffExtend(commands2.CommandBase):
         self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (abs(self.percent -self.arm.extendingArmEncoderPercent) <= self.arm.tolerance)
+        return (abs(self.percent -self.arm.extendingArmEncoderPercent) <= self.arm.tolerance) or self.arm.getExtendingArmLimitSwitchMaxPressed()

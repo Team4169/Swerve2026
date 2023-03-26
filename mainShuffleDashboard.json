@@ -694,6 +694,61 @@
               "_source0": "network_table:///SmartDashboard/moveTest",
               "_title": "moveTest"
             }
+          },
+          "17,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/x",
+              "_title": "x"
+            }
+          },
+          "18,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/y",
+              "_title": "y"
+            }
+          },
+          "19,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/dist",
+              "_title": "dist"
+            }
+          },
+          "20,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/see",
+              "_title": "see"
+            }
+          },
+          "21,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/conevscube",
+              "_title": "conevscube"
+            }
           }
         }
       }
@@ -1343,9 +1398,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.0,
-    "y": 0.0,
-    "width": 780.0,
-    "height": 678.0
+    "x": -7.333333492279053,
+    "y": -7.333333492279053,
+    "width": 1294.6666259765625,
+    "height": 686.6666870117188
   }
 }

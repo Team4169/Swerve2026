@@ -29,7 +29,7 @@ startingRotatingDegrees = 50
 
 #! extending arm give negative power as "foreward"
 extendingArmRevPerArmPercent = -103.47 / 100
-rotatingArmRevPerArmDegree = - 91 / 87 # / 360
+rotatingArmRevPerArmDegree = - 59 / 68 # / 360
 
 
 # *Arm pickup systems

@@ -10,6 +10,7 @@ from robotcontainer import RobotContainer
 from deadzone import addDeadzone
 import ntcore
 import robotpy_apriltag
+import time
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -59,7 +60,6 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically when disabled"""
 
     def autonomousInit(self) -> None:
-        
         self.drive.gyro.reset()
         self.arm.initializeDegreesOnStart()
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
@@ -71,17 +71,19 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.schedule()
 
     def autonomousPeriodic(self) -> None:
+        self.arm.updateDegreesAndPercent()
         """This function is called periodically during autonomous"""
 
 
     def teleopInit(self) -> None:
+        
         wpilib.CameraServer.launch()
         self.sd.putNumber("moveRestriction", constants.moveRestriction)
         # self.arm.initializeDegreesOnStart()
         self.sendLEDCommand(3, self.team)
         self.drive.resetEncoders()
-        self.drive.gyro.reset()
         self.time = 0
+        self.moveRestriction = 1
         
         
         # self.arm.resetGrabbingArmEncoder()
@@ -106,8 +108,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.areaPost = self.container.sd.getDoubleTopic("april_area").publish()
         self.yawPost = self.container.sd.getDoubleTopic("april_yaw").publish()
         self.idPost = self.container.sd.getDoubleTopic("april_id").publish()
+        self.pastDetections = []
 
     def teleopPeriodic(self):
+        # print(wpilib.DriverStation.getAlliance())
         self.drive.gyroOut.set(self.drive.gyro.getYaw())
         
         self.drive.gyroPitchOut.set(self.drive.gyro.getPitch())
@@ -159,33 +163,37 @@ class MyRobot(commands2.TimedCommandRobot):
 
     #todo: decide which controller this is on
     #^ untested auto cone pickup code
-        self.distance = constants.testDistance
-        self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.pivotDistanceFromGround - constants.armPickupHeight)**2)**.5
-        if self.driverController.getLeftTriggerAxis() > .1:
-            if self.hypot > constants.maxArmLength - 5: #5 is a buffer
-                self.drive.driveMecanum(.25, 0, 0)
-                # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
-            elif self.hypot < constants.minArmLength + 5:
-                self.drive.driveMecanum(-.25, 0, 0)
-            else:
-                self.drive.driveMecanum(0, 0, 0)
-                targetAngle = -math.atan((constants.pivotDistanceFromGround - constants.armPickupHeight)/(self.distance + constants.cameraDistanceFromArm)) * 180/math.pi
-                if targetAngle < constants.lowerArmAngleLimit:
-                    self.arm.setRotatingArmSpeed(0)
-                    self.driveMeacanum(-.25, 0, 0)
-                else:
-                    self.arm.setRotatingArmAngle(targetAngle, .25)
+        # self.distance = constants.testDistance
+        # self.hypot = ((self.distance + constants.cameraDistanceFromArm)**2 + (constants.pivotDistanceFromGround - constants.armPickupHeight)**2)**.5
+        # if self.driverController.getLeftTriggerAxis() > .1:
+        #     if self.hypot > constants.maxArmLength - 5: #5 is a buffer
+        #         self.drive.driveMecanum(.25, 0, 0)
+        #         # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
+        #     elif self.hypot < constants.minArmLength + 5:
+        #         self.drive.driveMecanum(-.25, 0, 0)
+        #     else:
+        #         self.drive.driveMecanum(0, 0, 0)
+        #         targetAngle = -math.atan((constants.pivotDistanceFromGround - constants.armPickupHeight)/(self.distance + constants.cameraDistanceFromArm)) * 180/math.pi
+        #         if targetAngle < constants.lowerArmAngleLimit:
+        #             self.arm.setRotatingArmSpeed(0)
+        #             self.driveMeacanum(-.25, 0, 0)
+        #         else:
+        #             self.arm.setRotatingArmAngle(targetAngle, .25)
                     # self.arm.setExtendingArmPercentWithAuto((self.hypot / constants.maxArmLength) * 100)
                 # self.setRotatingArmAngle(self.getTargetAngle(self.distance), .75)
             #     self.
     #
+        if self.driverController.getRightBumper() or self.driverController.getLeftBumper():
+            self.moveRestriction = .5
+        else:
+            self.moveRestriction = 1
     #^ start of driving code
-        self.leftX = addDeadzone(self.driverController.getLeftX() * (self.sd.getNumber("moverestriction", constants.moveRestriction))) #/2 is to slow down the robot
-        self.leftY = addDeadzone(self.driverController.getLeftY() * (self.sd.getNumber("moverestriction", constants.moveRestriction)))
-        self.rightX = addDeadzone(self.driverController.getRightX() * (self.sd.getNumber("moverestriction", constants.moveRestriction)))
+        self.leftX = addDeadzone(self.driverController.getLeftX() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction))) #/2 is to slow down the robot
+        self.leftY = addDeadzone(self.driverController.getLeftY() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
+        self.rightX = addDeadzone(self.driverController.getRightX() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
         
         self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
-
+            
         # if self.driverController.getBButton():
         #     self.arm.setGrabbingArmSpeed(0.1)
         # elif self.driverController.getXButton():
@@ -213,65 +221,112 @@ class MyRobot(commands2.TimedCommandRobot):
             self.rightTalon.set(self.speed)
             self.leftTalon2.set(self.speed)
             self.rightTalon2.set(self.speed)
-        elif self.driverController.getYButton() or self.driverController.getBButton():
-            result = self.container.camera.getLatestResult()
+        # elif self.driverController.getBButton():
+        #     self.pastDetections.append({"x" : self.container.sd.getDoubleTopic("x").subscribe(0.0).get(), 
+        #                                 "y": self.container.sd.getDoubleTopic("y").subscribe(0.0).get(),
+        #                                 "dist": self.container.sd.getDoubleTopic("dist").subscribe(0.0).get(),
+        #                                 "see": self.container.sd.getDoubleTopic("see").subscribe(0.0).get(),
+        #                                 "time": time.time(),
+        #                                 })
+            
+        #     self.distSum = 0
+        #     self.count = 0
+        #     self.xSum = 0
+        #     self.newPastDetections = self.pastDetections.copy()
 
-            targetYaw = -0.487
-            targetArea =    0.0497
+        #     for i in self.pastDetections:
+        #         if time.time() - i["time"] < 0.2:
+        #             self.distSum += i["dist"]
+        #             self.xSum += i["x"]
+        #             self.count += 1
+        #         else:
+        #             self.newPastDetections.remove(i)
+        #     self.pastDetections = self.newPastDetections.copy()
 
-            targets = result.getTargets()
-            targetinfo = []
-            for i in targets:
-                self.idPost.set(i.getFiducialId())
-                self.areaPost.set(i.getPitch())
-                self.yawPost.set(i.getYaw())
-                targetinfo.append({"id": i.getFiducialId(), "area" : i.getArea() * math.pi / 180, "yaw" : i.getYaw() * math.pi / 180})
+        #     self.dist = self.distSum / self.count
+        #     self.x = self.xSum / self.count
 
-            xout = 0
-            yout = 0
+        #     # self.arm.setExtendingArmPercentWithAuto(50, .3)
+        #     # self.arm.setRotatingArmAngle(, .5)
 
-            newtargetinfo = []
-            if len(targetinfo) > 0:
-                for i in targetinfo:
-                    if i["id"] in [1, 2, 3, 6, 7, 8]:
-                        newtargetinfo.append(i.copy())
+        #     xOut = 0
+        #     yOut = 0
+        #     if abs(self.x - 320) > 25:
+        #         if self.x < 320:
+        #             xOut = 0.3
+        #         else:
+        #             xOut = -0.3
+        #     else:
+        #         if abs(self.dist - 1500) > 50:
+        #             if self.dist < 1500:
+        #                 yOut = 0.15
+        #             else:
+        #                 yOut = -0.15
+
+        #     self.drive.driveMecanum(0, yOut, xOut)
+            # print("a")
+
+        # elif self.driverController.getYButton() or self.driverController.getBButton():
+        #     result = self.container.camera.getLatestResult()
+
+        #     targetYaw = -0.487
+        #     targetArea =    0.0497
+
+        #     targets = result.getTargets()
+        #     targetinfo = []
+        #     for i in targets:
+        #         self.idPost.set(i.getFiducialId())
+        #         self.areaPost.set(i.getPitch())
+        #         self.yawPost.set(i.getYaw())
+        #         targetinfo.append({"id": i.getFiducialId(), "area" : i.getArea() * math.pi / 180, "yaw" : i.getYaw() * math.pi / 180})
+
+        #     xout = 0
+        #     yout = 0
+
+        #     newtargetinfo = []
+        #     if len(targetinfo) > 0:
+        #         for i in targetinfo:
+        #             if i["id"] in [1, 2, 3, 6, 7, 8]:
+        #                 newtargetinfo.append(i.copy())
                         
-            if len(newtargetinfo) > 0:
-                '''
-                if self.driverController.getYButton():
-                    self.arm.setRotatingArmAngle(27.8, .5)
-                    self.arm.setExtendingArmPercentWithAuto(100, .5)
-                if self.driverController.getBButton():
-                    self.arm.setRotatingArmAngle(28, .5)
-                    self.arm.setExtendingArmPercentWithAuto(18, .5)
-                '''
+        #     if len(newtargetinfo) > 0:
+        #         '''
+        #         if self.driverController.getYButton():
+        #             self.arm.setRotatingArmAngle(27.8, .5)
+        #             self.arm.setExtendingArmPercentWithAuto(100, .5)
+        #         if self.driverController.getBButton():
+        #             self.arm.setRotatingArmAngle(28, .5)
+        #             self.arm.setExtendingArmPercentWithAuto(18, .5)
+        #         '''
 
-                if newtargetinfo[0]["yaw"] > targetYaw:
-                    xout = -0.2
-                else:
-                    xout = 0.2
+        #         if newtargetinfo[0]["yaw"] > targetYaw:
+        #             xout = -0.2
+        #         else:
+        #             xout = 0.2
 
-                if newtargetinfo[0]["area"] > targetArea:
-                    yout = -0.2
-                else:
-                    yout = 0.2
-                '''
-                if abs(newtargetinfo[0]["yaw"] - targetYaw) < 0.02:
-                    xout = 0
-                if abs(newtargetinfo[0]["area"] - targetArea) < 0.02:
-                    yout = 0
-                '''
+        #         if newtargetinfo[0]["area"] > targetArea:
+        #             yout = -0.2
+        #         else:
+        #             yout = 0.2
+        #         '''
+        #         if abs(newtargetinfo[0]["yaw"] - targetYaw) < 0.02:
+        #             xout = 0
+        #         if abs(newtargetinfo[0]["area"] - targetArea) < 0.02:
+        #             yout = 0
+        #         '''
                     
-            self.drive.driveMecanum(xout, yout, 0)
+        #     self.drive.driveMecanum(xout, yout, 0)
         else:
             self.drive.driveMecanum( -self.leftY * self.flipped, self.leftX * self.flipped, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
 
+        if self.driverController.getStartButton():
+            self.drive.gyro.reset()
         # * arm control  
         #Todo: make sure the "foreward" is positive
     
     #^: arm functions
         # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
-        if not self.driverController.getBButton():
+        if not self.driverController.getBButton() or not self.driverController.getXButton():
             self.arm.setRotatingArmSpeedWithAuto(addDeadzone(self.operatorController.getLeftY() / (2)))
             self.arm.setExtendingArmSpeedWithAuto(addDeadzone(self.operatorController.getRightY() / (4/3)))
             self.arm.setGrabbingArmSpeed(addDeadzone((self.operatorController.getRightTriggerAxis() - self.operatorController.getLeftTriggerAxis()) *(3/4)))

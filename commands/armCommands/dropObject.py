@@ -11,12 +11,14 @@ class dropObject(commands2.CommandBase):
         pass
 
     def execute(self) -> None:
-        speed = 0.3
-        self.angle = 90 #This is a random guess fix later
-        self.arm.setGrabbingArmAngle(self.angle,speed)
+        self.grabbingPressed = self.arm.getGrabbingArmLimitSwitchOpenPressed()
+        self.arm.setGrabbingArmSpeed(-.5)
+        # speed = 0.3
+        # self.angle = 90 #This is a random guess fix later
+        # self.arm.setGrabbingArmAngle(self.angle,speed)
 
     def end(self, interrupted: bool) -> None:
         self.arm.setGrabbingArmSpeed(0)
 
     def isFinished(self) -> bool:
-        return (abs(self.angle - self.arm.grabbingArmEncoderDegrees) <= self.arm.tolerance)
+        return self.arm.getGrabbingArmLimitSwitchOpenPressed()

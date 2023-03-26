@@ -6,10 +6,16 @@ from .armCommands.setRotatingArm import setRotatingArm
 from .balanceCommand import balanceCommand
 
 from .movecommandSpeed import movecommandSpeed
+from .armCommands.dropObject import dropObject
+from .armCommands.dropOffAngle import dropOffAngle
+from .armCommands.dropOffExtend import dropOffExtend
+from .MoveTillGyro import moveTillGyro
+
+
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.armsubsystem import ArmSubsystem
 from .reset_gyro import ResetGyro
-
+from commands2 import ParallelCommandGroup
 #from .SnowVeyerCommands.pickUp import pickUp
 #from .SnowVeyerCommands.dropOff import dropOff
 
@@ -32,9 +38,16 @@ class cubeToBalanceAuto(commands2.SequentialCommandGroup):
 
     def __init__(self, drive: DriveSubsystem, arm: ArmSubsystem):
         super().__init__(
-            movecommandSpeed(0.16,.5,drive),
-            dropOff(constants.dropOffDistance,constants.cubeTargetHeights[2], arm),
-            movecommandSpeed(-12,.3,drive)
+            # movecommandSpeed(0.16,.5,drive),
+            # dropOffAngle(constants.dropOffDistance,constants.cubeTargetHeights[2],arm),
+            dropOffAngle(28, 0, arm),
+            dropOffExtend(98,0, arm),
+            dropObject(arm),
+            ParallelCommandGroup(dropOffExtend(1,0,arm),dropOffAngle(40,0,arm),moveTillGyro(-14,.5,drive))
+            
+            
+            # dropOff(constants.dropOffDistance,constants.cubeTargetHeights[2], arm),
+            # movecommandSpeed(-12,.3,drive)
             #rotateCommand(180, .3 , drive),
             # ResetGyro(drive),
             # dropOff(constants.dropOffDistance,constants.cubeTargetHeights[drive.target], arm),

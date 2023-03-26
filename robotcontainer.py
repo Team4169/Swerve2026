@@ -92,7 +92,7 @@ class RobotContainer:
         
         self.simpleAuto = simpleAuto(self.drive, self.arm)
         self.cubeToBalance = cubeToBalanceAuto(self.drive, self.arm)
-        self.moveTest = movecommandSpeed(2, .5, self.drive)
+        self.moveTest = movecommandSpeed(5, .5, self.drive)
         self.dropOffAngle = dropOffAngle(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
         self.dropOffExtend = dropOffExtend(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
         self.dropObject = dropObject(self.arm)

@@ -45,6 +45,8 @@ class movecommandSpeed(commands2.CommandBase):
         # self.drive.sd.putValue("distance goal new", self.distance)
         # self.drive.sd.putValue("turn goal", self.heading)
         # self.drive.sd.putValue("average ticks", self.drive.getAverageEncoderTicks())
+        # turnCorrention = self.drive.gyro.getYaw() * -1 / 180
+        
         self.drive.driveMecanum(self.speed,0,0)
 
     def end(self, interrupted: bool) -> None:

@@ -44,7 +44,7 @@ class simpleAuto(commands2.SequentialCommandGroup):
             # movecommandSpeed(-12,.3,drive)
             #rotateCommand(180, .3 , drive),
             
-            moveTillGyro(1.5,.5,drive),
+            moveTillGyro(1.5,1,drive),
             moveTillGyro(-14,.3,drive),
             
 
