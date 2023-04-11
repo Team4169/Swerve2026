@@ -53,7 +53,7 @@ class DriveSubsystem(commands2.SubsystemBase):
         # self.encoderTicks = self.sd.getDoubleTopic("encoder ticks").subscribe(0)
 
         # gyro
-        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
         self.gyroOut = self.sd.getDoubleTopic("Gyro Yaw").publish()
         
         self.gyroPitchOut = self.sd.getDoubleTopic("Gyro Pitch").publish()
