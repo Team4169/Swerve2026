@@ -59,17 +59,16 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def autonomousInit(self) -> None:
         # self.drive.gyro.reset()
-        self.arm.initializeDegreesOnStart()
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
-        self.autonomousCommand = self.container.getAutonomousCommand()
+        #~ will be needed for future use
+        # self.autonomousCommand = self.container.getAutonomousCommand()
         
-        # self.output("ato com", self.autonomousCommand)
-        #
-        if self.autonomousCommand:
-            self.autonomousCommand.schedule()
+        # # self.output("ato com", self.autonomousCommand)
+        # #
+        # if self.autonomousCommand:
+        #     self.autonomousCommand.schedule()
 
     def autonomousPeriodic(self) -> None:
-        self.arm.updateDegreesAndPercent()
         """This function is called periodically during autonomous"""
 
 
@@ -95,13 +94,17 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
-        self.swerve.setDefaultCommand(SwerveJoystickCmd().driveSwerve(
-            self.swerve,
-            self.driverController.getLeftY(),
-            self.driverController.getLeftX(),
-            self.driverController.getRightX(),
-            not self.driverController.getLeftBumperPressed()
-        ))
+        try:
+            self.swerve.setDefaultCommand(SwerveJoystickCmd().driveSwerve(
+                self.swerve,
+                self.driverController.getLeftY(),
+                self.driverController.getLeftX(),
+                self.driverController.getRightX(),
+                not self.driverController.getLeftBumperPressed()
+            ))
+        except:
+            if not self.ds.isFMSAttached():
+                raise
 
         if self.driverController.getStartButton():
             self.swerve.zeroHeading()

@@ -36,7 +36,7 @@ class RobotContainer:
 
     def __init__(self) -> None:
 
-        self.driverController = wpilib.XboxController(constants.kDriverControllerPort)
+        self.driverController = wpilib.XboxController(constants.kDriverControllerPort) # can also use ps4 controller (^v^)
         self.operatorController = wpilib.XboxController(constants.kArmControllerPort)
 
         self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
