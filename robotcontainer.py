@@ -19,8 +19,10 @@ import constants
 # from commands.armCommands.dropOffExtend import dropOffExtend
 # from commands.armCommands.dropObject import dropObject
 # from commands.movecommandSpeed import movecommandSpeed
+from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 
-from subsystems.drivesubsystem import DriveSubsystem
+from wpilib import Joystick
+
 from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
 import math
@@ -35,14 +37,10 @@ class RobotContainer:
     """
 
     def __init__(self) -> None:
-
+        
         self.driverController = wpilib.XboxController(constants.kDriverControllerPort) # can also use ps4 controller (^v^)
         self.operatorController = wpilib.XboxController(constants.kArmControllerPort)
-
-        self.leftTalon = ctre.WPI_TalonSRX(constants.leftTalon)
-        self.leftTalon2 = ctre.WPI_TalonSRX(constants.leftTalon2)
-        self.rightTalon = ctre.WPI_TalonSRX(constants.rightTalon)
-        self.rightTalon2 = ctre.WPI_TalonSRX(constants.rightTalon2)
+        self.driver_joystick = wpilib.Joystick(constants.kDriverControllerPort)
 
         #Arm motor controllers
         # self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
@@ -63,12 +61,20 @@ class RobotContainer:
         # self.rotatingArmMinLimitSwitch = self.rotatingArm.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
 
         # The robot's subsystems
+        self.Swerve = SwerveSubsystem()
 
-        self.drive = DriveSubsystem(leftTalon=self.leftTalon,
-                                    leftTalon2=self.leftTalon2,
-                                    rightTalon=self.rightTalon,
-                                    rightTalon2=self.rightTalon2) #.drive
-        self.swerve = SwerveSubsystem()
+        self.Swerve.setDefaultCommand(SwerveJoystickCmd(
+                self.Swerve,
+                self.driverController.getLeftY(),
+                self.driverController.getLeftX(),
+                self.driverController.getRightX(),
+                not self.driverController.getLeftBumperPressed()
+            ))
+    #     self.configureButtonBindings()
+
+    # def configureButtonBindings(self):
+    #     Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
+
         # self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
         #                         extendingArm=self.extendingArm,
         #                         rotatingArm=self.rotatingArm,

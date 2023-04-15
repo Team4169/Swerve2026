@@ -22,7 +22,7 @@ class MyRobot(commands2.TimedCommandRobot):
     has an implementation of robotPeriodic which runs the scheduler for you
     """
 
-    autonomousCommand: typing.Optional[commands2.Command] = None
+    AutonomousCommand: typing.Optional[commands2.Command] = None
     
     def robotInit(self) -> None:
         self.sd = wpilib.SmartDashboard
@@ -34,19 +34,13 @@ class MyRobot(commands2.TimedCommandRobot):
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
         # wpilib.CameraServer().launch("vision.py:main")
-        self.container = RobotContainer()
+        self.Container = RobotContainer()
 
-        self.driverController = self.container.driverController
-        self.operatorController = self.container.operatorController
-
-        self.leftTalon = self.container.leftTalon
-        self.leftTalon2 = self.container.leftTalon2
-        self.rightTalon = self.container.rightTalon
-        self.rightTalon2 = self.container.rightTalon2
-
+        self.driverController = self.Container.driverController
+        self.operatorController = self.Container.operatorController
         
         # self.drive = self.container.drive
-        self.swerve = self.container.swerve
+        self.Swerve = self.Container.Swerve
         #~ LED commands and variables
         self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
         self.previousLEDCommand = 0
@@ -58,15 +52,14 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically when disabled"""
 
     def autonomousInit(self) -> None:
-        # self.drive.gyro.reset()
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
         #~ will be needed for future use
-        # self.autonomousCommand = self.container.getAutonomousCommand()
+        self.AutonomousCommand = self.Container.getAutonomousCommand()
         
-        # # self.output("ato com", self.autonomousCommand)
-        # #
-        # if self.autonomousCommand:
-        #     self.autonomousCommand.schedule()
+        # self.output("ato com", self.autonomousCommand)
+        #
+        if self.AutonomousCommand:
+            self.AutonomousCommand.schedule()
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
@@ -77,7 +70,6 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # wpilib.CameraServer.launch()
         self.isRedAlliance = self.ds.getAlliance() == self.ds.Alliance.kRed
-        self.sd.putNumber("moveRestriction", constants.moveRestriction) # TODO: figure out why this wasn't working
         self.sendLEDCommand(3, self.isRedAlliance)
         # self.drive.resetEncoders()
         self.moveRestriction = 1
@@ -86,28 +78,20 @@ class MyRobot(commands2.TimedCommandRobot):
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
         # this line or comment it out.
-        if self.autonomousCommand:
-            self.autonomousCommand.cancel()
+        if self.AutonomousCommand:
+            self.AutonomousCommand.cancel()
 
         # print("Starting teleop...")
         self.speed = 0
 
     def teleopPeriodic(self):
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
-        try:
-            self.swerve.setDefaultCommand(SwerveJoystickCmd().driveSwerve(
-                self.swerve,
-                self.driverController.getLeftY(),
-                self.driverController.getLeftX(),
-                self.driverController.getRightX(),
-                not self.driverController.getLeftBumperPressed()
-            ))
-        except:
-            if not self.ds.isFMSAttached():
-                raise
+        # try:
+        #     pass
+        # except:
+        #     if not self.ds.isFMSAttached():
+        #         raise
 
-        if self.driverController.getStartButton():
-            self.swerve.zeroHeading()
 
         # print(wpilib.DriverStation.getAlliance())
 
@@ -143,7 +127,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.leftY = addDeadzone(self.driverController.getLeftY() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
         # self.rightX = addDeadzone(self.driverController.getRightX() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
         
-        self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
+        # self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
             
         # if self.driverController.getBButton():
         #     self.arm.setGrabbingArmSpeed(0.1)
@@ -156,7 +140,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # else:
         #     self.arm.setGrabbingArmSpeed(0)
             
-        self.flipped = 1
+        # self.flipped = 1
     #^ balancing with the A button
         
         # self.drive.driveMecanum( -self.leftY * self.flipped, self.leftX * self.flipped, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
@@ -168,12 +152,13 @@ class MyRobot(commands2.TimedCommandRobot):
     #^: arm functions
         # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
         
-        if self.operatorController.getLeftY() > constants.deadzone or self.operatorController.getLeftY() < -constants.deadzone:
-            self.sendLEDCommand(1, self.isRedAlliance)
-        elif self.operatorController.getRightY() < constants.deadzone and self.operatorController.getRightY() > -constants.deadzone and self.operatorController.getLeftY() < constants.deadzone and self.operatorController.getLeftY() > -constants.deadzone:
-            self.sendLEDCommand(3, self.isRedAlliance)
-        else:
-            self.sendLEDCommand(2, self.isRedAlliance)
+        # if self.operatorController.getLeftY() > constants.deadzone or self.operatorController.getLeftY() < -constants.deadzone:
+        #     self.sendLEDCommand(1, self.isRedAlliance)
+        # elif self.operatorController.getRightY() < constants.deadzone and self.operatorController.getRightY() > -constants.deadzone and self.operatorController.getLeftY() < constants.deadzone and self.operatorController.getLeftY() > -constants.deadzone:
+        #     self.sendLEDCommand(3, self.isRedAlliance)
+        # else:
+        #     self.sendLEDCommand(2, self.isRedAlliance)
+        pass
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()

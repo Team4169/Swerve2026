@@ -6,6 +6,7 @@ import math
 import wpimath
 from wpimath.kinematics import SwerveModuleState
 from wpimath.geometry import Rotation2d
+from wpimath.controller import PIDController
 class swervemodule(commands2.SubsystemBase):
     def __init__(self, drivingMotorID: int, turningMotorID:int, drivingMotorReversed: bool, turningMotorReversed: bool, 
                  absoluteEncoderId: int, absouteEncoderOffset: float, absoluteEncoderReversed: bool) -> None:
@@ -39,7 +40,7 @@ class swervemodule(commands2.SubsystemBase):
         self.turningEncoder.setVelocityConversionFactor(constants.kTurningEncoderRPM2RadPerSec)
 
         #* PID Controllers
-        self.turningPIDController = wpimath.controller.PIDController(constants.KPturning, 0, 0)
+        self.turningPIDController = PIDController(constants.kPTurning, 0, 0)
         self.turningPIDController.enableContinuousInput(-math.pi, math.pi)
     
         self.resetEncoders()

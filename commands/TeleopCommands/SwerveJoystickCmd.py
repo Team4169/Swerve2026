@@ -7,19 +7,20 @@ from wpimath.kinematics import ChassisSpeeds
 
 class SwerveJoystickCmd(CommandBase):
 
-    def driveSwerve(self, swerve: SwerveSubsystem, xSpeed:float, 
+    def __init__(self, swerve: SwerveSubsystem, xSpeed:float, 
                     YSpeed:float, ZRotation:float, feildOriented:bool):
+        super().__init__()
         self.swerve = swerve
         self.xSpeed = xSpeed
         self.YSpeed = YSpeed
         self.ZRotation = ZRotation
         self.feildOriented = feildOriented
-        self.addRequirements(swerve)
+        self.addRequirements(self.swerve)
 
         # create Slew limiter
         self.xLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAccelerationUnitsPerSec)
         self.yLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAccelerationUnitsPerSec)
-        self.zRotLimiter = SlewRateLimiter(constants.KTeleopDriveMaxAngularAccelerationUnitsPerSec)
+        self.zRotLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAngularAccelerationUnitsPerSec)
 
 
 
@@ -36,7 +37,7 @@ class SwerveJoystickCmd(CommandBase):
         self.xSpeed = self.xLimiter.calculate(self.xSpeed) * constants.kTeleopDriveMaxSpeedMetersPerSecond
         self.YSpeed = self.yLimiter.calculate(self.YSpeed) * constants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ZRotation = self.zRotLimiter.calculate(self.ZRotation) \
-                    * constants.KTeleopDriveMaxAngularSpeedRadiansPerSecond
+                    * constants.kTeleopDriveMaxAngularSpeedRadiansPerSecond
         if self.feildOriented:
             chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.YSpeed, 
                                                                  self.ZRotation, self.swerve.getRotation2d())

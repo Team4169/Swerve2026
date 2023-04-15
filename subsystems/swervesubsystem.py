@@ -4,7 +4,7 @@ import constants
 import wpilib
 import navx
 
-# import threading
+import threading
 import time
 import math
 from wpimath.geometry import Rotation2d
@@ -14,7 +14,6 @@ from wpimath.kinematics import SwerveDrive4Kinematics
 class SwerveSubsystem (commands2.SubsystemBase):
     def __init__(self):
         super().__init__()
-
         self.sd = wpilib.SmartDashboard
 
         self.frontLeft = swervemodule(constants.frontLeftDrivingMotorID, 
@@ -49,18 +48,18 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 constants.backRightAbsoluteEncoderOffset, 
                                 constants.backRightAbsoluteEncoderReversed)
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
-        
-    def SwerveSubsytem(self):
-        # thread = threading.Thread(target=self.delay)
-        # thread.start()
-        self.zeroHeading()
+        thread = threading.Thread(target=self.zero_heading_after_delay)
+        thread.start()
+
+    def zero_heading_after_delay(self):
+        try:
+            time.sleep(1)
+            self.zero_heading()
+        except Exception as e:
+            pass
 
     def zeroHeading(self):
         self.gyro.reset()
-
-    def delay(self):
-        time.sleep(1)
-        self.zeroHeading()
         
     
     def getHeading(self):
@@ -76,7 +75,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.backRight.stop()
 
     def setModuleStates(self, states: list[SwerveModuleState]):
-        SwerveDrive4Kinematics.normalizeWheelSpeeds(states, constants.kphysicalMaxSpeedMetersPerSecond)
+        SwerveDrive4Kinematics.desaturateWheelSpeeds(states, constants.kphysicalMaxSpeedMetersPerSecond)
         self.frontLeft.setDesiredState(states[0])
         self.frontRight.setDesiredState(states[1])
         self.backLeft.setDesiredState(states[2])
