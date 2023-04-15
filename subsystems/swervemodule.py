@@ -24,7 +24,7 @@ class swervemodule(commands2.SubsystemBase):
                 # self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-    
+
         self.drivingMotor.setInverted(drivingMotorReversed)
         self.turningMotor.setInverted(turningMotorReversed)
 

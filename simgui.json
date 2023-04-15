@@ -31,6 +31,9 @@
         }
       },
       "/SmartDashboard/Field": {
+        "Robot": {
+          "style": "Box/Image"
+        },
         "window": {
           "visible": true
         }
