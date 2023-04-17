@@ -6,6 +6,7 @@ import commands2
 import ctre
 import math
 import constants
+
 from robotcontainer import RobotContainer
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
@@ -35,7 +36,6 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         # wpilib.CameraServer().launch("vision.py:main")
         self.Container = RobotContainer()
-
         self.driverController = self.Container.driverController
         self.operatorController = self.Container.operatorController
         
@@ -119,45 +119,6 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.sd.putNumber("grabbingArmEncoderDegrees", self.arm.grabbingArmEncoderDegrees)
         # self.sd.putNumber("extendingArmEncoderRevolutions", self.arm.extendingArmEncoder.getPosition())
         # self.sd.putNumber("rotatingArmEncoderRevolutions", self.arm.rotatingArmEncoder.getPosition())
-
-    #todo: decide which controller this is on
-    
-    #^ start of driving code
-        # self.leftX = addDeadzone(self.driverController.getLeftX() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction))) #/2 is to slow down the robot
-        # self.leftY = addDeadzone(self.driverController.getLeftY() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
-        # self.rightX = addDeadzone(self.driverController.getRightX() * self.moveRestriction) #* (self.sd.getNumber("moverestriction", constants.moveRestriction)))
-        
-        # self.moving = self.leftX != 0 or self.leftY != 0 or self.rightX != 0
-            
-        # if self.driverController.getBButton():
-        #     self.arm.setGrabbingArmSpeed(0.1)
-        # elif self.driverController.getXButton():
-        #     self.arm.setGrabbingArmSpeed(-0.1)
-        # elif self.driverController.getYButton():
-        #     self.arm.setGrabbingArmAngle(90, 0.09)
-        # elif self.driverController.getAButton():
-        #     self.arm.setGrabbingArmAngle(45, 0.09)
-        # else:
-        #     self.arm.setGrabbingArmSpeed(0)
-            
-        # self.flipped = 1
-    #^ balancing with the A button
-        
-        # self.drive.driveMecanum( -self.leftY * self.flipped, self.leftX * self.flipped, self.rightX, Rotation2d(self.gyroRad)) #self.gyroRad
-
-       
-        # * arm control  
-        #Todo: make sure the "foreward" is positive
-    
-    #^: arm functions
-        # self.arm.setRotatingArmSpeedWithAuto(self.operatorController.getLeftY())
-        
-        # if self.operatorController.getLeftY() > constants.deadzone or self.operatorController.getLeftY() < -constants.deadzone:
-        #     self.sendLEDCommand(1, self.isRedAlliance)
-        # elif self.operatorController.getRightY() < constants.deadzone and self.operatorController.getRightY() > -constants.deadzone and self.operatorController.getLeftY() < constants.deadzone and self.operatorController.getLeftY() > -constants.deadzone:
-        #     self.sendLEDCommand(3, self.isRedAlliance)
-        # else:
-        #     self.sendLEDCommand(2, self.isRedAlliance)
         pass
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
