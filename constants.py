@@ -8,7 +8,7 @@ import wpiutil
 import UtilCommands
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry._geometry import Translation2d
-
+from wpimath.trajectory import TrapezoidProfile
 #~ Controller Options
 kDriverControllerPort = 0
 kArmControllerPort = 1
@@ -20,10 +20,10 @@ kTrackWidth = UtilCommands.inchesToMeters(30) #todo: find the actual track width
 kWheelBase = UtilCommands.inchesToMeters(30) #todo: find the actual wheel base
     # ? Distance between the front and back wheels
 kDriveKinematics = SwerveDrive4Kinematics(
-    Translation2d(kTrackWidth / 2, kWheelBase / 2),
-    Translation2d(kTrackWidth / 2, -kWheelBase / 2),
-    Translation2d(-kTrackWidth / 2, kWheelBase / 2),
-    Translation2d(-kTrackWidth / 2, -kWheelBase / 2),
+    Translation2d(kTrackWidth / 2, kWheelBase / 2), #frontright
+    Translation2d(kTrackWidth / 2, -kWheelBase / 2), #backright
+    Translation2d(-kTrackWidth / 2, kWheelBase / 2), #frontleft
+    Translation2d(-kTrackWidth / 2, -kWheelBase / 2), # backleft
     # ? location of each swerve module relative to the center of the robot
 )
 
@@ -39,6 +39,7 @@ kTeleopDriveMaxAngularSpeedRadiansPerSecond = 12
 kphysicalMaxSpeedMetersPerSecond = 12 #^ not sure how to get this, maybe look online and multiply by gear ratio?
 kWheeleDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
+kPhysicalMaxAngularSpeedRadiansPerSecond  = 2 * 2 * math.pi
 kDriveMotorGearRatio = 1/5.43 #^placeholder
 kTurningMotorGearRatio = 1/5.43 #^placeholder
 #todo Change above
@@ -82,3 +83,22 @@ backRightTurningMotorReversed = False
 backRightAbsoluteEncoderId = 4
 backRightAbsoluteEncoderOffset = 0
 backRightAbsoluteEncoderReversed = False
+
+# ~ Auto Constants
+
+class AutoConstants:
+        kMaxSpeedMetersPerSecond = .75
+        kMaxAccelerationMetersPerSecondSquared = .75
+        kMaxAngularAccelerationRadiansPerSecondSquared = math.pi / 4
+
+        kPXController = 1.0
+        kPYController = 1.0
+
+        kMaxAngularSpeedRadiansPerSecond = kphysicalMaxSpeedMetersPerSecond / 10
+
+        kPThetaController = 1.0
+        kThetaControllerConstraints = TrapezoidProfile.Constraints(
+                kMaxAngularSpeedRadiansPerSecond,
+                kMaxAngularAccelerationRadiansPerSecondSquared,
+        )
+

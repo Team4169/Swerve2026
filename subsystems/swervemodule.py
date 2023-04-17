@@ -4,7 +4,7 @@ import wpilib
 import constants
 import math
 import wpimath
-from wpimath.kinematics import SwerveModuleState
+from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
 class swervemodule(commands2.SubsystemBase):
@@ -66,6 +66,9 @@ class swervemodule(commands2.SubsystemBase):
         angle *= 2 * math.pi #? convert to radians
         angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
         return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
+    
+    def getSwerveModulePosition(self) -> SwerveModulePosition:
+            return SwerveModulePosition(self.getDrivingPosition(), Rotation2d(self.getAbsoluteEncoderRad())),
 
     def resetEncoders(self):
         self.drivingEncoder.setPosition(0)

@@ -3,13 +3,14 @@ import commands2
 import constants
 import wpilib
 import navx
-
 import threading
 import time
 import math
-from wpimath.geometry import Rotation2d
-from wpimath.kinematics import SwerveModuleState
-from wpimath.kinematics import SwerveDrive4Kinematics
+from wpimath.geometry import Rotation2d, Translation2d
+from wpimath.kinematics import SwerveDrive4Kinematics, SwerveDrive4Odometry, SwerveModulePosition, SwerveModuleState
+
+from wpimath.geometry import Pose2d
+
 
 class SwerveSubsystem (commands2.SubsystemBase):
     def __init__(self):
@@ -48,9 +49,15 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 constants.backRightAbsoluteEncoderOffset, 
                                 constants.backRightAbsoluteEncoderReversed)
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+            #the odometry class tracks the robot position over time
+            #we can use the gyro in order to determnine the error from our auton path and correct it
+        self.odometer = SwerveDrive4Odometry(constants.kDriveKinematics, Rotation2d(0), self.getModuleStatesOld())
+
         thread = threading.Thread(target=self.zero_heading_after_delay)
+
         thread.start()
 
+    #~ Gyro Commands
     def zero_heading_after_delay(self):
         try:
             time.sleep(1)
@@ -61,13 +68,18 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def zeroHeading(self):
         self.gyro.reset()
         
-    
     def getHeading(self):
         return math.remainder(self.gyro.getAngle(), 360)
     
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())
 
+    def getPoise(self) -> Pose2d:
+        return self.odometer.getPose()
+    
+    def resetOdometry(self, pose: Pose2d):
+        self.odometer.resetPosition(pose, self.getRotation2d())
+    
     def stopModuels(self):
         self.frontLeft.stop()
         self.frontRight.stop()
@@ -81,5 +93,27 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.backLeft.setDesiredState(states[2])
         self.backRight.setDesiredState(states[3])
     
+    def getModuleStates(self) -> tuple[SwerveModulePosition]:
+        return (
+                self.frontRight.getSwerveModulePosition(),
+                self.backRight.getSwerveModulePosition(),
+                self.frontLeft.getSwerveModulePosition(),
+                self.backLeft.getSwerveModulePosition()
+                )
+    def getModuleStatesOld(self) -> tuple[SwerveModulePosition]:
+        return (
+                SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
+                SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())),
+                SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
+                SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad()))
+                )
     def periodic(self) -> None:
         self.sd.putNumber("Gyro", self.getHeading())
+        self.odometer.update(self.getRotation2d(), 
+                            SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
+                            SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())),
+                            SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
+                            SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad()))
+                            )
+        self.sd.putString("Robot Location", str(self.getPoise()))
+        

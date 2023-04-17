@@ -1,24 +1,19 @@
-import wpilib
+import wpilib, wpimath
 from wpilib.interfaces import GenericHID
-import ntcore
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
-import rev, ctre
 
-import commands2
+from wpimath.trajectory import TrajectoryConfig, Trajectory, TrajectoryUtil, TrajectoryGenerator, TrajectoryParameterizer
+from wpimath.controller import ProfiledPIDController, PIDController
+
+from commands2 import Swerve4ControllerCommand
+
+import ntcore, rev, ctre, commands2
 import commands2.button
 
 import constants
+from constants import AutoConstants
 
-# from commands.complexauto import ComplexAuto
-# from commands.drivedistance import DriveDistance
-# from commands.defaultdrive import DefaultDrive
-# from commands.halvedrivespeed import HalveDriveSpeed
-# from commands.simpleAuto import simpleAuto
-# from commands.cubeToBalanceAuto import cubeToBalanceAuto
-# from commands.armCommands.dropOffAngle import dropOffAngle
-# from commands.armCommands.dropOffExtend import dropOffExtend
-# from commands.armCommands.dropObject import dropObject
-# from commands.movecommandSpeed import movecommandSpeed
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 
 from wpilib import Joystick
@@ -40,7 +35,6 @@ class RobotContainer:
         
         self.driverController = wpilib.XboxController(constants.kDriverControllerPort) # can also use ps4 controller (^v^)
         self.operatorController = wpilib.XboxController(constants.kArmControllerPort)
-        self.driver_joystick = wpilib.Joystick(constants.kDriverControllerPort)
 
         #Arm motor controllers
         # self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
@@ -75,32 +69,7 @@ class RobotContainer:
     # def configureButtonBindings(self):
     #     Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
 
-        # self.arm = ArmSubsystem(grabbingArm=self.grabbingArm,
-        #                         extendingArm=self.extendingArm,
-        #                         rotatingArm=self.rotatingArm,
-        #                         grabbingArmLimitSwitchOpen=self.grabbingArmOpenLimitSwitch,
-        #                         grabbingArmLimitSwitchClosed=self.grabbingArmClosedLimitSwitch,
-        #                         extendingArmLimitSwitchMin=self.extendingArmMinLimitSwitch,
-        #                         extendingArmLimitSwitchMax=self.extendingArmMaxLimitSwitch,
-        #                         rotatingArmLimitSwitchMin=self.rotatingArmMinLimitSwitch,
-        #                         rotatingArmLimitSwitchMax=self.rotatingArmMaxLimitSwitch,
-        #                         grabbingArmEncoder=self.grabbingArmEncoder,
-        #                         extendingArmEncoder=self.extendingArmEncoder,
-        #                         rotatingArmEncoder=self.rotatingArmEncoder
-        #                         )
-
-        inst = ntcore.NetworkTableInstance.getDefault()
-        self.sd = inst.getTable("SmartDashboard")
         
-        
-        # self.simpleAuto = simpleAuto(self.drive, self.arm)
-        # self.cubeToBalance = cubeToBalanceAuto(self.drive, self.arm)
-        # self.moveTest = movecommandSpeed(5, .5, self.drive)
-        # self.dropOffAngle = dropOffAngle(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
-        # self.dropOffExtend = dropOffExtend(constants.dropOffDistance,constants.coneTargetHeights[2], self.arm)
-        # self.dropObject = dropObject(self.arm)
-
-        #chooser
         self.chooser = wpilib.SendableChooser()
 
         # self.chooser.setDefaultOption("cubeAuto", self.cubeToBalance )
@@ -116,7 +85,56 @@ class RobotContainer:
 
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
-        return self.chooser.getSelected()
-        # return self.coneToBalance
+        """Returns the autonomous command to run"""
+
+        # 1. Create Trajectory settings
+        self.trajectoryConfig = TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared).setKinematics(
+            constants.kDriveKinematics)
+
+        # 2. Generate Trajectory
+        self.trajectory = TrajectoryGenerator.generateTrajectory(
+            # ? initial location and rotation
+            Pose2d(0, 0, Rotation2d(0)),
+            [
+                # ? points we want to hit
+                Translation2d(1, 0),
+                Translation2d(1, 1),
+                Translation2d(0, 1),
+            ],
+            # ? final location and rotation
+            Pose2d(0, 0, Rotation2d(180)),
+            self.trajectoryConfig
+        )
+
+        # 3. Create PIdControllers to correct and track trajectory
+        self.xController = PIDController(AutoConstants.kPXController, 0, 0)
+        self.yController = PIDController(AutoConstants.kPYController, 0, 0)
+        self.thetaController = ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints)
+        self.thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        # 4. Construct command to follow trajectory
+        self.swerveControllerCommand = Swerve4ControllerCommand(
+            self.trajectory,
+            self.Swerve.getPose,
+            constants.kDriveKinematics,
+            self.xController,
+            self.yController,
+            self.thetaController,
+            self.Swerve.getModuleStates,
+            self.Swerve
+        )
+
+        # 5. Add some init and wrap up, and return command 
+        self.square = commands2.SequentialCommandGroup(
+            commands2.InstantCommand(self.Swerve.resetOdometry(self.trajectory.getInitialPose())),
+            self.swerveControllerCommand,
+            commands2.InstantCommand(self.swerve.stopModules())
+        )
+
+
+        return self.square
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
