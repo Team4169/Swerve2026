@@ -1,4 +1,5 @@
 import commands2, constants, wpilib, navx, threading, time, math
+from constants import OIConstants, RobotConstants
 from wpimath.filter import SlewRateLimiter
 from commands2 import CommandBase 
 
@@ -18,9 +19,9 @@ class SwerveJoystickCmd(CommandBase):
         self.addRequirements(self.swerve)
 
         # create Slew limiter
-        self.xLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAccelerationUnitsPerSec)
-        self.yLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAccelerationUnitsPerSec)
-        self.zRotLimiter = SlewRateLimiter(constants.kTeleopDriveMaxAngularAccelerationUnitsPerSec)
+        self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationUnitsPerSec)
+        self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationUnitsPerSec)
+        self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAngularAccelerationUnitsPerSec)
 
 
 
@@ -29,15 +30,15 @@ class SwerveJoystickCmd(CommandBase):
 
     def execute(self):
         # 1. Get the joystick values and apply deadzone
-        self.xSpeed = self.xSpeed if (abs(self.xSpeed) > constants.deadzone) else 0
-        self.YSpeed = self.YSpeed if (abs(self.YSpeed) > constants.deadzone) else 0
-        self.ZRotation = self.ZRotation if (abs(self.ZRotation) > constants.deadzone) else 0
+        self.xSpeed = self.xSpeed if (abs(self.xSpeed) > OIConstants.deadzone) else 0
+        self.YSpeed = self.YSpeed if (abs(self.YSpeed) > OIConstants.deadzone) else 0
+        self.ZRotation = self.ZRotation if (abs(self.ZRotation) > OIConstants.deadzone) else 0
         
         # 2. Add rateLimiter to smooth the joystick values
-        self.xSpeed = self.xLimiter.calculate(self.xSpeed) * constants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.YSpeed = self.yLimiter.calculate(self.YSpeed) * constants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.YSpeed = self.yLimiter.calculate(self.YSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ZRotation = self.zRotLimiter.calculate(self.ZRotation) \
-                    * constants.kTeleopDriveMaxAngularSpeedRadiansPerSecond
+                    * RobotConstants.kTeleopDriveMaxAngularSpeedRadiansPerSecond
         if self.feildOriented:
             chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.YSpeed, 
                                                                  self.ZRotation, self.swerve.getRotation2d())
@@ -45,7 +46,7 @@ class SwerveJoystickCmd(CommandBase):
             chasisSpeeds = ChassisSpeeds(self.xSpeed, self.YSpeed, self.ZRotation)
 
         # 3. convert chasis speeds to module states
-        moduleStates = constants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
+        moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
 
         self.swerve.setModuleStates(moduleStates)
         

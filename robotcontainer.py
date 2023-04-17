@@ -12,7 +12,7 @@ import ntcore, rev, ctre, commands2
 import commands2.button
 
 import constants
-from constants import AutoConstants
+from constants import AutoConstants, OIConstants, RobotConstants
 
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 
@@ -33,16 +33,16 @@ class RobotContainer:
 
     def __init__(self) -> None:
         
-        self.driverController = wpilib.XboxController(constants.kDriverControllerPort) # can also use ps4 controller (^v^)
-        self.operatorController = wpilib.XboxController(constants.kArmControllerPort)
+        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort) # can also use ps4 controller (^v^)
+        self.operatorController = wpilib.XboxController(OIConstants.kArmControllerPort)
 
         #Arm motor controllers
-        # self.grabbingArm = rev.CANSparkMax(constants.grabbingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
-        # self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        # self.rotatingArm = rev.CANSparkMax(constants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        # self.grabbingArm = rev.CANSparkMax(RobotConstants.grabbingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushed) #type: rev._rev.CANSparkMaxLowLevel.MotorType
+        # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        # self.rotatingArm = rev.CANSparkMax(RobotConstants.rotatingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         #Arm motor encoders
-        # self.grabbingArmEncoder = wpilib.Counter(wpilib._wpilib.DigitalInput(constants.grabbingArmEncoderPort))
+        # self.grabbingArmEncoder = wpilib.Counter(wpilib._wpilib.DigitalInput(RobotConstants.grabbingArmEncoderPort))
         # self.extendingArmEncoder = self.extendingArm.getEncoder()
         # self.rotatingArmEncoder = self.rotatingArm.getEncoder()
 
@@ -91,8 +91,7 @@ class RobotContainer:
         self.trajectoryConfig = TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
             AutoConstants.kMaxAccelerationMetersPerSecondSquared).setKinematics(
-            constants.kDriveKinematics)
-
+            RobotConstants.kDriveKinematics)
         # 2. Generate Trajectory
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             # ? initial location and rotation
@@ -119,7 +118,7 @@ class RobotContainer:
         self.swerveControllerCommand = Swerve4ControllerCommand(
             self.trajectory,
             self.Swerve.getPose,
-            constants.kDriveKinematics,
+            RobotConstants.kDriveKinematics,
             self.xController,
             self.yController,
             self.thetaController,

@@ -2,6 +2,7 @@ import commands2
 import wpilib
 import wpilib.drive
 import constants
+from constants import RobotConstants
 import ntcore
 import rev
 import math
@@ -51,8 +52,8 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.rotatingArmEncoderDegreesVal = self.sd.getDoubleTopic("RotArmDegrees").publish()
 
         
-        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / constants.rotatingArmRevPerArmDegree
-        self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() / constants.extendingArmRevPerArmPercent
+        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / RobotConstants.rotatingArmRevPerArmDegree
+        self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() / RobotConstants.extendingArmRevPerArmPercent
 
 
         # self.left1.setSelectedSensorPosition(0, 0, 10)
@@ -62,8 +63,8 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Resets the drive encoders to currently read a position of 0."""
 #* periodic functions
     def updateDegreesAndPercent(self):
-        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / constants.rotatingArmRevPerArmDegree
-        self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() / constants.extendingArmRevPerArmPercent
+        self.rotatingArmEncoderDegrees = self.rotatingArmEncoder.getPosition() / RobotConstants.rotatingArmRevPerArmDegree
+        self.extendingArmEncoderPercent = self.extendingArmEncoder.getPosition() / RobotConstants.extendingArmRevPerArmPercent
     
 
 # * Extending Arm functions
@@ -90,7 +91,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the extending arm"""
         #& if the rotating arm is between -7 and 24 degrees
          #& if the extending arm is greater than 75% of the way out
-        # print(self.rotatingArmEncoderDegrees >= constants.lowerArmAngleLimit, self.rotatingArmEncoderDegrees <= 24, self.extendingArmEncoderPercent > 70)
+        # print(self.rotatingArmEncoderDegrees >= RobotConstants.lowerArmAngleLimit, self.rotatingArmEncoderDegrees <= 24, self.extendingArmEncoderPercent > 70)
         if self.rotatingArmEncoderDegrees <= 24 and \
             self.extendingArmEncoderPercent > 72:
                 print("should move down")
@@ -163,7 +164,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         """Sets the speed of the Rotating arm"""
         if (self.rotatingArmEncoderDegrees > 65 and speed < 0 ):
             self.setRotatingArmSpeed(0)
-        # elif (self.rotatingArmEncoderDegrees <  constants.lowerArmAngleLimit and speed > 0):
+        # elif (self.rotatingArmEncoderDegrees <  RobotConstants.lowerArmAngleLimit and speed > 0):
         #     self.setRotatingArmAngle(-6, .1)
         else:
             self.setRotatingArmSpeed(speed)
@@ -180,10 +181,10 @@ class ArmSubsystem(commands2.SubsystemBase):
             self.setRotatingArmSpeed(0)
     
     def resetRotatingArmEncoder(self):
-        self.rotatingArmEncoder.setPosition(constants.lowerArmAngleLimit * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
+        self.rotatingArmEncoder.setPosition(RobotConstants.lowerArmAngleLimit * RobotConstants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
 
     def initializeDegreesOnStart(self):
-        self.rotatingArmEncoder.setPosition(constants.startingRotatingDegrees * constants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
+        self.rotatingArmEncoder.setPosition(RobotConstants.startingRotatingDegrees * RobotConstants.rotatingArmRevPerArmDegree) # ! we may not be able to set the encoder to negative degrees
 
     def zeroRotatingArm(self):
         """Zeroes the Rotating arm"""
@@ -226,9 +227,9 @@ class ArmSubsystem(commands2.SubsystemBase):
         self.diff = self.current - self.previousGrabbingArmEncoderTicks
         #& converts the diff into degrees depending on direction of travel
         if speed < 0:
-            self.grabbingArmEncoderDegrees += self.diff / constants.negativeTicksPerDeg
+            self.grabbingArmEncoderDegrees += self.diff / RobotConstants.negativeTicksPerDeg
         elif speed > 0:
-            self.grabbingArmEncoderDegrees -= self.diff / constants.positiveTicksPerDeg
+            self.grabbingArmEncoderDegrees -= self.diff / RobotConstants.positiveTicksPerDeg
         #& changes current
         self.previousGrabbingArmEncoderTicks = self.current
 
@@ -265,13 +266,13 @@ class ArmSubsystem(commands2.SubsystemBase):
     #* Object pickup functions
     def getTargetAngle(self, distance):
         """Gets the angle to the target"""
-        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.pivotDistanceFromGround-constants.armPickupHeight))-90
+        return 180/math.pi * math.atan((distance + RobotConstants.cameraDistanceFromArm)/(RobotConstants.pivotDistanceFromGround-RobotConstants.armPickupHeight))-90
 
     def dropOffAngle(self,distance,height):
-        return 180/math.pi * math.atan((distance + constants.cameraDistanceFromArm)/(constants.pivotDistanceFromGround-height))-90
+        return 180/math.pi * math.atan((distance + RobotConstants.cameraDistanceFromArm)/(RobotConstants.pivotDistanceFromGround-height))-90
 
     def dropOffAngleAuto(self,distance,height):
-        return 180 / math.pi * math.atan((distance) / (constants.pivotDistanceFromGround - height)) - 90
+        return 180 / math.pi * math.atan((distance) / (RobotConstants.pivotDistanceFromGround - height)) - 90
 
     def dropOffExtentionAuto(self,distance,height):
         return math.sqrt((distance ** 2)+ (height ** 2))

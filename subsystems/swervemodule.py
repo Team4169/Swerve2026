@@ -1,12 +1,13 @@
 import commands2
 import rev
 import wpilib
-import constants
 import math
 import wpimath
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
+
+from constants import ModuleConstants, RobotConstants
 class swervemodule(commands2.SubsystemBase):
     def __init__(self, drivingMotorID: int, turningMotorID:int, drivingMotorReversed: bool, turningMotorReversed: bool, 
                  absoluteEncoderId: int, absouteEncoderOffset: float, absoluteEncoderReversed: bool) -> None:
@@ -21,7 +22,7 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoder = wpilib.AnalogInput(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
-                # self.extendingArm = rev.CANSparkMax(constants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+                # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
@@ -33,14 +34,14 @@ class swervemodule(commands2.SubsystemBase):
         
         #~ this converts encoder ticks to meters, not entirely sure about how velocity works
         
-        self.drivingEncoder.setPositionConversionFactor(constants.kDrivingEncoderRot2Meter)
-        self.drivingEncoder.setVelocityConversionFactor(constants.KDrivingEncoderRPM2MeterPerSec)
+        self.drivingEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderRot2Meter)
+        self.drivingEncoder.setVelocityConversionFactor(ModuleConstants.KDrivingEncoderRPM2MeterPerSec)
 
-        self.turningEncoder.setPositionConversionFactor(constants.kTurningEncoderRot2Rad)
-        self.turningEncoder.setVelocityConversionFactor(constants.kTurningEncoderRPM2RadPerSec)
+        self.turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
+        self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
 
         #* PID Controllers
-        self.turningPIDController = PIDController(constants.kPTurning, 0, 0)
+        self.turningPIDController = PIDController(ModuleConstants.kPTurning, 0, 0)
         self.turningPIDController.enableContinuousInput(-math.pi, math.pi)
     
         self.resetEncoders()
@@ -83,7 +84,7 @@ class swervemodule(commands2.SubsystemBase):
             self.stop()
             return
         self.state = SwerveModuleState.optimize(state, self.getState().angle)
-        self.drivingMotor.set(self.state.speed / constants.kphysicalMaxSpeedMetersPerSecond)
+        self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         self.turningMotor.set(self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))
         self.sd.putString(f"Swerve[{self.absoluteEncoder.getChannel}] state", str(self.state))
 

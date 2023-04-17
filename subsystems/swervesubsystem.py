@@ -1,6 +1,6 @@
 from .swervemodule import swervemodule
 import commands2
-import constants
+from constants import RobotConstants
 import wpilib
 import navx
 import threading
@@ -17,41 +17,41 @@ class SwerveSubsystem (commands2.SubsystemBase):
         super().__init__()
         self.sd = wpilib.SmartDashboard
 
-        self.frontLeft = swervemodule(constants.frontLeftDrivingMotorID, 
-                                constants.frontLeftTurningMotorID, 
-                                constants.frontLeftDrivingMotorReversed, 
-                                constants.frontLeftTurningMotorReversed, 
-                                constants.frontLeftAbsoluteEncoderId, 
-                                constants.frontLeftAbsoluteEncoderOffset, 
-                                constants.frontLeftAbsoluteEncoderReversed)
+        self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
+                                RobotConstants.frontLeftTurningMotorID, 
+                                RobotConstants.frontLeftDrivingMotorReversed, 
+                                RobotConstants.frontLeftTurningMotorReversed, 
+                                RobotConstants.frontLeftAbsoluteEncoderId, 
+                                RobotConstants.frontLeftAbsoluteEncoderOffset, 
+                                RobotConstants.frontLeftAbsoluteEncoderReversed)
         
-        self.frontRight = swervemodule(constants.frontRightDrivingMotorID, 
-                                constants.frontRightTurningMotorID, 
-                                constants.frontRightDrivingMotorReversed, 
-                                constants.frontRightTurningMotorReversed, 
-                                constants.frontRightAbsoluteEncoderId, 
-                                constants.frontRightAbsoluteEncoderOffset, 
-                                constants.frontRightAbsoluteEncoderReversed)
+        self.frontRight = swervemodule(RobotConstants.frontRightDrivingMotorID, 
+                                RobotConstants.frontRightTurningMotorID, 
+                                RobotConstants.frontRightDrivingMotorReversed, 
+                                RobotConstants.frontRightTurningMotorReversed, 
+                                RobotConstants.frontRightAbsoluteEncoderId, 
+                                RobotConstants.frontRightAbsoluteEncoderOffset, 
+                                RobotConstants.frontRightAbsoluteEncoderReversed)
         
-        self.backLeft = swervemodule(constants.backLeftDrivingMotorID, 
-                                constants.backLeftTurningMotorID, 
-                                constants.backLeftDrivingMotorReversed, 
-                                constants.backLeftTurningMotorReversed, 
-                                constants.backLeftAbsoluteEncoderId, 
-                                constants.backLeftAbsoluteEncoderOffset, 
-                                constants.backLeftAbsoluteEncoderReversed)
+        self.backLeft = swervemodule(RobotConstants.backLeftDrivingMotorID, 
+                                RobotConstants.backLeftTurningMotorID, 
+                                RobotConstants.backLeftDrivingMotorReversed, 
+                                RobotConstants.backLeftTurningMotorReversed, 
+                                RobotConstants.backLeftAbsoluteEncoderId, 
+                                RobotConstants.backLeftAbsoluteEncoderOffset, 
+                                RobotConstants.backLeftAbsoluteEncoderReversed)
         
-        self.backRight = swervemodule(constants.backRightDrivingMotorID, 
-                                constants.backRightTurningMotorID, 
-                                constants.backRightDrivingMotorReversed, 
-                                constants.backRightTurningMotorReversed, 
-                                constants.backRightAbsoluteEncoderId, 
-                                constants.backRightAbsoluteEncoderOffset, 
-                                constants.backRightAbsoluteEncoderReversed)
+        self.backRight = swervemodule(RobotConstants.backRightDrivingMotorID, 
+                                RobotConstants.backRightTurningMotorID, 
+                                RobotConstants.backRightDrivingMotorReversed, 
+                                RobotConstants.backRightTurningMotorReversed, 
+                                RobotConstants.backRightAbsoluteEncoderId, 
+                                RobotConstants.backRightAbsoluteEncoderOffset, 
+                                RobotConstants.backRightAbsoluteEncoderReversed)
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it
-        self.odometer = SwerveDrive4Odometry(constants.kDriveKinematics, Rotation2d(0), self.getModuleStatesOld())
+        self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModuleStatesOld())
 
         thread = threading.Thread(target=self.zero_heading_after_delay)
 
@@ -87,7 +87,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.backRight.stop()
 
     def setModuleStates(self, states: list[SwerveModuleState]):
-        SwerveDrive4Kinematics.desaturateWheelSpeeds(states, constants.kphysicalMaxSpeedMetersPerSecond)
+        SwerveDrive4Kinematics.desaturateWheelSpeeds(states, RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         self.frontLeft.setDesiredState(states[0])
         self.frontRight.setDesiredState(states[1])
         self.backLeft.setDesiredState(states[2])
