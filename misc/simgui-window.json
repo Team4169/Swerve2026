@@ -1,0 +1,96 @@
+{
+  "Docking": {
+    "Data": [
+      "DockNode  ID=0x00000001 Pos=399,17 Size=1162,597 Selected=0x2D9B9756"
+    ]
+  },
+  "MainWindow": {
+    "GLOBAL": {
+      "fps": "120",
+      "height": "974",
+      "maximized": "1",
+      "style": "0",
+      "userScale": "2",
+      "width": "1920",
+      "xpos": "0",
+      "ypos": "34"
+    }
+  },
+  "Table": {
+    "0x965B9C9E,2": {
+      "Column 0  Width": "190",
+      "Column 1  Weight": "1.0000",
+      "RefScale": "19"
+    },
+    "0xE56EC1C2,4": {
+      "Column 0  Weight": "1.0000",
+      "Column 1  Weight": "1.0000",
+      "Column 2  Weight": "1.0000",
+      "Column 3  Weight": "1.0000"
+    }
+  },
+  "Window": {
+    "###/FMSInfo": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "235,221"
+    },
+    "###/SmartDashboard/Autonomousff": {
+      "Collapsed": "0",
+      "Pos": "-13,213",
+      "Size": "32,41"
+    },
+    "###/SmartDashboard/Field": {
+      "Collapsed": "0",
+      "DockId": "0x00000001,1",
+      "Pos": "399,17",
+      "Size": "1162,597"
+    },
+    "###FMS": {
+      "Collapsed": "0",
+      "Pos": "0,727",
+      "Size": "32,41"
+    },
+    "###Joysticks": {
+      "Collapsed": "0",
+      "Pos": "396,614",
+      "Size": "32,41"
+    },
+    "###NetworkTables": {
+      "Collapsed": "0",
+      "DockId": "0x00000001,0",
+      "Pos": "399,17",
+      "Size": "1162,597"
+    },
+    "###NetworkTables Info": {
+      "Collapsed": "1",
+      "Pos": "111,69",
+      "Size": "971,712"
+    },
+    "###Other Devices": {
+      "Collapsed": "0",
+      "Pos": "1559,12",
+      "Size": "312,868"
+    },
+    "###System Joysticks": {
+      "Collapsed": "0",
+      "Pos": "0,429",
+      "Size": "32,41"
+    },
+    "###Timing": {
+      "Collapsed": "0",
+      "Pos": "6,187",
+      "Size": "32,41"
+    },
+    "Debug##Default": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "400,400"
+    },
+    "Robot State": {
+      "Collapsed": "0",
+      "Pos": "5,20",
+      "Size": "32,41"
+    }
+  }
+}
