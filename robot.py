@@ -8,6 +8,7 @@ import math
 import constants
 
 from robotcontainer import RobotContainer
+from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
 import robotpy_apriltag
@@ -40,9 +41,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.operatorController = self.Container.operatorController
         # self.drive = self.container.drive
         self.swerve = self.Container.swerve
+        CommandScheduler.getInstance().registerSubsystem(self.swerve)
         #~ LED commands and variables
         self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
         self.previousLEDCommand = 0
+
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
 
@@ -54,8 +57,7 @@ class MyRobot(commands2.TimedCommandRobot):
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
         #~ will be needed for future use
         self.autonomousCommand = self.Container.getAutonomousCommand()
-        print("====================Starting autonomous...====================")
-        print(type(self.autonomousCommand))
+        print(self.autonomousCommand, type(self.autonomousCommand))
         # self.output("ato com", self.autonomousCommand)
        
         if self.autonomousCommand:

@@ -128,12 +128,10 @@ class RobotContainer:
         )
         # 5. Add some init and wrap up, and return command 
         self.square = commands2.SequentialCommandGroup(
-            commands2.InstantCommand(self.swerve.resetOdometry(self.trajectory.initialPose())),
+            commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose())),
             self.swerveControllerCommand,
-            commands2.InstantCommand(self.swerve.stopModules())
+            commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-
-
         return self.square
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
