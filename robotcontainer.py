@@ -92,7 +92,7 @@ class RobotContainer:
             AutoConstants.kMaxSpeedMetersPerSecond,
             AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         self.trajectoryConfig.setKinematics(RobotConstants.kDriveKinematics)
-        print(self.trajectoryConfig)
+
         # 2. Generate Trajectory
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             # ? initial location and rotation
