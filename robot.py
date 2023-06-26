@@ -15,6 +15,12 @@ import robotpy_apriltag
 import time
 import numpy
 
+# -----------------
+# code adopted from FRC 0 to Autonomous: #6 Swerve Drive Auto (https://www.youtube.com/watch?v=0Xi9yb1IMyA)
+# and ported to Python
+# if we can't get it to work,
+# we can use the code from https://github.com/1757WestwoodRobotics/RobotBase/tree/master
+# -----------------
 
 class MyRobot(commands2.TimedCommandRobot):
     """
