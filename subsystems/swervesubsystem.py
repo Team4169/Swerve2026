@@ -121,5 +121,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
                             SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
                             SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad()))
                             )
-        self.sd.putString("Robot Location", str(self.getPose()))
+        self.sd.putString("Robot Odometer", str(self.getModuleStatesOld()))
+        self.sd.putString("Robot Location, x", str(self.getPose().X()))
+        self.sd.putString("Robot Location, y", str(self.getPose().Y()))
+        self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))
         
