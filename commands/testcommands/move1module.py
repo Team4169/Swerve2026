@@ -1,19 +1,40 @@
 import commands2
 from subsystems.swervesubsystem import SwerveSubsystem
+from constants import RobotConstants
+from subsystems.swervemodule import swervemodule
+from wpimath.kinematics import SwerveModuleState
+from wpimath.geometry import Rotation2d
+import time
 
 class move1module(commands2.CommandBase):
-    def __init__(self, distance, height, swerve: SwerveSubsystem) -> None:
+    def __init__(self, swerve: SwerveSubsystem) -> None:
         super().__init__()
         self.swerve = swerve
+        self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
+                                RobotConstants.frontLeftTurningMotorID, 
+                                RobotConstants.frontLeftDrivingMotorReversed, 
+                                RobotConstants.frontLeftTurningMotorReversed, 
+                                RobotConstants.frontLeftAbsoluteEncoderId, 
+                                RobotConstants.frontLeftAbsoluteEncoderOffset, 
+                                RobotConstants.frontLeftAbsoluteEncoderReversed)
+        self.startTime = time.time()
+        self.runTime = 5
+
 
     def initialize(self):
-        pass
+        self.rotation = Rotation2d(1.0, 1.0)
+        self.frontLeft.setDesiredState(SwerveModuleState(0.25, self.rotation))
 
     def execute(self) -> None:
        pass 
 
     def end(self, interrupted: bool) -> None:
-        pass
+        self.rotation = Rotation2d(0, 0)
+        self.frontLeft.setDesiredState(SwerveModuleState(0, self.rotation))
 
     def isFinished(self) -> bool:
-        return 
+        self.currentTime = time.time()
+        if self.currentTime - self.startingTime > self.runTime:
+            return True
+
+        return False

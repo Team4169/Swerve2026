@@ -7,8 +7,8 @@ class move2motors(commands2.CommandBase):
         super().__init__()
 
     def initialize(self):
-        self.drivingMotor = rev.CANSparkMax(RobotConstants.drivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.turningMotor = rev.CANSparkMax(RobotConstants.turningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.drivingMotor = rev.CANSparkMax(RobotConstants.testDrivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.turningMotor = rev.CANSparkMax(RobotConstants.testTurningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         # self.drivingMotor.setInverted(drivingMotorReversed)
         # self.turningMotor.setInverted(turningMotorReversed)
@@ -32,7 +32,7 @@ class move2motors(commands2.CommandBase):
 
     def isFinished(self) -> bool:
         self.currentTime = time.time()
-        if self.currentTime - self.startingTime > self.runTime:
+        if self.currentTime - self.startTime > self.runTime:
             return True
 
         return False

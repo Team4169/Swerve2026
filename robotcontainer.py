@@ -23,6 +23,8 @@ from subsystems.swervesubsystem import SwerveSubsystem
 import math
 import photonvision
 
+from commands.testcommands.move2motors import move2motors
+
 class RobotContainer:
     """
     This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -132,6 +134,7 @@ class RobotContainer:
             self.swerveControllerCommand,
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        return self.square
+        self.move = move2motors()
+        return self.move
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
