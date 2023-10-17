@@ -48,6 +48,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderId, 
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
+        
         self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it

@@ -49,7 +49,6 @@ class SwerveJoystickCmd(CommandBase):
         moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
 
         self.swerve.setModuleStates(moduleStates)
-        # self.swerve.sd.putString(f"Swerve[{self.absoluteEncoder.getChannel}] state", str(self.state))
         
 
     def end(self, interrupted):

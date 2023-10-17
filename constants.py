@@ -82,8 +82,8 @@ class RobotConstants:
     kTeleopDriveMaxSpeedMetersPerSecond = 12 
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = 12
 
-    testDrivingMotorID = 13
-    testTurningMotorID = 14
+    
+
 # ~ Swerve Constants 
 
 

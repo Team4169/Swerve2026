@@ -23,6 +23,7 @@ from subsystems.swervesubsystem import SwerveSubsystem
 import math
 import photonvision
 
+from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 
 class RobotContainer:
@@ -134,7 +135,7 @@ class RobotContainer:
             self.swerveControllerCommand,
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        self.move = move2motors()
+        self.move = move1module(self.swerve)#move2motors(self.swerve)
         return self.move
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225

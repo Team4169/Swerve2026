@@ -2,29 +2,35 @@ import commands2
 from constants import RobotConstants
 import rev
 import time
+
+from subsystems.swervesubsystem import SwerveSubsystem
+
 class move2motors(commands2.CommandBase):
-    def __init__(self) -> None:
+    def __init__(self, swerve: SwerveSubsystem) -> None:
         super().__init__()
 
+        self.swerve = swerve
+
     def initialize(self):
-        self.drivingMotor = rev.CANSparkMax(RobotConstants.testDrivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.turningMotor = rev.CANSparkMax(RobotConstants.testTurningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.drivingMotor = rev.CANSparkMax(5, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.turningMotor = rev.CANSparkMax(55, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         # self.drivingMotor.setInverted(drivingMotorReversed)
         # self.turningMotor.setInverted(turningMotorReversed)
-
+        
+        self.drivingMotor.set(1.0)
+        self.turningMotor.set(0)
         self.drivingEncoder = self.drivingMotor.getEncoder()
         self.turningEncoder = self.turningMotor.getEncoder()
-
-        self.drivingMotor.set(.25)
-        self.turningMotor.set(.25)
-
+    
         self.startTime = time.time()
-        self.runTime = 5
+        self.runTime = 20
 
 
     def execute(self) -> None:
-        pass
+        self.swerve.sd.putString("Motor Position", str(self.drivingEncoder.getVelocity()))
+
+        
 
     def end(self, interrupted: bool) -> None:
         self.drivingMotor.set(0)
@@ -32,7 +38,9 @@ class move2motors(commands2.CommandBase):
 
     def isFinished(self) -> bool:
         self.currentTime = time.time()
+        self.swerve.sd.putString("Delta time", str(self.currentTime - self.startTime))
         if self.currentTime - self.startTime > self.runTime:
+            print(9)
             return True
 
         return False

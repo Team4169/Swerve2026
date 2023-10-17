@@ -10,13 +10,13 @@ class move4modules(commands2.CommandBase):
     def __init__(self, swerve: SwerveSubsystem) -> None:
         super().__init__()
         self.swerve = swerve
-        self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
-                                RobotConstants.frontLeftTurningMotorID, 
-                                RobotConstants.frontLeftDrivingMotorReversed, 
-                                RobotConstants.frontLeftTurningMotorReversed, 
-                                RobotConstants.frontLeftAbsoluteEncoderId, 
-                                RobotConstants.frontLeftAbsoluteEncoderOffset, 
-                                RobotConstants.frontLeftAbsoluteEncoderReversed)
+        # self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
+        #                         RobotConstants.frontLeftTurningMotorID, 
+        #                         RobotConstants.frontLeftDrivingMotorReversed, 
+        #                         RobotConstants.frontLeftTurningMotorReversed, 
+        #                         RobotConstants.frontLeftAbsoluteEncoderId, 
+        #                         RobotConstants.frontLeftAbsoluteEncoderOffset, 
+        #                         RobotConstants.frontLeftAbsoluteEncoderReversed)
         
         self.frontRight = swervemodule(RobotConstants.frontRightDrivingMotorID, 
                                 RobotConstants.frontRightTurningMotorID, 
