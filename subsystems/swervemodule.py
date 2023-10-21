@@ -23,6 +23,7 @@ class swervemodule(commands2.SubsystemBase):
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        
         self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 

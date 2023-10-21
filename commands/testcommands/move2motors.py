@@ -14,7 +14,7 @@ class move2motors(commands2.CommandBase):
     def initialize(self):
         self.drivingMotor = rev.CANSparkMax(5, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         self.turningMotor = rev.CANSparkMax(55, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-
+        
         # self.drivingMotor.setInverted(drivingMotorReversed)
         # self.turningMotor.setInverted(turningMotorReversed)
         
@@ -25,6 +25,7 @@ class move2motors(commands2.CommandBase):
     
         self.startTime = time.time()
         self.runTime = 20
+
 
 
     def execute(self) -> None:

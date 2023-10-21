@@ -89,7 +89,6 @@ class RobotContainer:
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
         """Returns the autonomous command to run"""
-
         # 1. Create Trajectory settings
         self.trajectoryConfig = TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
@@ -135,7 +134,8 @@ class RobotContainer:
             self.swerveControllerCommand,
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        self.move = move1module(self.swerve)#move2motors(self.swerve)
-        return self.move
+        self.move1module = move1module(self.swerve)#move2motors(self.swerve)
+        self.move2motors = move2motors(self.swerve)
+        return self.move2motors
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
