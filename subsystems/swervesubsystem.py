@@ -62,6 +62,11 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def zeroHeading(self):
         self.gyro.reset()
 
+    #^used when we are able to adjust gyro with apriltags
+    def setHeading(self, angle):
+        self.gyro.reset()
+        self.gyro.setAngleAdjustment(angle)
+
     def zero_heading_after_delay(self):
         try:
             time.sleep(1)

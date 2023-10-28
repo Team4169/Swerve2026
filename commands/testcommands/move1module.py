@@ -26,7 +26,7 @@ class move1module(commands2.CommandBase):
 
     def isFinished(self) -> bool:
         self.currentTime = time.time()
-        if self.currentTime - self.startingTime > self.runTime:
+        if self.currentTime - self.startTime > self.runTime:
             return True
 
         return False

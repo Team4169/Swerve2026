@@ -72,6 +72,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
+        try:
+            #make a function that constantly updates robot pose/gyro based on apriltags
+            #updatelocaiton()
+            pass
+        except:
+            if not self.ds.isFMSAttached():
+                raise
 
 
     def teleopInit(self) -> None:
@@ -95,11 +102,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self):
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
-        # try:
-        #     pass
-        # except:
-        #     if not self.ds.isFMSAttached():
-        #         raise
+        try:
+            #make a function that constantly updates robot pose/gyro based on apriltags
+            #updatelocaiton()
+            pass
+        except:
+            if not self.ds.isFMSAttached():
+                raise
 
 
         # print(wpilib.DriverStation.getAlliance())

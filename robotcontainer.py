@@ -16,7 +16,8 @@ from constants import AutoConstants, OIConstants, RobotConstants
 
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 
-from wpilib import Joystick
+from commands2.button import JoystickButton
+from wpilib import XboxController, Joystick
 
 from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
@@ -25,6 +26,8 @@ import photonvision
 
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
+from commands.testcommands.move4modules import move4modules
+
 
 class RobotContainer:
     """
@@ -67,11 +70,9 @@ class RobotContainer:
                 self.driverController.getRightX(),
                 not self.driverController.getLeftBumperPressed()
             ))
-    #     self.configureButtonBindings()
+        self.configureButtonBindings()
 
-    # def configureButtonBindings(self):
-    #     Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
-
+    
         
         self.chooser = wpilib.SendableChooser()
 
@@ -134,8 +135,19 @@ class RobotContainer:
             self.swerveControllerCommand,
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        self.move1module = move1module(self.swerve)#move2motors(self.swerve)
+        self.move1module = move1module(self.swerve)
         self.move2motors = move2motors(self.swerve)
-        return self.move2motors
+        self.move4modules = move4modules(self.swerve)
+
+        return self.move4modules
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
+
+    def configureButtonBindings(self):
+        (
+        JoystickButton(self.driverController, XboxController.Button.kStart)
+        .whenPressed(lambda: self.swerve.zeroHeading())
+        )
+        #Old way of Assigning Buttons
+            # Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
+            # Joystick.button(self.driverController, )
