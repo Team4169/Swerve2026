@@ -16,7 +16,6 @@
 # # https://github.com/robotpy/robotpy-cscore/blob/main/examples/dual_cameraserver.py
 #
 # import cv2
-# import numpy as np
 #
 # # from cscore import CameraServer
 #

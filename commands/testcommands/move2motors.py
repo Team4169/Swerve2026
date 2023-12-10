@@ -12,24 +12,25 @@ class move2motors(commands2.CommandBase):
         self.swerve = swerve
 
     def initialize(self):
-        self.drivingMotor = rev.CANSparkMax(5, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.turningMotor = rev.CANSparkMax(55, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.drivingMotor = rev.CANSparkMax(1, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.turningMotor = rev.CANSparkMax(11, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         
         # self.drivingMotor.setInverted(drivingMotorReversed)
         # self.turningMotor.setInverted(turningMotorReversed)
         
-        self.drivingMotor.set(1.0)
-        self.turningMotor.set(0)
+        self.drivingMotor.set(0.1)
+        self.turningMotor.set(0.1)
         self.drivingEncoder = self.drivingMotor.getEncoder()
         self.turningEncoder = self.turningMotor.getEncoder()
     
         self.startTime = time.time()
-        self.runTime = 20
+        self.runTime = 3
 
 
 
     def execute(self) -> None:
         self.swerve.sd.putString("Motor Position", str(self.drivingEncoder.getVelocity()))
+        print("This code is being run. whoooo!")
 
         
 

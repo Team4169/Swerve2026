@@ -49,7 +49,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
         
-        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+        #!uncomment after NAVX is reattached
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it
         self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModuleStatesOld())
@@ -61,11 +62,13 @@ class SwerveSubsystem (commands2.SubsystemBase):
     #~ Gyro Commands
     def zeroHeading(self):
         self.gyro.reset()
+        
 
     #^used when we are able to adjust gyro with apriltags
     def setHeading(self, angle):
         self.gyro.reset()
         self.gyro.setAngleAdjustment(angle)
+        
 
     def zero_heading_after_delay(self):
         try:
@@ -75,7 +78,9 @@ class SwerveSubsystem (commands2.SubsystemBase):
             pass
         
     def getHeading(self):
-        return math.remainder(self.gyro.getAngle(), 360)
+        #!uncomment after NAVX is reattached
+        return  1 #math.remainder(self.gyro.getAngle(), 360)
+        
     
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())

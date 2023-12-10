@@ -6,6 +6,7 @@ import commands2
 import ctre
 import math
 import constants
+from constants import ModuleConstants
 
 from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
@@ -13,7 +14,6 @@ from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
 import robotpy_apriltag
 import time
-import numpy
 
 # -----------------
 # code adopted from FRC 0 to Autonomous: #6 Swerve Drive Auto (https://www.youtube.com/watch?v=0Xi9yb1IMyA)
@@ -55,10 +55,17 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
+        # self.testabsoluteEncoder = wpilib.DutyCycleEncoder(5)
 
 
     def disabledPeriodic(self) -> None:
         """This function is called periodically when disabled"""
+        # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
+        # print(self.testabsoluteEncoder.getAbsolutePosition())
+
+        # print(self.swerve.frontRight.getTurningPostion())
+        # self.sd.putNumber(f"turning Velocity", self.swerve.frontLeft.getDrivingVelocity())
+
 
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""

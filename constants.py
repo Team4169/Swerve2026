@@ -45,7 +45,7 @@ class RobotConstants:
     frontLeftTurningMotorID = 11
     frontLeftDrivingMotorReversed = False
     frontLeftTurningMotorReversed = False
-    frontLeftAbsoluteEncoderId = 1
+    frontLeftAbsoluteEncoderId = 1 #DIO port ID
     frontLeftAbsoluteEncoderOffset = 0
     frontLeftAbsoluteEncoderReversed = False
 
@@ -74,7 +74,13 @@ class RobotConstants:
     backRightAbsoluteEncoderReversed = False
 
     kPhysicalMaxAngularSpeedRadiansPerSecond  = 2 * 2 * math.pi
-    kphysicalMaxSpeedMetersPerSecond = 12 #^ not sure how to get this, maybe look online and multiply by gear ratio?
+    kphysicalMaxSpeedMetersPerSecond = 1 
+    #! This value seems to be the max swerve speed in MPS,
+    #! it would serve us to either calculate the max swerve velocity at 100% or take it from the 
+    #! WCP page https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options/custom-gear-ratios#possible-gear-ratios-non-flipped
+    #^ the above constant is needed to normalize wheel speeds in the case that a speed value above the max is 
+    #^ trying to be passed into the setmodulestates function, this will likely not be done manually
+    #^ but occur in code at some point
 
     kTeleopDriveMaxAccelerationUnitsPerSec = 1 # ? 0 to 1, represents move restriciton
     kTeleopDriveMaxAngularAccelerationUnitsPerSec = 1
@@ -91,8 +97,8 @@ class RobotConstants:
 class ModuleConstants:
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
-    kDriveMotorGearRatio = 1/5.43 #^placeholder
-    kTurningMotorGearRatio = 1/5.43 #^placeholder
+    kDriveMotorGearRatio = 1/6.75 #^placeholder
+    kTurningMotorGearRatio = 1/13 #^13 rotations of the motor = 1 turn of the wheel
 
     kDrivingEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
     KDrivingEncoderRPM2MeterPerSec = kDrivingEncoderRot2Meter / 60
@@ -102,7 +108,7 @@ class ModuleConstants:
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60 
 
-    kPTurning = .5 #? turning PID controller per wheele
+    kPTurning = .5 #? turning PID controller per wheel
 
 
 # ~ Auto Constants

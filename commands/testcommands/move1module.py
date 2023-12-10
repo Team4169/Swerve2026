@@ -14,15 +14,15 @@ class move1module(commands2.CommandBase):
         self.runTime = 5
 
     def initialize(self):
-        self.rotation = Rotation2d(1.0, 1.0)
-        self.swerve.frontLeft.setDesiredState(SwerveModuleState(0.25, self.rotation))
+        self.rotation = Rotation2d(0.0, 1.0)
+        self.swerve.frontRight.setDesiredState(SwerveModuleState(.1, self.rotation))
 
     def execute(self) -> None:
-       pass 
+       self.swerve.frontRight.getAbsoluteEncoderRad()
 
     def end(self, interrupted: bool) -> None:
         self.rotation = Rotation2d(0, 0)
-        self.swerve.frontLeft.setDesiredState(SwerveModuleState(0, self.rotation))
+        self.swerve.frontRight.setDesiredState(SwerveModuleState(0, self.rotation))
 
     def isFinished(self) -> bool:
         self.currentTime = time.time()

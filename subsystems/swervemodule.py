@@ -6,6 +6,7 @@ import wpimath
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
+from wpilib import DutyCycleEncoder
 
 from constants import ModuleConstants, RobotConstants
 class swervemodule(commands2.SubsystemBase):
@@ -19,7 +20,7 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoderOffsetRad = absouteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
 
-        self.absoluteEncoder = wpilib.AnalogInput(absoluteEncoderId)
+        self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -64,7 +65,9 @@ class swervemodule(commands2.SubsystemBase):
         return self.turningEncoder.getVelocity()
     
     def getAbsoluteEncoderRad(self) -> float:
-        angle = self.absoluteEncoder.getVoltage() / wpilib.RobotController.getVoltage5V() #? percent of full rotation
+        wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.getAbsolutePosition())
+        # print(self.absoluteEncoder.getAbsolutePosition())
+        angle = self.absoluteEncoder.getAbsolutePosition()  #? percent of full rotation
         angle *= 2 * math.pi #? convert to radians
         angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
         return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
@@ -81,13 +84,33 @@ class swervemodule(commands2.SubsystemBase):
 
     def setDesiredState(self, state:SwerveModuleState):
         #^ this prevents the wheels from resetting their position after every input is made
-        if (abs(state.speed) < 0.001):
-            self.stop()
-            return
+        #https://youtu.be/0Xi9yb1IMyA?t=577
+        # if (abs(state.speed) < 0.001):
+        #     self.stop()
+        #     return
         self.state = SwerveModuleState.optimize(state, self.getState().angle)
-        self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+        # self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+        #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
+        #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
+        #^ given that we don't know the max speed in m/s, nor would it serve us to use that value right now,
+        #^ we can ignore kphysicalMaxSpeedMetersPerSecond here
+        self.drivingMotor.set(self.state.speed)
+        self.sd.putNumber(f"speed", self.state.speed)
+        #! However, given that we do use that variable in other parts of the code,
+        #! it would serve us to either calculate the max swerve velocity at 100% or take it from the 
+        #! WCP page https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options/custom-gear-ratios#possible-gear-ratios-non-flipped
+        
+        self.sd.putString(f"drivingMotorSetFunction", f"{self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians())}")
+
+        #^ from looking at the code, I wouldn't be surprised if the getTurningPosition function is off,
+        #^ or the pid P value is off, self.state.angle.radians() is as expected
         self.turningMotor.set(self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))
-        self.sd.putString(f"Swerve[{self.absoluteEncoder.getChannel}] state", str(self.state))
+            
+
+        # self.sd.putNumber(f"pid output", self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))        
+        # self.sd.putString(f"Optimized state", str(self.state))
+        # self.sd.putString(f"state", str(state))
+
 
     def stop(self):
         self.drivingMotor.set(0)

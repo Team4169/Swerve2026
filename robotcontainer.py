@@ -27,6 +27,7 @@ import photonvision
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 from commands.testcommands.move4modules import move4modules
+from commands.testcommands.MoveInACircle import MoveInACircle
 
 
 class RobotContainer:
@@ -72,8 +73,7 @@ class RobotContainer:
             ))
         self.configureButtonBindings()
 
-    
-        
+   
         self.chooser = wpilib.SendableChooser()
 
         # self.chooser.setDefaultOption("cubeAuto", self.cubeToBalance )
@@ -111,6 +111,43 @@ class RobotContainer:
             self.trajectoryConfig
         )
 
+        #make the robot go in a octagon
+        self.octagonTrajectory = TrajectoryGenerator.generateTrajectory(
+            # ? initial location and rotation
+            Pose2d(0, 0, Rotation2d(0)),
+            [
+                # ? points we want to hit
+                Translation2d(1, 0),
+                Translation2d(2, 1),
+                Translation2d(2, 2),
+                Translation2d(1, 3),
+                Translation2d(0, 3),
+                Translation2d(-1, 2),
+                Translation2d(-1, 1),
+                
+            ],
+            # ? final location and rotation
+            Pose2d(0, 0, Rotation2d(180)),
+            self.trajectoryConfig
+        )
+        # #make the robot go to an april tag
+        # self.angle = 0 #make sure to use a radian angle here
+        # self.distance = 0
+        # self.aprilTagTrajectory = TrajectoryGenerator.generateTrajectory(
+        #     # ? initial location and rotation
+        #     Pose2d(0,0, Rotation2d(0)),
+        #     [
+        #         # ? points we want to hit
+        #         #april tag infront of the robot is 0 degrees
+        #         #this is in radians
+        #         Translation2d(self.distance*math.sin(self.angle * 180 / math.pi), self.distance*math.cos(self.angle * 180 / math.pi)),
+                
+        #     ],
+        #     # ? final location and rotation
+        #     Pose2d(0, 0, Rotation2d(180)),
+        #     self.trajectoryConfig
+        # )
+
         # 3. Create PIdControllers to correct and track trajectory
         self.xController = PIDController(AutoConstants.kPXController, 0, 0)
         self.yController = PIDController(AutoConstants.kPYController, 0, 0)
@@ -138,8 +175,9 @@ class RobotContainer:
         self.move1module = move1module(self.swerve)
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
+        self.MoveInACircle = MoveInACircle(self.swerve)
 
-        return self.move4modules
+        return self.move1module
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
