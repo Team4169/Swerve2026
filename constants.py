@@ -24,9 +24,9 @@ class OIConstants:
 #~ robot specifications
 class RobotConstants:
         
-    kTrackWidth = UtilCommands.inchesToMeters(30) #todo: find the actual track width 
+    kTrackWidth = UtilCommands.inchesToMeters(20) #found with measuring tape
         # ? Distance between the right and left wheels
-    kWheelBase = UtilCommands.inchesToMeters(30) #todo: find the actual wheel base
+    kWheelBase = UtilCommands.inchesToMeters(20) #todo: find the actual wheel base
         # ? Distance between the front and back wheels
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(kTrackWidth / 2, kWheelBase / 2), #frontleft
@@ -57,21 +57,23 @@ class RobotConstants:
     frontRightAbsoluteEncoderOffset = 0
     frontRightAbsoluteEncoderReversed = False
 
-    backLeftDrivingMotorID = 3
-    backLeftTurningMotorID = 33
+    backRightDrivingMotorID = 3
+    backRightTurningMotorID = 33
+    backRightDrivingMotorReversed = False
+    backRightTurningMotorReversed = False
+    backRightAbsoluteEncoderId = 3
+    backRightAbsoluteEncoderOffset = 0
+    backRightAbsoluteEncoderReversed = False
+    
+    backLeftDrivingMotorID = 4
+    backLeftTurningMotorID = 44
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
-    backLeftAbsoluteEncoderId = 3
+    backLeftAbsoluteEncoderId = 4
     backLeftAbsoluteEncoderOffset = 0
     backLeftAbsoluteEncoderReversed = False
 
-    backRightDrivingMotorID = 4
-    backRightTurningMotorID = 44
-    backRightDrivingMotorReversed = False
-    backRightTurningMotorReversed = False
-    backRightAbsoluteEncoderId = 4
-    backRightAbsoluteEncoderOffset = 0
-    backRightAbsoluteEncoderReversed = False
+    
 
     kPhysicalMaxAngularSpeedRadiansPerSecond  = 2 * 2 * math.pi
     kphysicalMaxSpeedMetersPerSecond = 1 

@@ -40,7 +40,7 @@ class RobotContainer:
 
     def __init__(self) -> None:
         
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort) # can also use ps4 controller (^v^)
+        self.driverController = wpilib.PS4Controller(OIConstants.kDriverControllerPort) # can also use ps4 controller (^v^)
         self.operatorController = wpilib.XboxController(OIConstants.kArmControllerPort)
 
         #Arm motor controllers
@@ -65,11 +65,8 @@ class RobotContainer:
         self.swerve = SwerveSubsystem()
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
-                self.swerve,
-                self.driverController.getLeftY(),
-                self.driverController.getLeftX(),
-                self.driverController.getRightX(),
-                not self.driverController.getLeftBumperPressed()
+                swerve=self.swerve,
+                driverController = self.driverController
             ))
         self.configureButtonBindings()
 
@@ -90,88 +87,88 @@ class RobotContainer:
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
         """Returns the autonomous command to run"""
-        # 1. Create Trajectory settings
-        self.trajectoryConfig = TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        self.trajectoryConfig.setKinematics(RobotConstants.kDriveKinematics)
+        # # 1. Create Trajectory settings
+        # self.trajectoryConfig = TrajectoryConfig(
+        #     AutoConstants.kMaxSpeedMetersPerSecond,
+        #     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        # self.trajectoryConfig.setKinematics(RobotConstants.kDriveKinematics)
 
-        # 2. Generate Trajectory
-        self.trajectory = TrajectoryGenerator.generateTrajectory(
-            # ? initial location and rotation
-            Pose2d(0, 0, Rotation2d(0)),
-            [
-                # ? points we want to hit
-                Translation2d(1, 0),
-                Translation2d(1, 1),
-                Translation2d(0, 1),
-            ],
-            # ? final location and rotation
-            Pose2d(0, 0, Rotation2d(180)),
-            self.trajectoryConfig
-        )
-
-        #make the robot go in a octagon
-        self.octagonTrajectory = TrajectoryGenerator.generateTrajectory(
-            # ? initial location and rotation
-            Pose2d(0, 0, Rotation2d(0)),
-            [
-                # ? points we want to hit
-                Translation2d(1, 0),
-                Translation2d(2, 1),
-                Translation2d(2, 2),
-                Translation2d(1, 3),
-                Translation2d(0, 3),
-                Translation2d(-1, 2),
-                Translation2d(-1, 1),
-                
-            ],
-            # ? final location and rotation
-            Pose2d(0, 0, Rotation2d(180)),
-            self.trajectoryConfig
-        )
-        # #make the robot go to an april tag
-        # self.angle = 0 #make sure to use a radian angle here
-        # self.distance = 0
-        # self.aprilTagTrajectory = TrajectoryGenerator.generateTrajectory(
+        # # 2. Generate Trajectory
+        # self.trajectory = TrajectoryGenerator.generateTrajectory(
         #     # ? initial location and rotation
-        #     Pose2d(0,0, Rotation2d(0)),
+        #     Pose2d(0, 0, Rotation2d(0)),
         #     [
         #         # ? points we want to hit
-        #         #april tag infront of the robot is 0 degrees
-        #         #this is in radians
-        #         Translation2d(self.distance*math.sin(self.angle * 180 / math.pi), self.distance*math.cos(self.angle * 180 / math.pi)),
-                
+        #         Translation2d(1, 0),
+        #         Translation2d(1, 1),
+        #         Translation2d(0, 1),
         #     ],
         #     # ? final location and rotation
         #     Pose2d(0, 0, Rotation2d(180)),
         #     self.trajectoryConfig
         # )
 
-        # 3. Create PIdControllers to correct and track trajectory
-        self.xController = PIDController(AutoConstants.kPXController, 0, 0)
-        self.yController = PIDController(AutoConstants.kPYController, 0, 0)
-        self.thetaController = ProfiledPIDControllerRadians(
-            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints)
-        self.thetaController.enableContinuousInput(-math.pi, math.pi)
+        # #make the robot go in a octagon
+        # self.octagonTrajectory = TrajectoryGenerator.generateTrajectory(
+        #     # ? initial location and rotation
+        #     Pose2d(0, 0, Rotation2d(0)),
+        #     [
+        #         # ? points we want to hit
+        #         Translation2d(1, 0),
+        #         Translation2d(2, 1),
+        #         Translation2d(2, 2),
+        #         Translation2d(1, 3),
+        #         Translation2d(0, 3),
+        #         Translation2d(-1, 2),
+        #         Translation2d(-1, 1),
+                
+        #     ],
+        #     # ? final location and rotation
+        #     Pose2d(0, 0, Rotation2d(180)),
+        #     self.trajectoryConfig
+        # )
+        # # #make the robot go to an april tag
+        # # self.angle = 0 #make sure to use a radian angle here
+        # # self.distance = 0
+        # # self.aprilTagTrajectory = TrajectoryGenerator.generateTrajectory(
+        # #     # ? initial location and rotation
+        # #     Pose2d(0,0, Rotation2d(0)),
+        # #     [
+        # #         # ? points we want to hit
+        # #         #april tag infront of the robot is 0 degrees
+        # #         #this is in radians
+        # #         Translation2d(self.distance*math.sin(self.angle * 180 / math.pi), self.distance*math.cos(self.angle * 180 / math.pi)),
+                
+        # #     ],
+        # #     # ? final location and rotation
+        # #     Pose2d(0, 0, Rotation2d(180)),
+        # #     self.trajectoryConfig
+        # # )
 
-        # 4. Construct command to follow trajectory
-        self.swerveControllerCommand = Swerve4ControllerCommand(
-            self.trajectory,
-            self.swerve.getPose,
-            RobotConstants.kDriveKinematics,
-            self.xController,
-            self.yController,
-            self.thetaController,
-            self.swerve.setModuleStates,
-            [self.swerve]
-        )
-        # 5. Add some init and wrap up, and return command 
-        self.square = commands2.SequentialCommandGroup(
-            commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose())),
-            self.swerveControllerCommand,
-            commands2.InstantCommand(lambda:self.swerve.stopModules())
-        )
+        # # 3. Create PIdControllers to correct and track trajectory
+        # self.xController = PIDController(AutoConstants.kPXController, 0, 0)
+        # self.yController = PIDController(AutoConstants.kPYController, 0, 0)
+        # self.thetaController = ProfiledPIDControllerRadians(
+        #     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints)
+        # self.thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        # # 4. Construct command to follow trajectory
+        # self.swerveControllerCommand = Swerve4ControllerCommand(
+        #     self.trajectory,
+        #     self.swerve.getPose,
+        #     RobotConstants.kDriveKinematics,
+        #     self.xController,
+        #     self.yController,
+        #     self.thetaController,
+        #     self.swerve.setModuleStates,
+        #     [self.swerve]
+        # )
+        # # 5. Add some init and wrap up, and return command 
+        # self.square = commands2.SequentialCommandGroup(
+        #     commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose())),
+        #     self.swerveControllerCommand,
+        #     commands2.InstantCommand(lambda:self.swerve.stopModules())
+        # )
         self.move1module = move1module(self.swerve)
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
@@ -182,10 +179,11 @@ class RobotContainer:
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
     def configureButtonBindings(self):
-        (
-        JoystickButton(self.driverController, XboxController.Button.kStart)
-        .whenPressed(lambda: self.swerve.zeroHeading())
-        )
+        # (
+        # JoystickButton(self.driverController, XboxController.Button.kStart)
+        # .whenPressed(lambda: self.swerve.zeroHeading())
+        # )
+        pass
         #Old way of Assigning Buttons
             # Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
             # Joystick.button(self.driverController, )
