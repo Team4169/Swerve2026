@@ -3,21 +3,23 @@ from constants import OIConstants, RobotConstants
 from wpimath.filter import SlewRateLimiter
 from commands2 import CommandBase 
 from wpilib import PS4Controller
+from wpilib import XboxController
+
 from subsystems.swervesubsystem import SwerveSubsystem
 from wpimath.kinematics import ChassisSpeeds
 
 class SwerveJoystickCmd(CommandBase):
 
-    def __init__(self, swerve: SwerveSubsystem, driverController:PS4Controller):
+    def __init__(self, swerve: SwerveSubsystem, driverController:XboxController):
         super().__init__()
         self.swerve = swerve
         self.driverController = driverController
         self.addRequirements(self.swerve)
 
         # create Slew limiter
-        self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationUnitsPerSec)
-        self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationUnitsPerSec)
-        self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAngularAccelerationUnitsPerSec)
+        self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
+        self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
+        self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared)
 
 
 

@@ -40,7 +40,7 @@ class RobotContainer:
 
     def __init__(self) -> None:
         
-        self.driverController = wpilib.PS4Controller(OIConstants.kDriverControllerPort) # can also use ps4 controller (^v^)
+        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort) # can also use ps4 controller (^v^)
         self.operatorController = wpilib.XboxController(OIConstants.kArmControllerPort)
 
         #Arm motor controllers

@@ -88,23 +88,21 @@ class swervemodule(commands2.SubsystemBase):
         # if (abs(state.speed) < 0.001):
         #     self.stop()
         #     return
+
         self.state = SwerveModuleState.optimize(state, self.getState().angle)
         # self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
         #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
-        #^ given that we don't know the max speed in m/s, nor would it serve us to use that value right now,
-        #^ we can ignore kphysicalMaxSpeedMetersPerSecond here
+        #^ given that we don't know the max speed in m/s, I think we can do everything in terms of percentage ( -1, 1) right now,
+        #^ untill we can accurately measure position and as a result, velocity, and acceleration
+        #! make sure that driving position is accurate, then make sure driving velocity is accurate
+        #! same for turning, get values of maxSpeedMetersPerSecond, maxAccel
         self.drivingMotor.set(self.state.speed)
-        self.sd.putNumber(f"speed", self.state.speed)
-        #! However, given that we do use that variable in other parts of the code,
-        #! it would serve us to either calculate the max swerve velocity at 100% or take it from the 
-        #! WCP page https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options/custom-gear-ratios#possible-gear-ratios-non-flipped
-        
-        self.sd.putString(f"drivingMotorSetFunction", f"{self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians())}")
+        self.sd.putNumber(f"speed", state.speed)
+        # print(state.speed)
 
-        #^ from looking at the code, I wouldn't be surprised if the getTurningPosition function is off,
-        #^ or the pid P value is off, self.state.angle.radians() is as expected
-        self.turningMotor.set(self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))
+      
+        self.turningMotor.set(self.turningPIDController.calculate(self.getTurningPostion(), state.angle.radians()))
             
 
         # self.sd.putNumber(f"pid output", self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))        

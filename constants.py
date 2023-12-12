@@ -74,21 +74,22 @@ class RobotConstants:
     backLeftAbsoluteEncoderReversed = False
 
     
-
+    #what is the fastest speed  rotationally our robot can go
     kPhysicalMaxAngularSpeedRadiansPerSecond  = 2 * 2 * math.pi
+    #what is the fastest speed laterally our robot can go
     kphysicalMaxSpeedMetersPerSecond = 1 
     #! This value seems to be the max swerve speed in MPS,
     #! it would serve us to either calculate the max swerve velocity at 100% or take it from the 
     #! WCP page https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options/custom-gear-ratios#possible-gear-ratios-non-flipped
     #^ the above constant is needed to normalize wheel speeds in the case that a speed value above the max is 
-    #^ trying to be passed into the setmodulestates function, this will likely not be done manually
-    #^ but occur in code at some point
+    #^ trying to be passed into the setmodulestates function, also needed for SlewRateLimiter
 
-    kTeleopDriveMaxAccelerationUnitsPerSec = 1 # ? 0 to 1, represents move restriciton
-    kTeleopDriveMaxAngularAccelerationUnitsPerSec = 1
+    kTeleopDriveMaxAccelerationMetersPerSecSquared = 1 
+    kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = 1
 
-    kTeleopDriveMaxSpeedMetersPerSecond = 12 
-    kTeleopDriveMaxAngularSpeedRadiansPerSecond = 12
+    #what is the max speed we allow teleop driver to move laterally
+    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
     
 
