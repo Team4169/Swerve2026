@@ -98,7 +98,6 @@ class swervemodule(commands2.SubsystemBase):
         #! make sure that driving position is accurate, then make sure driving velocity is accurate
         #! same for turning, get values of maxSpeedMetersPerSecond, maxAccel
         self.drivingMotor.set(self.state.speed)
-        self.sd.putNumber(f"speed", state.speed)
         # print(state.speed)
 
       

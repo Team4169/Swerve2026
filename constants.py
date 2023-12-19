@@ -19,7 +19,7 @@ class FildConstants:
 class OIConstants:
     kDriverControllerPort = 0
     kArmControllerPort = 1
-    deadzone = .1
+    deadzone = .12 
 
 #~ robot specifications
 class RobotConstants:
@@ -44,15 +44,15 @@ class RobotConstants:
     frontLeftDrivingMotorID = 1
     frontLeftTurningMotorID = 11
     frontLeftDrivingMotorReversed = False
-    frontLeftTurningMotorReversed = False
+    frontLeftTurningMotorReversed = True
     frontLeftAbsoluteEncoderId = 1 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = 0
+    frontLeftAbsoluteEncoderOffset = .828 -.1 #.728
     frontLeftAbsoluteEncoderReversed = False
 
     frontRightDrivingMotorID = 2
     frontRightTurningMotorID = 22
     frontRightDrivingMotorReversed = False
-    frontRightTurningMotorReversed = False
+    frontRightTurningMotorReversed = True
     frontRightAbsoluteEncoderId = 2
     frontRightAbsoluteEncoderOffset = 0
     frontRightAbsoluteEncoderReversed = False
@@ -60,17 +60,17 @@ class RobotConstants:
     backRightDrivingMotorID = 3
     backRightTurningMotorID = 33
     backRightDrivingMotorReversed = False
-    backRightTurningMotorReversed = False
+    backRightTurningMotorReversed = True
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = 0
+    backRightAbsoluteEncoderOffset = .25
     backRightAbsoluteEncoderReversed = False
     
     backLeftDrivingMotorID = 4
     backLeftTurningMotorID = 44
     backLeftDrivingMotorReversed = False
-    backLeftTurningMotorReversed = False
+    backLeftTurningMotorReversed = True
     backLeftAbsoluteEncoderId = 4
-    backLeftAbsoluteEncoderOffset = 0
+    backLeftAbsoluteEncoderOffset = 5.571
     backLeftAbsoluteEncoderReversed = False
 
     
@@ -88,8 +88,8 @@ class RobotConstants:
     kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = 1
 
     #what is the max speed we allow teleop driver to move laterally
-    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
-    kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
+    kTeleopDriveMaxSpeedMetersPerSecond = .25 #kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxAngularSpeedRadiansPerSecond = .25 #kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
     
 
@@ -111,7 +111,7 @@ class ModuleConstants:
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60 
 
-    kPTurning = .5 #? turning PID controller per wheel
+    kPTurning = .2 #? turning PID controller per wheel
 
 
 # ~ Auto Constants

@@ -11,9 +11,9 @@
       "maximized": "0",
       "style": "1",
       "userScale": "2",
-      "width": "1920",
-      "xpos": "-537",
-      "ypos": "133"
+      "width": "1918",
+      "xpos": "1",
+      "ypos": "45"
     }
   },
   "Table": {
@@ -33,12 +33,12 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "35,573",
-      "Size": "32,38"
+      "Size": "336,164"
     },
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "381,770",
-      "Size": "32,38"
+      "Size": "976,179"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -54,12 +54,12 @@
     "###System Joysticks": {
       "Collapsed": "0",
       "Pos": "16,260",
-      "Size": "32,38"
+      "Size": "232,254"
     },
     "###Timing": {
       "Collapsed": "0",
       "Pos": "40,766",
-      "Size": "32,38"
+      "Size": "162,168"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -69,7 +69,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "21,60",
-      "Size": "32,38"
+      "Size": "109,114"
     }
   }
 }

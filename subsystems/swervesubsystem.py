@@ -49,8 +49,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
         
-        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
-        #!uncomment after NAVX is reattached
+        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it
         self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModuleStatesOld())
@@ -78,8 +77,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
             pass
         
     def getHeading(self):
-        #!uncomment after NAVX is reattached
-        return  1 #math.remainder(self.gyro.getAngle(), 360)
+        return  math.remainder(self.gyro.getAngle(), 360)
         
     
     def getRotation2d(self) -> Rotation2d:
@@ -106,23 +104,27 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def setModuleStates(self, states: list[SwerveModuleState]):
         SwerveDrive4Kinematics.desaturateWheelSpeeds(tuple(states), RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         self.frontLeft.setDesiredState(states[0])
+        self.sd.putNumber(f"FL speed", states[0].speed)
         self.frontRight.setDesiredState(states[1])
+        self.sd.putNumber(f"FR speed", states[1].speed)
         self.backLeft.setDesiredState(states[2])
+        self.sd.putNumber(f"BL speed", states[2].speed)
         self.backRight.setDesiredState(states[3])
+        self.sd.putNumber(f"BR speed", states[3].speed)
     
     def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
         return (
-                self.frontRight.getSwerveModulePosition(),
-                self.backRight.getSwerveModulePosition(),
                 self.frontLeft.getSwerveModulePosition(),
-                self.backLeft.getSwerveModulePosition()
+                self.frontRight.getSwerveModulePosition(),
+                self.backLeft.getSwerveModulePosition(),
+                self.backRight.getSwerveModulePosition()
                 )
     def getModuleStatesOld(self) -> tuple[SwerveModulePosition, SwerveModulePosition,SwerveModulePosition,SwerveModulePosition]:
         return (
-                SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
-                SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())),
                 SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
-                SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad()))
+                SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
+                SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
+                SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
                 )
     def periodic(self) -> None:
         self.sd.putNumber("Gyro", self.getHeading())

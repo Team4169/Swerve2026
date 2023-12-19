@@ -56,15 +56,31 @@ class MyRobot(commands2.TimedCommandRobot):
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
         # self.testabsoluteEncoder = wpilib.DutyCycleEncoder(5)
+        self.swerve.frontRight.resetEncoders()
+        self.swerve.frontLeft.resetEncoders()
+        self.swerve.backLeft.resetEncoders()
+        self.swerve.backRight.resetEncoders()
+
 
 
     def disabledPeriodic(self) -> None:
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
         # print(self.testabsoluteEncoder.getAbsolutePosition())
-
+        
         # print(self.swerve.frontRight.getTurningPostion())
-        # self.sd.putNumber(f"turning Velocity", self.swerve.frontLeft.getDrivingVelocity())
+        
+        self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+
+        self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
+        self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
+        self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
+        self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
+
+        self.sd.putString("states", str(self.swerve.getModuleStates()))
 
 
     def autonomousInit(self) -> None:
@@ -110,13 +126,20 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopPeriodic(self):
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
-            #make a function that constantly updates robot pose/gyro based on apriltags
-            #updatelocaiton()
+            self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+
+            self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
+            self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
+            self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
+            self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
             pass
         except:
             if not self.ds.isFMSAttached():
                 raise
-
+        
 
         # print(wpilib.DriverStation.getAlliance())
 
@@ -148,6 +171,10 @@ class MyRobot(commands2.TimedCommandRobot):
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
+        self.swerve.frontRight.resetEncoders()
+        self.swerve.frontLeft.resetEncoders()
+        self.swerve.backLeft.resetEncoders()
+        self.swerve.backRight.resetEncoders()
     
     def sendLEDCommand(self, command, isRedAlliance = None):
             # send the specified command to the LEDserver
