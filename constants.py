@@ -43,35 +43,35 @@ class RobotConstants:
 
     frontLeftDrivingMotorID = 1
     frontLeftTurningMotorID = 11
-    frontLeftDrivingMotorReversed = False
-    frontLeftTurningMotorReversed = True
+    frontLeftDrivingMotorReversed = True
+    frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 1 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = .828 -.1 #.728
-    frontLeftAbsoluteEncoderReversed = False
+    frontLeftAbsoluteEncoderOffset = .5 * math.pi -.728
+    frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 2
     frontRightTurningMotorID = 22
-    frontRightDrivingMotorReversed = False
-    frontRightTurningMotorReversed = True
+    frontRightDrivingMotorReversed = True
+    frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 2
-    frontRightAbsoluteEncoderOffset = 0
-    frontRightAbsoluteEncoderReversed = False
+    frontRightAbsoluteEncoderOffset = 2 * math.pi
+    frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 3
     backRightTurningMotorID = 33
-    backRightDrivingMotorReversed = False
-    backRightTurningMotorReversed = True
+    backRightDrivingMotorReversed = True
+    backRightTurningMotorReversed = False 
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = .25
-    backRightAbsoluteEncoderReversed = False
+    backRightAbsoluteEncoderOffset = .25 + 2* math.pi #.25
+    backRightAbsoluteEncoderReversed = True
     
     backLeftDrivingMotorID = 4
     backLeftTurningMotorID = 44
-    backLeftDrivingMotorReversed = False
-    backLeftTurningMotorReversed = True
+    backLeftDrivingMotorReversed = True
+    backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 4
     backLeftAbsoluteEncoderOffset = 5.571
-    backLeftAbsoluteEncoderReversed = False
+    backLeftAbsoluteEncoderReversed = True
 
     
     #what is the fastest speed  rotationally our robot can go
