@@ -15,7 +15,6 @@ class SwerveJoystickCmd(CommandBase):
         self.swerve = swerve
         self.driverController = driverController
         self.addRequirements(self.swerve)
-
         # create Slew limiter
         self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
         self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
@@ -53,10 +52,12 @@ class SwerveJoystickCmd(CommandBase):
         
 
         # if self.feildOriented:
-        #     chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 
-        #                                                          self.zRotation, self.swerve.getRotation2d())
+        chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 
+                                                            self.zRotation, self.swerve.getRotation2d())
+        
         # else:
-        chasisSpeeds = ChassisSpeeds(self.xSpeed, self.ySpeed, self.zRotation)
+        # If robotOrinted is desired (But what's the fun in that?)
+        #     chasisSpeeds = ChassisSpeeds(self.xSpeed, self.ySpeed, self.zRotation)
 
         # 3. convert chasis speeds to module states
         moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)

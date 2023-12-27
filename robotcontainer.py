@@ -179,10 +179,10 @@ class RobotContainer:
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
     def configureButtonBindings(self):
-        # (
-        # JoystickButton(self.driverController, XboxController.Button.kStart)
-        # .whenPressed(lambda: self.swerve.zeroHeading())
-        # )
+        (
+        JoystickButton(self.driverController, XboxController.Button.kStart)
+        .whenPressed(lambda: self.swerve.zeroHeading())
+        )
         pass
         #Old way of Assigning Buttons
             # Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
