@@ -27,7 +27,7 @@ class SwerveJoystickCmd(CommandBase):
         pass
     
     def execute(self):
-        self.xSpeed = -self.driverController.getLeftX() * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.xSpeed = self.driverController.getLeftX() * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.driverController.getLeftY() * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.zRotation = self.driverController.getRightX()
 
@@ -60,6 +60,22 @@ class SwerveJoystickCmd(CommandBase):
 
         # 3. convert chasis speeds to module states
         moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
+        self.swerve.sd.putNumber("ExpectedFL", float(moduleStates[0].angle.degrees()))
+        self.swerve.sd.putNumber("ExpectedFR", float(moduleStates[1].angle.degrees()))
+        self.swerve.sd.putNumber("ExpectedBL", float(moduleStates[2].angle.degrees()))
+        self.swerve.sd.putNumber("ExpectedBR", float(moduleStates[3].angle.degrees()))
+
+        self.swerve.sd.putNumber("ExpectedSpeedFL", float(moduleStates[0].speed))
+        self.swerve.sd.putNumber("ExpectedSpeedFR", float(moduleStates[1].speed))
+        self.swerve.sd.putNumber("ExpectedSpeedBL", float(moduleStates[2].speed))
+        self.swerve.sd.putNumber("ExpectedSpeedBR", float(moduleStates[3].speed))
+
+
+        self.swerve.sd.putNumber("ActualFL", float(self.swerve.getModuleStates()[0].angle.degrees()))
+        self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
+
 
         self.swerve.setModuleStates(moduleStates)
         

@@ -103,13 +103,13 @@ class SwerveSubsystem (commands2.SubsystemBase):
 
     def setModuleStates(self, states: list[SwerveModuleState]):
         SwerveDrive4Kinematics.desaturateWheelSpeeds(tuple(states), RobotConstants.kphysicalMaxSpeedMetersPerSecond)
-        self.frontLeft.setDesiredState(states[0])
+        self.frontLeft.setDesiredState(states[3])
         self.sd.putNumber(f"FL speed", states[0].speed)
         self.frontRight.setDesiredState(states[1])
         self.sd.putNumber(f"FR speed", states[1].speed)
         self.backLeft.setDesiredState(states[2])
         self.sd.putNumber(f"BL speed", states[2].speed)
-        self.backRight.setDesiredState(states[3])
+        self.backRight.setDesiredState(states[0])
         self.sd.putNumber(f"BR speed", states[3].speed)
     
     def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
@@ -129,10 +129,10 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def periodic(self) -> None:
         self.sd.putNumber("Gyro", self.getHeading())
         self.odometer.update(self.getRotation2d(), 
-                            SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
-                            SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())),
                             SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
-                            SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad()))
+                            SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
+                            SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
+                            SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
                             )
         self.sd.putString("Robot Odometer", str(self.getModuleStatesOld()))
         self.sd.putString("Robot Location, x", str(self.getPose().X()))

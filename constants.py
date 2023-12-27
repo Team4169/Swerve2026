@@ -62,7 +62,7 @@ class RobotConstants:
     backRightDrivingMotorReversed = True
     backRightTurningMotorReversed = False 
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = .25 + 2* math.pi #.25
+    backRightAbsoluteEncoderOffset = .25#.25
     backRightAbsoluteEncoderReversed = True
     
     backLeftDrivingMotorID = 4
