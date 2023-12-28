@@ -29,10 +29,11 @@ class RobotConstants:
     kWheelBase = UtilCommands.inchesToMeters(20) #todo: find the actual wheel base
         # ? Distance between the front and back wheels
     kDriveKinematics = SwerveDrive4Kinematics(
-        Translation2d(kTrackWidth / 2, kWheelBase / 2), #frontleft
-        Translation2d(kTrackWidth / 2, -kWheelBase / 2), #frontRight
-        Translation2d(-kTrackWidth / 2, kWheelBase / 2), #backLeft
-        Translation2d(-kTrackWidth / 2, -kWheelBase / 2), # backRight
+        Translation2d(-kTrackWidth / 2, -kWheelBase / 2), #Front Left       
+        Translation2d(kTrackWidth / 2, -kWheelBase / 2), #Front Right
+        Translation2d(-kTrackWidth / 2, kWheelBase / 2), #Back Left
+        Translation2d(kTrackWidth / 2, kWheelBase / 2), #Back Right
+
         # ? location of each swerve module relative to the center of the robot
     )
     kFrontLeftWheelPosition = Translation2d(kTrackWidth / 2, kWheelBase / 2)
