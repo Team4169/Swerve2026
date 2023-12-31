@@ -13,7 +13,7 @@ from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
 import robotpy_apriltag
-import time
+from wpilib import Timer
 
 # -----------------
 # code adopted from FRC 0 to Autonomous: #6 Swerve Drive Auto (https://www.youtube.com/watch?v=0Xi9yb1IMyA)
@@ -67,20 +67,24 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
         # print(self.testabsoluteEncoder.getAbsolutePosition())
-        
+                
         # print(self.swerve.frontRight.getTurningPostion())
-        
-        self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
-        self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
-        self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
-        self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+        # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+        # self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+        # self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+        # self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
 
-        self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
-        self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
-        self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
-        self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
+        # self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
+        # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
+        # self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
+        # self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
 
-        self.sd.putString("states", str(self.swerve.getModuleStates()))
+        # self.swerve.sd.putNumber("ActualFL", float(self.swerve.getModuleStates()[0].angle.degrees()))
+        # self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
+        # self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
+        # self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
+
+            
 
 
     def autonomousInit(self) -> None:
@@ -119,23 +123,46 @@ class MyRobot(commands2.TimedCommandRobot):
         # this line or comment it out.
         if self.AutonomousCommand:
             self.AutonomousCommand.cancel()
-
+        
         # print("Starting teleop...")
         self.speed = 0
 
+        self.swerve.frontLeft.drivingEncoder.setPosition(0)
+        self.swerve.frontRight.drivingEncoder.setPosition(0)
+        self.swerve.backLeft.drivingEncoder.setPosition(0)
+        self.swerve.backRight.drivingEncoder.setPosition(0)
+
     def teleopPeriodic(self):
+        self.swerve.frontRight.resetEncoders()
+        self.swerve.frontLeft.resetEncoders()
+        self.swerve.backLeft.resetEncoders()
+        self.swerve.backRight.resetEncoders()
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
-            self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+            # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+            # self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+            # self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+            # self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
 
-            self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
-            self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
-            self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
-            self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
-            pass
+            # self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
+            # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
+            # self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
+            # self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
+            print(Timer.getFPGATimestamp(),  
+                  round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
+                  round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
+                  round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
+            self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
+            self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
+            self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())
+            self.sd.putNumber("Module Position (BR)", self.swerve.backRight.getDrivingPosition())
+
+            self.sd.putNumber("Module Velocity (FL)", self.swerve.frontLeft.getDrivingVelocity())
+            self.sd.putNumber("Module Velocity (FR)", self.swerve.frontRight.getDrivingVelocity())
+            self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
+            self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
+
+            
         except:
             if not self.ds.isFMSAttached():
                 raise
@@ -175,6 +202,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
+    def testPeriodic(self) -> None:
+        pass
+            
     
     def sendLEDCommand(self, command, isRedAlliance = None):
             # send the specified command to the LEDserver

@@ -24,6 +24,8 @@ class OIConstants:
 #~ robot specifications
 class RobotConstants:
         
+    kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
+
     kTrackWidth = UtilCommands.inchesToMeters(20) #found with measuring tape
         # ? Distance between the right and left wheels
     kWheelBase = UtilCommands.inchesToMeters(20) #todo: find the actual wheel base
@@ -75,22 +77,19 @@ class RobotConstants:
     backLeftAbsoluteEncoderReversed = True
 
     
-    #what is the fastest speed  rotationally our robot can go
-    kPhysicalMaxAngularSpeedRadiansPerSecond  = 2 * 2 * math.pi
+    
     #what is the fastest speed laterally our robot can go
-    kphysicalMaxSpeedMetersPerSecond = 1 
-    #! This value seems to be the max swerve speed in MPS,
-    #! it would serve us to either calculate the max swerve velocity at 100% or take it from the 
-    #! WCP page https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options/custom-gear-ratios#possible-gear-ratios-non-flipped
-    #^ the above constant is needed to normalize wheel speeds in the case that a speed value above the max is 
-    #^ trying to be passed into the setmodulestates function, also needed for SlewRateLimiter
-
-    kTeleopDriveMaxAccelerationMetersPerSecSquared = 1 
-    kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = 1
+    kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test current is test based on 1/2 speeds
+    #or maybethrough the max rpm of motors 
+    #what is the fastest speed  rotationally our robot can go
+    kPhysicalMaxAngularSpeedRadiansPerSecond  = kphysicalMaxSpeedMetersPerSecond * 2 / kWheelDiameterMeters #! Find through Current UNKNOWN
+    
+    kTeleopDriveMaxAccelerationMetersPerSecSquared = 3 #* Found through .5 test, should be the same no matter the power
+    kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared * 2 / kWheelDiameterMeters
 
     #what is the max speed we allow teleop driver to move laterally
-    kTeleopDriveMaxSpeedMetersPerSecond = .25 #kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
-    kTeleopDriveMaxAngularSpeedRadiansPerSecond = .25 #kPhysicalMaxAngularSpeedRadiansPerSecond / 2
+    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
     
 
@@ -101,11 +100,11 @@ class RobotConstants:
 class ModuleConstants:
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
-    kDriveMotorGearRatio = 1/6.75 #^placeholder
-    kTurningMotorGearRatio = 1/13 #^13 rotations of the motor = 1 turn of the wheel
+    kDriveMotorGearRatio = 1/6.75 
+    kTurningMotorGearRatio = 1/13.3714 #*found through wcp site https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options#:~:text=35%3A1%20or-,13.3714,-%3A1
 
     kDrivingEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
-    KDrivingEncoderRPM2MeterPerSec = kDrivingEncoderRot2Meter / 60
+    KDrivingEncoderRPM2MeterPerSec = kDrivingEncoderRot2Meter / 60 #* Initially in RPM, converted to Mps
 
     kWheelDistancePerRadian = kDrivingEncoderRot2Meter / (2 * math.pi)
 
@@ -118,8 +117,8 @@ class ModuleConstants:
 # ~ Auto Constants
 
 class AutoConstants:
-        kMaxSpeedMetersPerSecond = .75
-        kMaxAccelerationMetersPerSecondSquared = .75
+        kMaxSpeedMetersPerSecond = RobotConstants.kphysicalMaxSpeedMetersPerSecond / 2
+        kMaxAccelerationMetersPerSecondSquared = 3
         kMaxAngularAccelerationRadiansPerSecondSquared = math.pi / 4
 
         kPXController = 1.0

@@ -76,17 +76,11 @@ class swervemodule(commands2.SubsystemBase):
             return SwerveModulePosition(self.getDrivingPosition(), Rotation2d(self.getAbsoluteEncoderRad()))
 
     def resetEncoders(self):
-        self.drivingEncoder.setPosition(0)
+        # self.drivingEncoder.setPosition(0)
         self.turningEncoder.setPosition(self.getAbsoluteEncoderRad())
 
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(self.getDrivingVelocity(), Rotation2d(self.getTurningPostion()))
-
-    def getAbsEncoderOutput(self):
-        angle = self.absoluteEncoder.getAbsolutePosition()  #? percent of full rotation
-        angle *= 2 * math.pi #? convert to radians
-        angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
-        return self.absoluteEncoder.getAbsolutePosition()
 
     def setDesiredState(self, state:SwerveModuleState):
         #^ this prevents the wheels from resetting their position after every input is made
@@ -96,19 +90,19 @@ class swervemodule(commands2.SubsystemBase):
         #     return
 
         self.state = SwerveModuleState.optimize(state, self.getState().angle)
-        # self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+        self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
         #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
         #^ given that we don't know the max speed in m/s, I think we can do everything in terms of percentage ( -1, 1) right now,
         #^ untill we can accurately measure position and as a result, velocity, and acceleration
         #! make sure that driving position is accurate, then make sure driving velocity is accurate
         #! same for turning, get values of maxSpeedMetersPerSecond, maxAccel
-        self.drivingMotor.set(self.state.speed)
+        # self.drivingMotor.set(self.state.speed)
         # print(state.speed)
 
       
         self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
-            
+            #may or may not be due to the impresise conversion factor or som
 
         # self.sd.putNumber(f"pid output", self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))        
         # self.sd.putString(f"Optimized state", str(self.state))

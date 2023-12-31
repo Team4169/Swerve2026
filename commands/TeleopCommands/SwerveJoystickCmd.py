@@ -18,7 +18,7 @@ class SwerveJoystickCmd(CommandBase):
         # create Slew limiter
         self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
         self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
-        self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared)
+        self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
 
 
 
@@ -26,9 +26,9 @@ class SwerveJoystickCmd(CommandBase):
         pass
     
     def execute(self):
-        self.xSpeed = self.driverController.getLeftX() * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.ySpeed = self.driverController.getLeftY() * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.driverController.getRightX()
+        self.xSpeed = self.driverController.getLeftX() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.ySpeed = self.driverController.getLeftY() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.zRotation = self.driverController.getRightX() 
 
         # 1. Get the joystick values and apply deadzone
         
@@ -39,14 +39,14 @@ class SwerveJoystickCmd(CommandBase):
         self.ySpeed = self.ySpeed if (abs(self.ySpeed) > OIConstants.deadzone) else 0
         self.zRotation = self.zRotation if (abs(self.zRotation) > OIConstants.deadzone) else 0
         
-        self.swerve.sd.putNumber("xSpeed", self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.swerve.sd.putNumber("ySpeed", self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.swerve.sd.putNumber("xSpeed", self.xSpeed) 
+        self.swerve.sd.putNumber("ySpeed", self.ySpeed) 
         self.swerve.sd.putNumber("Zspeed", self.zRotation)
         # # 2. Add rateLimiter to smooth the joystick values
-        # self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        # self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        # self.zRotation = self.zRotLimiter.calculate(self.zRotation) \
-        #             * RobotConstants.kTeleopDriveMaxAngularSpeedRadiansPerSecond
+        self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.zRotation = self.zRotLimiter.calculate(self.zRotation) \
+                    * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         
         
         

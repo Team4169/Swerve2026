@@ -104,13 +104,9 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def setModuleStates(self, states: list[SwerveModuleState]):
         SwerveDrive4Kinematics.desaturateWheelSpeeds(tuple(states), RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         self.frontLeft.setDesiredState(states[0])
-        self.sd.putNumber(f"FL speed", states[0].speed)
         self.frontRight.setDesiredState(states[1])
-        self.sd.putNumber(f"FR speed", states[1].speed)
         self.backLeft.setDesiredState(states[2])
-        self.sd.putNumber(f"BL speed", states[2].speed)
         self.backRight.setDesiredState(states[3])
-        self.sd.putNumber(f"BR speed", states[3].speed)
     
     def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
         return (
