@@ -117,7 +117,7 @@ class ModuleConstants:
 # ~ Auto Constants
 
 class AutoConstants:
-        kMaxSpeedMetersPerSecond = RobotConstants.kphysicalMaxSpeedMetersPerSecond / 2
+        kMaxSpeedMetersPerSecond = RobotConstants.kphysicalMaxSpeedMetersPerSecond / 4
         kMaxAccelerationMetersPerSecondSquared = 3
         kMaxAngularAccelerationRadiansPerSecondSquared = math.pi / 4
 

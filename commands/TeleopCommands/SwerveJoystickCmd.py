@@ -4,7 +4,7 @@ from wpimath.filter import SlewRateLimiter
 from commands2 import CommandBase 
 from wpilib import PS4Controller
 from wpilib import XboxController
-
+import wpimath
 from subsystems.swervesubsystem import SwerveSubsystem
 from wpimath.kinematics import ChassisSpeeds
 
@@ -35,9 +35,9 @@ class SwerveJoystickCmd(CommandBase):
         # print(self.ySpeed)
         # print(self.zRotation)
         
-        self.xSpeed = self.xSpeed if (abs(self.xSpeed) > OIConstants.deadzone) else 0
-        self.ySpeed = self.ySpeed if (abs(self.ySpeed) > OIConstants.deadzone) else 0
-        self.zRotation = self.zRotation if (abs(self.zRotation) > OIConstants.deadzone) else 0
+        self.xSpeed = wpimath.applyDeadband(self.xSpeed, OIConstants.deadzone)
+        self.ySpeed = wpimath.applyDeadband(self.ySpeed, OIConstants.deadzone)
+        self.zRotation = wpimath.applyDeadband(self.zRotation, OIConstants.deadzone)
         
         self.swerve.sd.putNumber("xSpeed", self.xSpeed) 
         self.swerve.sd.putNumber("ySpeed", self.ySpeed) 
@@ -45,8 +45,8 @@ class SwerveJoystickCmd(CommandBase):
         # # 2. Add rateLimiter to smooth the joystick values
         self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.zRotLimiter.calculate(self.zRotation) \
-                    * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.zRotation = self.zRotLimiter.calculate(self.zRotation) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond / 0.418480
+        #! Not sure why this is needed, for some reason without it, the robot rotates slower 
         
         
         

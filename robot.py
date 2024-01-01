@@ -148,10 +148,10 @@ class MyRobot(commands2.TimedCommandRobot):
             # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
             # self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
             # self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
-            print(Timer.getFPGATimestamp(),  
-                  round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
-                  round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
-                  round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
+            # print(Timer.getFPGATimestamp(),  
+            #       round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
+            #       round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
+            #       round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
             self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
             self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
             self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())

@@ -3,10 +3,6 @@ from wpilib.interfaces import GenericHID
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
 
-from wpimath.trajectory import TrajectoryConfig, Trajectory, TrajectoryUtil, TrajectoryGenerator, TrajectoryParameterizer
-from wpimath.controller import ProfiledPIDController, PIDController, ProfiledPIDControllerRadians
-
-from commands2 import Swerve4ControllerCommand
 
 import ntcore, rev, ctre, commands2
 import commands2.button
@@ -28,7 +24,7 @@ from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 from commands.testcommands.move4modules import move4modules
 from commands.testcommands.MoveInACircle import MoveInACircle
-
+from commands.AutonCommands.sCurve import sCurve
 
 class RobotContainer:
     """
@@ -87,26 +83,7 @@ class RobotContainer:
         self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
         """Returns the autonomous command to run"""
-        # # 1. Create Trajectory settings
-        # self.trajectoryConfig = TrajectoryConfig(
-        #     AutoConstants.kMaxSpeedMetersPerSecond,
-        #     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        # self.trajectoryConfig.setKinematics(RobotConstants.kDriveKinematics)
-
-        # # 2. Generate Trajectory
-        # self.trajectory = TrajectoryGenerator.generateTrajectory(
-        #     # ? initial location and rotation
-        #     Pose2d(0, 0, Rotation2d(0)),
-        #     [
-        #         # ? points we want to hit
-        #         Translation2d(1, 0),
-        #         Translation2d(1, 1),
-        #         Translation2d(0, 1),
-        #     ],
-        #     # ? final location and rotation
-        #     Pose2d(0, 0, Rotation2d(180)),
-        #     self.trajectoryConfig
-        # )
+        
 
         # #make the robot go in a octagon
         # self.octagonTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -145,36 +122,12 @@ class RobotContainer:
         # #     self.trajectoryConfig
         # # )
 
-        # # 3. Create PIdControllers to correct and track trajectory
-        # self.xController = PIDController(AutoConstants.kPXController, 0, 0)
-        # self.yController = PIDController(AutoConstants.kPYController, 0, 0)
-        # self.thetaController = ProfiledPIDControllerRadians(
-        #     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints)
-        # self.thetaController.enableContinuousInput(-math.pi, math.pi)
-
-        # # 4. Construct command to follow trajectory
-        # self.swerveControllerCommand = Swerve4ControllerCommand(
-        #     self.trajectory,
-        #     self.swerve.getPose,
-        #     RobotConstants.kDriveKinematics,
-        #     self.xController,
-        #     self.yController,
-        #     self.thetaController,
-        #     self.swerve.setModuleStates,
-        #     [self.swerve]
-        # )
-        # # 5. Add some init and wrap up, and return command 
-        # self.square = commands2.SequentialCommandGroup(
-        #     commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose())),
-        #     self.swerveControllerCommand,
-        #     commands2.InstantCommand(lambda:self.swerve.stopModules())
-        # )
         self.move1module = move1module(self.swerve)
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
         self.MoveInACircle = MoveInACircle(self.swerve)
-
-        return self.move1module
+        self.sCurve = sCurve(self.swerve).getCommand()
+        return self.sCurve
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
