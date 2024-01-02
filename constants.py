@@ -10,6 +10,7 @@ from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry._geometry import Translation2d, Pose2d
 from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
 
+import pathplannerlib 
 #~ Field Measurements/targets
 class FildConstants:
     kFieldWidth = UtilCommands.inchesToMeters(27) #2023 charged up change next year
@@ -131,6 +132,15 @@ class AutoConstants:
                 kMaxAngularSpeedRadiansPerSecond,
                 kMaxAngularAccelerationRadiansPerSecondSquared,
         )
+
+        pathFollowerConfig = pathplannerlib.HolonomicPathFollowerConfig( 
+                pathplannerlib.PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+                pathplannerlib.PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
+                kMaxSpeedMetersPerSecond, # Max module speed, in m/s
+                math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
+                pathplannerlib.ReplanningConfig() # Default path replanning config. See the API for the options here
+            )
+
 class sim:
     kSimTargetName = "SimTarget"
     # kSimDefaultTargetLocation = Pose2d(

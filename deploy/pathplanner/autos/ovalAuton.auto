@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2.0,
+      "y": 7.0
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "resetOdometry"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Oval"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopModules"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

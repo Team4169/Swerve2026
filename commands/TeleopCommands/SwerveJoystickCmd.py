@@ -72,11 +72,6 @@ class SwerveJoystickCmd(CommandBase):
         self.swerve.sd.putNumber("ExpectedSpeedBR", float(moduleStates[3].speed))
 
 
-        self.swerve.sd.putNumber("ActualFL", float(self.swerve.getModuleStates()[0].angle.degrees()))
-        self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
-        self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
-        self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
-
 
         self.swerve.setModuleStates(moduleStates)
         

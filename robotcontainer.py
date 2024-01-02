@@ -20,6 +20,8 @@ from subsystems.swervesubsystem import SwerveSubsystem
 import math
 import photonvision
 
+from pathplannerlib.auto import NamedCommands, PathPlannerAuto
+
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 from commands.testcommands.move4modules import move4modules
@@ -64,6 +66,14 @@ class RobotContainer:
                 swerve=self.swerve,
                 driverController = self.driverController
             ))
+        NamedCommands.registerCommand("resetOdometry",
+            commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose()))
+        )
+        NamedCommands.registerCommand("stopModules",
+            commands2.InstantCommand(lambda:self.swerve.stopModules())
+        )
+        
+        
         self.configureButtonBindings()
 
    
@@ -126,6 +136,7 @@ class RobotContainer:
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
         self.MoveInACircle = MoveInACircle(self.swerve)
+        self.oval = PathPlannerAuto("ovalAuton")
         self.sCurve = sCurve(self.swerve).getCommand()
         return self.sCurve
 

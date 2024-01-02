@@ -1,6 +1,6 @@
 from .swervemodule import swervemodule
 import commands2
-from constants import RobotConstants
+from constants import RobotConstants, AutoConstants
 import wpilib
 import navx
 import threading
@@ -10,6 +10,10 @@ from wpimath.geometry import Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics, SwerveDrive4Odometry, SwerveModulePosition, SwerveModuleState
 
 from wpimath.geometry import Pose2d
+
+from pathplannerlib.auto import AutoBuilder
+from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants
+from wpimath.kinematics import ChassisSpeeds
 
 
 class SwerveSubsystem (commands2.SubsystemBase):
@@ -57,7 +61,15 @@ class SwerveSubsystem (commands2.SubsystemBase):
         thread = threading.Thread(target=self.zero_heading_after_delay)
 
         thread.start()
-
+        
+        AutoBuilder.configureHolonomic(
+            self.getPose,
+            self.resetOdometry,
+            self.getChasisSpeeds,
+            self.driveChasisSpeeds,
+            AutoConstants.pathFollowerConfig
+        )
+        
     #~ Gyro Commands
     def zeroHeading(self):
         self.gyro.reset()
@@ -108,13 +120,13 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.backLeft.setDesiredState(states[2])
         self.backRight.setDesiredState(states[3])
     
-    def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
-        return (
-                self.frontLeft.getSwerveModulePosition(),
-                self.frontRight.getSwerveModulePosition(),
-                self.backLeft.getSwerveModulePosition(),
-                self.backRight.getSwerveModulePosition()
-                )
+    # def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
+    #     return (
+    #             self.frontLeft.getSwerveModulePosition(),
+    #             self.frontRight.getSwerveModulePosition(),
+    #             self.backLeft.getSwerveModulePosition(),
+    #             self.backRight.getSwerveModulePosition()
+    #             )
     def getModuleStatesOld(self) -> tuple[SwerveModulePosition, SwerveModulePosition,SwerveModulePosition,SwerveModulePosition]:
         return (
                 SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
@@ -122,6 +134,15 @@ class SwerveSubsystem (commands2.SubsystemBase):
                 SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
                 SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
                 )
+    
+    def getChassisSpeeds(self):
+        return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStatesOld())
+    
+    def driveChassisSpeeds(self, chassisSpeeds: ChassisSpeeds):
+        self.setModuleStates(
+            RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
+        )
+        
     def periodic(self) -> None:
         self.sd.putNumber("Gyro", self.getHeading())
         self.odometer.update(self.getRotation2d(), 

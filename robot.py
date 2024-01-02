@@ -3,7 +3,6 @@ import typing
 import wpilib
 from wpimath.geometry import Rotation2d 
 import commands2
-import ctre
 import math
 import constants
 from constants import ModuleConstants
