@@ -38,7 +38,3 @@ class ShooterSubsystem(commands2.SubsystemBase):
     
     def setShooterAngle(self, theta) -> None:
         self.rotatingMotor.set(self.shooterAnglePIDController.calculate(self.rotatingMotorDegrees, theta))
-
-
-
-#hellothis is a test
