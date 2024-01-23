@@ -10,7 +10,8 @@ from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry._geometry import Translation2d, Pose2d
 from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
 
-import pathplannerlib 
+from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config
+
 #~ Field Measurements/targets
 class FildConstants:
     kFieldWidth = UtilCommands.inchesToMeters(27) #2023 charged up change next year
@@ -92,6 +93,21 @@ class RobotConstants:
     kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
+    # ~ Intake Constants
+    intakeMotor1ID = 101
+
+    # ~ Outtake Constants
+    shooterMotor1ID = 111 
+    rotatingMotor1ID = 112
+    rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
+    kPShooterAngle = .1
+
+    # ~ Climber Constants
+    climbingMotorLeft = 121
+    climbingMotorRight = 122
+
+    #names are in relation to back of robot similar to the swerve modules
+
     
 
 # ~ Swerve Constants 
@@ -133,12 +149,13 @@ class AutoConstants:
                 kMaxAngularAccelerationRadiansPerSecondSquared,
         )
 
-        pathFollowerConfig = pathplannerlib.HolonomicPathFollowerConfig( 
-                pathplannerlib.PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                pathplannerlib.PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
+        #^^Added this today (1/11)
+        pathFollowerConfig = HolonomicPathFollowerConfig( 
+                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+                PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
                 kMaxSpeedMetersPerSecond, # Max module speed, in m/s
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
-                pathplannerlib.ReplanningConfig() # Default path replanning config. See the API for the options here
+                ReplanningConfig() # Default path replanning config. See the API for the options here
             )
 
 class sim:
