@@ -2,8 +2,8 @@ import commands2, constants, wpilib, navx, threading, time, math
 from constants import OIConstants, RobotConstants
 from wpimath.filter import SlewRateLimiter
 from commands2 import CommandBase 
-from wpilib import PS4Controller
 from wpilib import XboxController
+from commands2.button import CommandXboxController
 import wpimath
 from subsystems.swervesubsystem import SwerveSubsystem
 from wpimath.kinematics import ChassisSpeeds
