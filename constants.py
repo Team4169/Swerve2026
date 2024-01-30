@@ -94,17 +94,17 @@ class RobotConstants:
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
     # ~ Intake Constants
-    intakeMotor1ID = 101
+    intakeMotor1ID = 51
 
     # ~ Outtake Constants
-    shooterMotor1ID = 111 
-    rotatingMotor1ID = 112
+    shooterMotor1ID = 52 
+    rotatingMotor1ID = 53
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
     # ~ Climber Constants
-    climbingMotorLeft = 121
-    climbingMotorRight = 122
+    climbingMotorLeft = 54
+    # climbingMotorRight = 55
 
     #names are in relation to back of robot similar to the swerve modules
 
@@ -151,8 +151,8 @@ class AutoConstants:
 
         #^^Added this today (1/11)
         pathFollowerConfig = HolonomicPathFollowerConfig( 
-                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
+                PIDConstants(1.0, 0.0, 0.0), # Translation PID constants
+                PIDConstants(1.0, 0.0, 0.0), # Rotation PID constants
                 kMaxSpeedMetersPerSecond, # Max module speed, in m/s
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
                 ReplanningConfig() # Default path replanning config. See the API for the options here

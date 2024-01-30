@@ -25,8 +25,8 @@ class swervemodule(commands2.SubsystemBase):
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         
-        self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkLowLevel.MotorType.kBrushless)
 
         self.drivingMotor.setInverted(drivingMotorReversed)
         self.turningMotor.setInverted(turningMotorReversed)
@@ -88,7 +88,6 @@ class swervemodule(commands2.SubsystemBase):
         # if (abs(state.speed) < 0.001):
         #     self.stop()
         #     return
-
         self.state = SwerveModuleState.optimize(state, self.getState().angle)
         self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
@@ -112,3 +111,11 @@ class swervemodule(commands2.SubsystemBase):
     def stop(self):
         self.drivingMotor.set(0)
         self.turningMotor.set(0)
+
+    def setBrakeMode(self):
+        self.drivingMotor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
+        self.turningMotor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
+
+    def setCoastMode(self):
+        self.drivingMotor.setIdleMode(rev.CANSparkMax.IdleMode.kCoast)
+        self.turningMotor.setIdleMode(rev.CANSparkMax.IdleMode.kCoast)

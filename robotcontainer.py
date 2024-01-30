@@ -4,29 +4,34 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
 
 
-import ntcore, rev, ctre, commands2
+import ntcore, rev, commands2
+import commands2.cmd
 import commands2.button
+
 
 import constants
 from constants import AutoConstants, OIConstants, RobotConstants
 
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 
-from commands2.button import JoystickButton
+from commands2.button import JoystickButton, CommandXboxController
 from wpilib import XboxController, Joystick
 
 from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
 import math
-import photonvision
+# import photonvision
 
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto
+from pathplannerlib.path import PathPlannerPath #.path
+from pathplannerlib.auto import AutoBuilder #.auto
 
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 from commands.testcommands.move4modules import move4modules
 from commands.testcommands.MoveInACircle import MoveInACircle
 from commands.AutonCommands.sCurve import sCurve
+from commands2 import InstantCommand
 
 class RobotContainer:
     """
@@ -66,6 +71,8 @@ class RobotContainer:
                 swerve=self.swerve,
                 driverController = self.driverController
             ))
+        
+        #^^Added this today (1/11)
         NamedCommands.registerCommand("resetOdometry",
             commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose()))
         )
@@ -90,30 +97,12 @@ class RobotContainer:
         # self.shuffle.putData("dropOffExtend", self.dropOffExtend)
         # self.shuffle.putData("dropObject", self.dropObject)
 
-        self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
+        # self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
         """Returns the autonomous command to run"""
         
 
-        # #make the robot go in a octagon
-        # self.octagonTrajectory = TrajectoryGenerator.generateTrajectory(
-        #     # ? initial location and rotation
-        #     Pose2d(0, 0, Rotation2d(0)),
-        #     [
-        #         # ? points we want to hit
-        #         Translation2d(1, 0),
-        #         Translation2d(2, 1),
-        #         Translation2d(2, 2),
-        #         Translation2d(1, 3),
-        #         Translation2d(0, 3),
-        #         Translation2d(-1, 2),
-        #         Translation2d(-1, 1),
-                
-        #     ],
-        #     # ? final location and rotation
-        #     Pose2d(0, 0, Rotation2d(180)),
-        #     self.trajectoryConfig
-        # )
+       
         # # #make the robot go to an april tag
         # # self.angle = 0 #make sure to use a radian angle here
         # # self.distance = 0
@@ -136,18 +125,32 @@ class RobotContainer:
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
         self.MoveInACircle = MoveInACircle(self.swerve)
-        self.oval = PathPlannerAuto("ovalAuton")
+        # self.oval = PathPlannerAuto("ovalAuton")
         self.sCurve = sCurve(self.swerve).getCommand()
-        return self.sCurve
+
+        #^^Added this today (1/11)
+        path = PathPlannerPath.fromPathFile('Oval')
+        # Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path)
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
     def configureButtonBindings(self):
-        (
-        JoystickButton(self.driverController, XboxController.Button.kStart)
-        .whenPressed(lambda: self.swerve.zeroHeading())
-        )
-        pass
+        #  (
+        # JoystickButton(self.driverController, XboxController.Button.kStart).whenPressed(lambda: self.swerve.zeroHeading())
+        # )
+        # (
+        #JoystickButton(self.driverController, XboxController.Button.kY).whenHeld(lockWheels(self.swerve)).whenReleased(lambda: self.swerve.unlockWheels())
+        # )
+
+        # self.driverController.start().onTrue(commands2.cmd.run(lambda: self.swerve.zeroHeading()))
+
+        # self.driverController.Y().whileActiveContinous(commands2.cmd.run(lambda: self.swerve.lockWheels()))
+        # self.driverController.Y().onFalse(commands2.cmd.run(lambda: self.swerve.unlockWheels()))
+        
+        
         #Old way of Assigning Buttons
-            # Joystick.button(self.driver_joystick, 2).whenPressed(lambda: self.swerve.zeroHeading())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
+            
             # Joystick.button(self.driverController, )

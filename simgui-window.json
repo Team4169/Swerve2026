@@ -12,8 +12,8 @@
       "style": "1",
       "userScale": "2",
       "width": "1918",
-      "xpos": "1",
-      "ypos": "45"
+      "xpos": "-204",
+      "ypos": "94"
     }
   },
   "Table": {
@@ -33,18 +33,23 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "35,573",
-      "Size": "336,164"
+      "Size": "202,214"
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "381,770",
-      "Size": "976,278"
+      "Pos": "439,691",
+      "Size": "976,179"
     },
     "###NetworkTables": {
       "Collapsed": "0",
       "DockId": "0x00000001,0",
       "Pos": "259,110",
       "Size": "1125,565"
+    },
+    "###NetworkTables Info": {
+      "Collapsed": "0",
+      "Pos": "250,130",
+      "Size": "750,145"
     },
     "###Other Devices": {
       "Collapsed": "0",
@@ -69,7 +74,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "21,60",
-      "Size": "109,114"
+      "Size": "109,134"
     }
   }
 }
