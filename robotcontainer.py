@@ -185,6 +185,14 @@ class RobotContainer:
 
             #&These are here right now to test the minicims
             commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.25))).onFalse(lambda: self.intake.stopIntake())
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
+            
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.25))).onFalse(lambda: self.intake.stopIntake())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.25))).onFalse(lambda: self.midstage.stopMidstage())
+
+
+            # commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
 
             # Joystick.button(self.driverController, )
+
+            #https://prod.liveshare.vsengsaas.visualstudio.com/join?DA81D23EA4137F017617414D8919F7E19BD0
