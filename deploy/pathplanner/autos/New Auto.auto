@@ -5,28 +5,16 @@
       "x": 2.0,
       "y": 7.0
     },
-    "rotation": 0
+    "rotation": -179.18574455458972
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "resetOdometry"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Oval"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopModules"
+            "pathName": "New Path"
           }
         }
       ]

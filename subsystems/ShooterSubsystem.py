@@ -20,8 +20,8 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         #* encoders
-        self.shooterMotor1Encoder = self.shooterMotor1.getEncoder()
-        self.rotatingMotor1Encoder = self.rotatingMotor1.getEncoder()
+        # self.shooterMotor1Encoder = self.shooterMotor1.getEncoder()
+        # self.rotatingMotor1Encoder = self.rotatingMotor1.getEncoder()
 
         self.rotatingMotorDegrees = self.rotatingMotor1Encoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
 

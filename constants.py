@@ -81,7 +81,7 @@ class RobotConstants:
     
     
     #what is the fastest speed laterally our robot can go
-    kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test current is test based on 1/2 speeds
+    kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test, current is test based on 1/2 speeds
     #or maybethrough the max rpm of motors 
     #what is the fastest speed  rotationally our robot can go
     kPhysicalMaxAngularSpeedRadiansPerSecond  = kphysicalMaxSpeedMetersPerSecond * 2 / kWheelDiameterMeters #! Find through Current UNKNOWN
@@ -93,16 +93,20 @@ class RobotConstants:
     kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
-    # ~ Intake Constants
-    intakeMotor1ID = 51
+    # ~ Intake Constants (minicim)
+    intakeMotor1ID = 52
+    intakeMotor2ID = 53
 
-    # ~ Outtake Constants
-    shooterMotor1ID = 52 
-    rotatingMotor1ID = 53
+    # ~ Midstage Constants (minicim)
+    midstageMotor1ID = 54
+
+    # ~ Outtake Constants (NEO)
+    # shooterMotor1ID = 55 
+    # rotatingMotor1ID = 56
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
-    # ~ Climber Constants
+    # ~ Climber Constants (NEO)
     climbingMotorLeft = 54
     # climbingMotorRight = 55
 
@@ -151,8 +155,8 @@ class AutoConstants:
 
         #^^Added this today (1/11)
         pathFollowerConfig = HolonomicPathFollowerConfig( 
-                PIDConstants(1.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(1.0, 0.0, 0.0), # Rotation PID constants
+                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+                PIDConstants(5.0, 0.0, 1.0), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
                 kMaxSpeedMetersPerSecond, # Max module speed, in m/s
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
                 ReplanningConfig() # Default path replanning config. See the API for the options here

@@ -1,0 +1,99 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.9626945359454185,
+      "y": 7.003080254377342
+    },
+    "rotation": -178.63607246839706
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto2  1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setShooterAngle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootRing"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto2 2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickupRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto2 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setShooterAngle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootRing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -2,12 +2,9 @@ import wpilib, wpimath
 from wpilib.interfaces import GenericHID
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
-
-
 import ntcore, rev, commands2
 import commands2.cmd
 import commands2.button
-
 
 import constants
 from constants import AutoConstants, OIConstants, RobotConstants
@@ -19,6 +16,12 @@ from wpilib import XboxController, Joystick
 
 from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
+
+from subsystems.intakeSubsystem import IntakeSubsystem
+from subsystems.midstageSubsystem import MidstageSubsystem
+# from subsystems.ShooterSubsystem import ShooterSubsystem
+
+
 import math
 # import photonvision
 
@@ -67,6 +70,10 @@ class RobotContainer:
         # The robot's subsystems
         self.swerve = SwerveSubsystem()
 
+        self.intake = IntakeSubsystem()
+        self.midstage = MidstageSubsystem()
+        # self.shooter = ShooterSubsystem()
+
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
                 swerve=self.swerve,
                 driverController = self.driverController
@@ -79,12 +86,32 @@ class RobotContainer:
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
+        NamedCommands.registerCommand("pickupRing",
+            commands2.InstantCommand(lambda:self.intake.runIntake(0.50))
+        )
+        NamedCommands.registerCommand("stopIntake",
+            commands2.InstantCommand(lambda:self.intake.stopIntake())
+        )
+        NamedCommands.registerCommand("midstageRing",
+            commands2.InstantCommand(lambda:self.midstage.runMidstage(0.50))
+        )
+        NamedCommands.registerCommand("stopMidstage",
+            commands2.InstantCommand(lambda:self.midstage.stopMidstage())
+        )
+        # NamedCommands.registerCommand("setShooterAngle",
+        #     commands2.InstantCommand(lambda:self.shooter.setShooterAngle())
+        # )
+       
+        
         
         
         self.configureButtonBindings()
 
    
         self.chooser = wpilib.SendableChooser()
+
+       
+
 
         # self.chooser.setDefaultOption("cubeAuto", self.cubeToBalance )
         # self.chooser.addOption("simple auto", self.simpleAuto)
@@ -125,13 +152,15 @@ class RobotContainer:
         self.move2motors = move2motors(self.swerve)
         self.move4modules = move4modules(self.swerve)
         self.MoveInACircle = MoveInACircle(self.swerve)
-        # self.oval = PathPlannerAuto("ovalAuton")
-        self.sCurve = sCurve(self.swerve).getCommand()
+        # self.sCurve = sCurve(self.swerve).getCommand()
 
         #^^Added this today (1/11)
-        path = PathPlannerPath.fromPathFile('Oval')
+        # path = PathPlannerPath.fromPathFile('Line')
         # Create a path following command using AutoBuilder. This will also trigger event markers.
-        return AutoBuilder.followPath(path)
+
+        return PathPlannerAuto('New Auto')
+
+        # return AutoBuilder.followPath(path)
 
         #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
 
@@ -152,5 +181,10 @@ class RobotContainer:
         #Old way of Assigning Buttons
             commands2.button.JoystickButton(self.driverController, XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
             commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
-            
+
+
+            #&These are here right now to test the minicims
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.25))).onFalse(lambda: self.intake.stopIntake())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
+
             # Joystick.button(self.driverController, )
