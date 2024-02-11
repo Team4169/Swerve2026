@@ -101,14 +101,23 @@ class RobotConstants:
     midstageMotor1ID = 54
 
     # ~ Outtake Constants (NEO)
-    # shooterMotor1ID = 55 
-    # rotatingMotor1ID = 56
+    shooterMotor1ID = 55 
+    rotatingMotor1ID = 56
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
+    #height of the speaker - height of the outtake
+    speakerHeight = 2.1082 - 0 #! need the height of the shooter and substitute that for 0
+    #radius of the fly wheels 6ft 6in ~198 cm
+    flyWheelRadius = 0 #! must be found once shooter is made (in m)
+    #time it takes for one full rotation of the fly wheels
+    period = 1 #! must be found once shooter is made (in sec/rot)
+    
+    ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
+
     # ~ Climber Constants (NEO)
-    climbingMotorLeft = 54
-    # climbingMotorRight = 55
+    climbingMotorLeft = 57
+    climbingMotorRight = 58
 
     #names are in relation to back of robot similar to the swerve modules
 

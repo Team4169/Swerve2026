@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+#! TODO:
+#! 1. get the front to align in pathplanner
+#! 2. test to see if pathplanner switch alliance side code works (in swervesubsystem)
+#! 3. ...
+
+#! for autos just rotate the robot in pathplanner so that the roborio is in the direction you want it
+#! the robot in pathplanner would be moving "sideways", but it should run correctly
+
 import typing
 import wpilib
 from wpimath.geometry import Rotation2d 

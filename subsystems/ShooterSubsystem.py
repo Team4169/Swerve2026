@@ -20,8 +20,8 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
 
         #* encoders
-        # self.shooterMotor1Encoder = self.shooterMotor1.getEncoder()
-        # self.rotatingMotor1Encoder = self.rotatingMotor1.getEncoder()
+        self.shooterMotor1Encoder = self.shooterMotor1.getEncoder()
+        self.rotatingMotor1Encoder = self.rotatingMotor1.getEncoder()
 
         self.rotatingMotorDegrees = self.rotatingMotor1Encoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
 
@@ -32,9 +32,23 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.shooterMaxLimitSwitch = self.rotatingMotor1Encoder.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
         self.shooterMaxLimitSwitch = self.rotatingMotor1Encoder.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
 
-    def getShooterAngleAndSpeed(self, shooter_distance) -> tuple(float, float): 
-        #returns theta and speed value for our shooter given distance from speaker
-        pass
-    
+    def getShooterAngle(self, shooter_distance) -> tuple(float, float): 
+        #returns theta value for our shooter given distance from speaker
+        #! this needs to be checked! I have extreemely low faith in this working
+        theta = -math.asin((7 * (7 * RobotConstants.ringInitialVelocity - math.sqrt((40 * RobotConstants.speakerHeight + 49) * RobotConstants.ringInitialVelocity**2))) / (20 * RobotConstants.ringInitialVelocity**2)) #+2*math.pi
+        return theta
+
     def setShooterAngle(self, theta) -> None:
         self.rotatingMotor.set(self.shooterAnglePIDController.calculate(self.rotatingMotorDegrees, theta))
+
+
+    def runShooter(self):
+        self.shooterMotor1.set(0.8)
+
+    def stopShooter(self):
+        self.shooterMotor1.set(0)
+
+    def stopRotating(self):
+        self.rotatingMotor.set(0)
+    
+

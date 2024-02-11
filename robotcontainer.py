@@ -19,7 +19,8 @@ from subsystems.swervesubsystem import SwerveSubsystem
 
 from subsystems.intakeSubsystem import IntakeSubsystem
 from subsystems.midstageSubsystem import MidstageSubsystem
-# from subsystems.ShooterSubsystem import ShooterSubsystem
+from subsystems.climbingSubsystem import ClimbingSubsystem
+from subsystems.ShooterSubsystem import ShooterSubsystem
 
 
 import math
@@ -72,6 +73,9 @@ class RobotContainer:
 
         self.intake = IntakeSubsystem()
         self.midstage = MidstageSubsystem()
+        self.climber = ClimbingSubsystem()
+        self.shooter = ShooterSubsystem()
+
         # self.shooter = ShooterSubsystem()
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
@@ -80,6 +84,7 @@ class RobotContainer:
             ))
         
         #^^Added this today (1/11)
+        #commands for pathplanner
         NamedCommands.registerCommand("resetOdometry",
             commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose()))
         )
@@ -103,8 +108,6 @@ class RobotContainer:
         # )
        
         
-        
-        
         self.configureButtonBindings()
 
    
@@ -127,8 +130,6 @@ class RobotContainer:
         # self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
     def getAutonomousCommand(self) -> commands2.Command:
         """Returns the autonomous command to run"""
-        
-
        
         # # #make the robot go to an april tag
         # # self.angle = 0 #make sure to use a radian angle here
@@ -179,20 +180,27 @@ class RobotContainer:
         
         
         #Old way of Assigning Buttons
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
-
-
-            #&These are here right now to test the minicims
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.25))).onFalse(lambda: self.intake.stopIntake())
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
             
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.25))).onFalse(lambda: self.intake.stopIntake())
-            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.25))).onFalse(lambda: self.midstage.stopMidstage())
+        #TODO: change drivecontroller to operator controller
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
 
-
+            #run intake and midtsage to bring the ring into the robot
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.25))).onFalse(lambda: self.intake.stopIntake())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
+            #run the intake and midstage to eject the ring
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.25))).onFalse(lambda: self.intake.stopIntake())
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.25))).onFalse(lambda: self.midstage.stopMidstage())
+            #climber to go down
+            commands2.button.JoystickButton(self.driverController, XboxController.leftTrigger).whileTrue(InstantCommand(lambda: self.climber.runLeftClimbingMotor(-0.25))).onFalse(lambda: self.climber.stopLeftClimbingMotor())
+            commands2.button.JoystickButton(self.driverController, XboxController.rightTrigger).whileTrue(InstantCommand(lambda: self.climber.runRightClimbingMotor(-0.25))).onFalse(lambda: self.climber.stopRightClimbingMotor())
+            #Climber to go up
+            commands2.button.JoystickButton(self.driverController, XboxController.leftBumper).whileTrue(InstantCommand(lambda: self.climber.runLeftClimbingMotor(0.25))).onFalse(lambda: self.climber.stopLeftClimbingMotor())
+            commands2.button.JoystickButton(self.driverController, XboxController.rightBumper).whileTrue(InstantCommand(lambda: self.climber.runRightClimbingMotor(0.25))).onFalse(lambda: self.climber.stopRightClimbingMotor())
             # commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
-
-            # Joystick.button(self.driverController, )
-
-            #https://prod.liveshare.vsengsaas.visualstudio.com/join?DA81D23EA4137F017617414D8919F7E19BD0
+            
+            #Shooter set angle 
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(self.shooter.getShooterAngle()))).onFalse(lambda: self.shooter.stopRotating())
+            #Shooter launch
+            commands2.button.JoystickButton(self.driverController, XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(lambda: self.shooter.stopShooter())
+            
