@@ -14,7 +14,6 @@ import commands2
 import math
 import constants
 from constants import ModuleConstants
-
 from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
@@ -147,7 +146,28 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
 
+        if self.operatorController.getLeftTriggerAxis() > 0.2:
+            self.Container.climber.runLeftClimbingMotor(-0.25)
+        else:
+            self.Container.climber.stopLeftClimbingMotor()
+        
+        if self.operatorController.getRightTriggerAxis() > 0.2:
+            self.Container.climber.runRightClimbingMotor(-0.25)
 
+        else:
+            self.Container.climber.stopRightClimbingMotor()
+
+        if self.operatorController.getLeftBumperPressed():
+            self.Container.climber.runLeftClimbingMotor(0.25)
+        else:
+            self.Container.climber.stopLeftClimbingMotor()
+            
+        if self.operatorController.getRightBumperPressed():
+            self.Container.climber.runRightClimbingMotor(-0.25)
+        else:
+            self.Container.climber.stopRightClimbingMotor()
+
+            
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
             # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())

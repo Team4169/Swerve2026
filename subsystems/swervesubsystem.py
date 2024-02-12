@@ -17,7 +17,7 @@ from pathplannerlib.auto import AutoBuilder #.auto
 from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
 
 from wpimath.kinematics import ChassisSpeeds
-
+from wpimath.estimator import SwerveDrive4PoseEstimator
 from wpimath.geometry import Rotation2d
 
 
@@ -69,7 +69,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
         thread.start()
         
 
-        # #^^Added this today (1/11)
+        #^^Added this today (1/11)
         AutoBuilder.configureHolonomic(
             self.getPose,
             self.resetOdometry,
@@ -172,11 +172,11 @@ class SwerveSubsystem (commands2.SubsystemBase):
             RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
         )
     
-    def shouldFlipPath():
+    def shouldFlipPath(self):
         # Boolean supplier that controls when the path will be mirrored for the red alliance
         # This will flip the path being followed to the red side of the field.
         # THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-        return DriverStation.getAlliance() == DriverStation.Alliance.kblue  #! or kred idk this needs testing
+        return DriverStation.getAlliance() == DriverStation.Alliance.kRed  #! or kBlue idk this needs testing
       
     # def getAlliance(self):
     #     return True

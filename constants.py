@@ -106,18 +106,24 @@ class RobotConstants:
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
+    shooterMaxLimitSwitchID = 5
+    shooterMinLimitSwitchID = 6
+    
     #height of the speaker - height of the outtake
     speakerHeight = 2.1082 - 0 #! need the height of the shooter and substitute that for 0
     #radius of the fly wheels 6ft 6in ~198 cm
-    flyWheelRadius = 0 #! must be found once shooter is made (in m)
+    flyWheelRadius = 0.051 
+
+    flyWheelPower = 0.5 #from 0-1. like what you'd do for a motor
+    gravityConstant = 9.8
     #time it takes for one full rotation of the fly wheels
-    period = 1 #! must be found once shooter is made (in sec/rot)
+    period = 60/(5676 * flyWheelPower)
     
     ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
 
     # ~ Climber Constants (NEO)
-    climbingMotorLeft = 57
-    climbingMotorRight = 58
+    climbingMotorLeftID = 57
+    climbingMotorRightID = 58
 
     #names are in relation to back of robot similar to the swerve modules
 

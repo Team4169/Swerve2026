@@ -7,6 +7,8 @@ import ntcore
 import rev
 import math
 from wpimath.controller import PIDController
+from wpimath.geometry import Rotation2d
+
 
 class ShooterSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
@@ -16,39 +18,54 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.sd = wpilib.SmartDashboard        
         
         #* shooting motors
-        self.shooterMotor1 = rev.CANSparkMax(RobotConstants.shooterMotor1ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.shooterMotor = rev.CANSparkMax(RobotConstants.shooterMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
 
         #* encoders
-        self.shooterMotor1Encoder = self.shooterMotor1.getEncoder()
-        self.rotatingMotor1Encoder = self.rotatingMotor1.getEncoder()
+        self.shooterMotorEncoder = self.shooterMotor.getEncoder()
+        self.rotatingMotorEncoder = self.rotatingMotor.getEncoder()
 
-        self.rotatingMotorDegrees = self.rotatingMotor1Encoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
+        self.rotatingMotorDegrees = self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
 
         #* shooterAngle PID controller
         self.shooterAnglePIDController = PIDController(RobotConstants.kPShooterAngle, 0, 0)
 
         #* limit Switches
-        self.shooterMaxLimitSwitch = self.rotatingMotor1Encoder.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
-        self.shooterMaxLimitSwitch = self.rotatingMotor1Encoder.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        #self.rotatingMotorEncoder = rotatingMotorEncoder
+        #!this is code the luc wrote, but could very much be wrong
+        self.shooterMaxLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMaxLimitSwitchID)
+        self.shooterMinLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMinLimitSwitchID)
 
-    def getShooterAngle(self, shooter_distance) -> tuple(float, float): 
+        #! this is the code that was written before, which luc commented out when he wrote the code above
+        # self.shooterMaxLimitSwitch = self.rotatingMotorEncoder.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        # self.shooterMinLimitSwitch = self.rotatingMotorEncoder.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+
+    def getShooterAngle(self, shooter_distance) -> Rotation2d(): 
         #returns theta value for our shooter given distance from speaker
-        #! this needs to be checked! I have extreemely low faith in this working
-        theta = -math.asin((7 * (7 * RobotConstants.ringInitialVelocity - math.sqrt((40 * RobotConstants.speakerHeight + 49) * RobotConstants.ringInitialVelocity**2))) / (20 * RobotConstants.ringInitialVelocity**2)) #+2*math.pi
-        return theta
+        velocity = RobotConstants.ringInitialVelocity
+        height = RobotConstants.speakerHeight
+        gravity = RobotConstants.gravityConstant
+        theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity((gravity*(shooter_distance**2)) + (2*height*(velocity**2))))/(gravity*shooter_distance))
+
+        return Rotation2d(theta)
+    
+    #https://prod.liveshare.vsengsaas.visualstudio.com/join?2712EB1CEF1BFFE0AB943E39D41B79C6CDDE
+    
 
     def setShooterAngle(self, theta) -> None:
         self.rotatingMotor.set(self.shooterAnglePIDController.calculate(self.rotatingMotorDegrees, theta))
 
-
     def runShooter(self):
-        self.shooterMotor1.set(0.8)
+        self.shooterMotor.set(RobotConstants.flyWheelPower)
 
     def stopShooter(self):
-        self.shooterMotor1.set(0)
+        self.shooterMotor.set(0)
 
     def stopRotating(self):
         self.rotatingMotor.set(0)
     
+    def getForwardLimitSwitch(self):
+        self.shooterMaxLimitSwitch.get()
 
+    def getReverseLimitSwitch(self):
+        self.shooterMinLimitSwitch.get()

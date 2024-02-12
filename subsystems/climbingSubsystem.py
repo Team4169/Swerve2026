@@ -6,7 +6,6 @@ from constants import RobotConstants
 import ntcore
 import rev
 import math
-import phoenix5
 
 class ClimbingSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
@@ -16,9 +15,9 @@ class ClimbingSubsystem(commands2.SubsystemBase):
         self.sd = wpilib.SmartDashboard
 
         #* Intake motors
-        self.leftClimbingMotor = phoenix5.WPI_TalonSRX(RobotConstants.climbingMotorLeft)
-        self.rightClimbingMotor = phoenix5.WPI_TalonSRX(RobotConstants.climbingMotorRight)
-        
+        self.leftClimbingMotor = rev.CANSparkMax(RobotConstants.climbingMotorLeftID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.rightClimbingMotor = rev.CANSparkMax(RobotConstants.climbingMotorRightID, rev.CANSparkLowLevel.MotorType.kBrushless)
+
 
     def runLeftClimbingMotor(self, speed: float):
         self.leftClimbingMotor.set(speed)
