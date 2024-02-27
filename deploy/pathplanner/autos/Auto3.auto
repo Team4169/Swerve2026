@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3725738150477713,
-      "y": 7.096766946743594
+      "x": 1.3374413054104268,
+      "y": 3.9816844255657124
     },
-    "rotation": 92.41102974661125
+    "rotation": 90.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 1"
+            "pathName": "Auto4 1"
           }
         },
         {
@@ -39,62 +39,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "pickupRing"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "midstageRing"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopMidstage"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1 2"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -132,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 3"
+            "pathName": "Auto3 3"
           }
         },
         {
@@ -160,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1 4"
+                  "pathName": "Auto3 4"
                 }
               },
               {
@@ -198,12 +142,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Auto1 5"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "setShooterAngle"
@@ -219,6 +157,12 @@
           "type": "named",
           "data": {
             "name": "stopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto3 5"
           }
         }
       ]

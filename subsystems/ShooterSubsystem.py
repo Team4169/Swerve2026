@@ -18,11 +18,13 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.sd = wpilib.SmartDashboard        
         
         #* shooting motors
-        self.shooterMotor = rev.CANSparkMax(RobotConstants.shooterMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.shooterMotor1 = rev.CANSparkMax(RobotConstants.shooterMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.shooterMotor2 = rev.CANSparkMax(RobotConstants.shooterMotor2ID, rev.CANSparkLowLevel.MotorType.kBrushless)
+
         self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
 
         #* encoders
-        self.shooterMotorEncoder = self.shooterMotor.getEncoder()
+        # self.shooterMotorEncoder = self.shooterMotor.getEncoder()
         self.rotatingMotorEncoder = self.rotatingMotor.getEncoder()
 
         self.rotatingMotorDegrees = self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
@@ -45,21 +47,23 @@ class ShooterSubsystem(commands2.SubsystemBase):
         velocity = RobotConstants.ringInitialVelocity
         height = RobotConstants.speakerHeight
         gravity = RobotConstants.gravityConstant
-        theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity((gravity*(shooter_distance**2)) + (2*height*(velocity**2))))/(gravity*shooter_distance))
-
-        return Rotation2d(theta)
-    
-    #https://prod.liveshare.vsengsaas.visualstudio.com/join?2712EB1CEF1BFFE0AB943E39D41B79C6CDDE
-    
+        if shooter_distance == 0:
+            return Rotation2d(0)
+        theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity*((gravity*(shooter_distance**2)) + (2*height*(velocity**2))))/(gravity*shooter_distance))
+        self.sd.putNumber('Theta', theta)
+        return Rotation2d(theta)    
 
     def setShooterAngle(self, theta) -> None:
         self.rotatingMotor.set(self.shooterAnglePIDController.calculate(self.rotatingMotorDegrees, theta))
 
     def runShooter(self):
-        self.shooterMotor.set(RobotConstants.flyWheelPower)
+        self.shooterMotor1.set(RobotConstants.flyWheelPower)
+        self.shooterMotor2.set(RobotConstants.flyWheelPower)
 
     def stopShooter(self):
-        self.shooterMotor.set(0)
+        self.shooterMotor1.set(0)
+        self.shooterMotor2.set(0)
+        
 
     def stopRotating(self):
         self.rotatingMotor.set(0)
@@ -69,3 +73,8 @@ class ShooterSubsystem(commands2.SubsystemBase):
 
     def getReverseLimitSwitch(self):
         self.shooterMinLimitSwitch.get()
+
+    def rotateManually(self, speed):
+        self.rotatingMotor.set(speed)
+    
+    

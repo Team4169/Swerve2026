@@ -20,15 +20,13 @@ class SwerveJoystickCmd(CommandBase):
         self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
         self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
 
-
-
     def initialize(self):
         pass
     
     def execute(self):
         self.xSpeed = self.driverController.getLeftX() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.driverController.getLeftY() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.driverController.getRightX() 
+        self.zRotation = self.driverController.getRightX() * -1
 
         # 1. Get the joystick values and apply deadzone
         

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3725738150477713,
-      "y": 7.096766946743594
+      "x": 1.3842846515935527,
+      "y": 7.0850561101978125
     },
-    "rotation": 92.41102974661125
+    "rotation": 90.61605990839922
   },
   "command": {
     "type": "sequential",
@@ -55,9 +55,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shootRing"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -71,18 +83,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
           }
         },
         {
@@ -132,7 +132,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 3"
+            "pathName": "Auto6 3"
           }
         },
         {
@@ -157,12 +157,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1 4"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -179,37 +173,6 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopMidstage"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto1 5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setShooterAngle"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "shootRing"
@@ -219,6 +182,12 @@
           "type": "named",
           "data": {
             "name": "stopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto6 4"
           }
         }
       ]

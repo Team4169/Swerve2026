@@ -51,31 +51,31 @@ class RobotConstants:
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 1 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = .5 * math.pi -.728
+    frontLeftAbsoluteEncoderOffset = .5 * math.pi -.728 + (0.25*math.pi)
     frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 2
     frontRightTurningMotorID = 22
-    frontRightDrivingMotorReversed = True
+    frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 2
-    frontRightAbsoluteEncoderOffset = 2 * math.pi
+    frontRightAbsoluteEncoderOffset = 0.770 + (0.5*math.pi) #2 * math.pi
     frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 3
     backRightTurningMotorID = 33
-    backRightDrivingMotorReversed = True
+    backRightDrivingMotorReversed = False
     backRightTurningMotorReversed = False 
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = .25#.25
+    backRightAbsoluteEncoderOffset = .256#.25
     backRightAbsoluteEncoderReversed = True
     
     backLeftDrivingMotorID = 4
     backLeftTurningMotorID = 44
-    backLeftDrivingMotorReversed = True
+    backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 4
-    backLeftAbsoluteEncoderOffset = 5.571
+    backLeftAbsoluteEncoderOffset = 0.319
     backLeftAbsoluteEncoderReversed = True
 
     
@@ -102,15 +102,20 @@ class RobotConstants:
 
     # ~ Outtake Constants (NEO)
     shooterMotor1ID = 55 
-    rotatingMotor1ID = 56
+    shooterMotor2ID = 56
+    rotatingMotor1ID = 57
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
     shooterMaxLimitSwitchID = 5
     shooterMinLimitSwitchID = 6
     
+    subwooferDistance = 0.92 + 0.29 #subwoofer distance + pivot-bumper distance
     #height of the speaker - height of the outtake
-    speakerHeight = 2.1082 - 0 #! need the height of the shooter and substitute that for 0
+    speakerHeight = 2.1082 - 0.3 #! the 2.1082 might be 1.98 also. there are 2 values (look at speaker video)
+                                 #! to get the most accurate result, we need the 
+                                 #! length of shooter * sin(launch angle). this is
+                                 #! a bit difficult to get bc we don't know the launch angle.
     #radius of the fly wheels 6ft 6in ~198 cm
     flyWheelRadius = 0.051 
 
@@ -121,9 +126,12 @@ class RobotConstants:
     
     ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
 
+    backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
+
+
     # ~ Climber Constants (NEO)
-    climbingMotorLeftID = 57
-    climbingMotorRightID = 58
+    climbingMotorLeftID = 58
+    climbingMotorRightID = 59
 
     #names are in relation to back of robot similar to the swerve modules
 

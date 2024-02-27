@@ -1,0 +1,97 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.618501382509183,
+        "y": 4.555515416309007
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.8644289499705946,
+        "y": 3.1619258673610067
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.410259374013754,
+        "y": 2.5412515304345873
+      },
+      "prevControl": {
+        "x": 2.51041881596389,
+        "y": 2.3769328198341775
+      },
+      "nextControl": {
+        "x": 4.757005576778627,
+        "y": 2.7871790978959985
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.85069226914488,
+        "y": 4.04023860829462
+      },
+      "prevControl": {
+        "x": 4.129905322487501,
+        "y": 4.177188128159521
+      },
+      "nextControl": {
+        "x": 6.021775923723031,
+        "y": 3.817732713924771
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.94693201083977,
+        "y": 5.2230330994185525
+      },
+      "prevControl": {
+        "x": 6.326646744551862,
+        "y": 4.748127192416872
+      },
+      "nextControl": {
+        "x": 7.696425549769787,
+        "y": 5.796864090161847
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.801823078681821,
+        "y": 5.808574926707628
+      },
+      "prevControl": {
+        "x": 7.801823078681821,
+        "y": 5.8151214833550675
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.95484125387209,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Auto4",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

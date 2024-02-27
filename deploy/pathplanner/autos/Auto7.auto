@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3725738150477713,
-      "y": 7.096766946743594
+      "x": 0.5411044202972841,
+      "y": 2.096239741694889
     },
-    "rotation": 92.41102974661125
+    "rotation": 91.19348942398204
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 1"
+            "pathName": "Auto7 1"
           }
         },
         {
@@ -40,59 +40,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "pickupRing"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "midstageRing"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopMidstage"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1 2"
+                  "pathName": "Auto7 2"
                 }
               },
               {
@@ -132,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 3"
+            "pathName": "Auto7 3"
           }
         },
         {
@@ -148,31 +98,25 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1 4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "pickupRing"
+                  "pathName": "Auto7 4"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "midstageRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickupRing"
                 }
               }
             ]
@@ -200,7 +144,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 5"
+            "pathName": "Auto7 5"
           }
         },
         {
@@ -219,6 +163,12 @@
           "type": "named",
           "data": {
             "name": "stopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto7 6"
           }
         }
       ]

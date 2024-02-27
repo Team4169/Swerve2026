@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3725738150477713,
-      "y": 7.096766946743594
+      "x": 0.5059719106599396,
+      "y": 2.131372251332233
     },
-    "rotation": 92.41102974661125
+    "rotation": 90.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 1"
+            "pathName": "Auto5 1"
           }
         },
         {
@@ -40,59 +40,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "pickupRing"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "midstageRing"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stopMidstage"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1 2"
+                  "pathName": "Auto5 2"
                 }
               },
               {
@@ -132,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 3"
+            "pathName": "Auto5 3"
           }
         },
         {
@@ -160,7 +110,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1 4"
+                  "pathName": "Auto5 4"
                 }
               },
               {
@@ -200,7 +150,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1 5"
+            "pathName": "Auto 5 5"
           }
         },
         {

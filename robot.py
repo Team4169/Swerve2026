@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 #! TODO:
-#! 1. get the front to align in pathplanner
-#! 2. test to see if pathplanner switch alliance side code works (in swervesubsystem)
-#! 3. ...
-
-#! for autos just rotate the robot in pathplanner so that the roborio is in the direction you want it
-#! the robot in pathplanner would be moving "sideways", but it should run correctly
+#! 1. reflash talons
+#! 2. test auto rotate function when angling shooter
+#! 3. test the subsystems (especially the shooter angle code)
+#! 4. find rotatingMotorRevPerArmDegree in constants.py
+#! 5. find out what left and right sticks are in robotcontainer (they're for the backup to the backup)
+#! 6. test auto codes at max speed
+#! 7. test the pathplanner alliance side mirror code
+#! 8. test the limit switches for the shooter subsystem
+#! 9. merge code with object detection
+#! 10. get more accurate delta y for the height of speaker in constants.py 
+#! 11. pathfinder
 
 import typing
 import wpilib
@@ -20,6 +25,7 @@ from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
 import robotpy_apriltag
 from wpilib import Timer
+from wpimath.kinematics import SwerveModuleState
 
 import phoenix5
 
@@ -59,7 +65,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #~ LED commands and variables
         self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
         self.previousLEDCommand = 0
-
+        
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
@@ -72,6 +78,11 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def disabledPeriodic(self) -> None:
+        self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
+
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
         # print(self.testabsoluteEncoder.getAbsolutePosition())
@@ -100,11 +111,11 @@ class MyRobot(commands2.TimedCommandRobot):
         #~ will be needed for future use
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
-        # self.output("ato com", self.autonomousCommand)
+        #self.output("ato com", self.autonomousCommand)
        
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
-
+            
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
         try:
@@ -141,11 +152,15 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backRight.drivingEncoder.setPosition(0)
 
     def teleopPeriodic(self):
+        self.xDistance = 0 #!These are the numbers that we need from ATAOD
+        self.zDistance = 0
+        self.distanceToShooter = math.sqrt(self.xDistance**2 + self.zDistance**2)
+
         self.swerve.frontRight.resetEncoders()
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
-
+        self.sd.putNumber("Left Trigger Axis", self.operatorController.getLeftTriggerAxis())
         if self.operatorController.getLeftTriggerAxis() > 0.2:
             self.Container.climber.runLeftClimbingMotor(-0.25)
         else:
@@ -167,7 +182,26 @@ class MyRobot(commands2.TimedCommandRobot):
         else:
             self.Container.climber.stopRightClimbingMotor()
 
+        
+
+        if self.operatorController.getAButton():
+            self.sd.putBoolean("A Button Pressed", True)
+            if self.distanceToShooter < 3.35: #robot can't find the tag if distance is too large (3.35m), so it won't set the angle
+                self.Container.shooter.setShooterAngle(2) #self.Container.shooter.getShooterAngle(self.distanceToShooter)
+                # self.rotation = Rotation2d(math.acos(self.zDistance/self.distanceToShooter)) 
+                # self.Container.rotateToSpesaker(self.rotation)     
+        else:
+            self.Container.shooter.stopRotating()
+            self.sd.putBoolean("A Button Pressed", False)
+        
+        #Attempt to code dpad (change it to another button if it doesn't work) 
+        # Turn robot until arctan(zDistance/xDistance) = 90 degrees
             
+        # if self.operatorController.POVRightPressed():
+        #     self.rotation = Rotation2d() 
+        #     self.swerve.rotateToSpeaker(self.rotation)
+
+        
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
             # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())

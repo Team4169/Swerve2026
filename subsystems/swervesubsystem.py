@@ -22,6 +22,7 @@ from wpimath.geometry import Rotation2d
 
 
 
+
 class SwerveSubsystem (commands2.SubsystemBase):
     def __init__(self):
         super().__init__()
@@ -172,6 +173,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
             RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
         )
     
+    
+
     def shouldFlipPath(self):
         # Boolean supplier that controls when the path will be mirrored for the red alliance
         # This will flip the path being followed to the red side of the field.
@@ -180,9 +183,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
       
     # def getAlliance(self):
     #     return True
-    #     #!use FMS to find the allinace side
+    #     #~use FMS to find the allinace side
 
-    
     def periodic(self) -> None:
         self.sd.putNumber("Gyro", self.getHeading())
         self.odometer.update(

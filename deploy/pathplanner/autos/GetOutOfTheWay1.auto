@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 0.5645260933888472,
+      "y": 2.1899264340611406
     },
-    "rotation": -179.18574455458972
+    "rotation": 90.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Get out of the way1"
           }
         }
       ]
