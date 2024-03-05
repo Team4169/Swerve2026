@@ -24,9 +24,10 @@ class SwerveJoystickCmd(CommandBase):
         pass
     
     def execute(self):
-        self.xSpeed = self.driverController.getLeftX() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.ySpeed = self.driverController.getLeftY() #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.driverController.getRightX() * -1
+        #these are multiplied by the drivingSpeedLimiter which limit the speed of the robot so it doesn't go too fast
+        self.xSpeed = self.driverController.getLeftX() * RobotConstants.drivingSpeedLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.ySpeed = self.driverController.getLeftY() * RobotConstants.drivingSpeedLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.zRotation = self.driverController.getRightX() * -1 * RobotConstants.drivingSpeedLimiter
 
         # 1. Get the joystick values and apply deadzone
         
@@ -45,9 +46,6 @@ class SwerveJoystickCmd(CommandBase):
         self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.zRotation = self.zRotLimiter.calculate(self.zRotation) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond / 0.418480
         #! Not sure why this is needed, for some reason without it, the robot rotates slower 
-        
-        
-        
 
         # if self.feildOriented:
         chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 

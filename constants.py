@@ -11,6 +11,10 @@ from wpimath.geometry._geometry import Translation2d, Pose2d
 from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
 
 from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config
+from pathplannerlib.path import PathPlannerPath, PathConstraints
+from wpimath.units import degreesToRadians
+
+
 
 #~ Field Measurements/targets
 class FildConstants:
@@ -25,12 +29,13 @@ class OIConstants:
 
 #~ robot specifications
 class RobotConstants:
-        
+    drivingSpeedLimiter = 0.9
+
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
-    kTrackWidth = UtilCommands.inchesToMeters(20) #found with measuring tape
+    kTrackWidth = UtilCommands.inchesToMeters(22) #found with measuring tape
         # ? Distance between the right and left wheels
-    kWheelBase = UtilCommands.inchesToMeters(20) #todo: find the actual wheel base
+    kWheelBase = UtilCommands.inchesToMeters(17.5) #todo: find the actual wheel base
         # ? Distance between the front and back wheels
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(-kTrackWidth / 2, -kWheelBase / 2), #Front Left       
@@ -45,13 +50,12 @@ class RobotConstants:
     kBackLeftWheelPosition = Translation2d(kTrackWidth / 2, -kWheelBase / 2)
     kBackRightWheelPosition = Translation2d(-kTrackWidth / 2, -kWheelBase / 2)
 
-
     frontLeftDrivingMotorID = 1
     frontLeftTurningMotorID = 11
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 1 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = .5 * math.pi -.728 + (0.25*math.pi)
+    frontLeftAbsoluteEncoderOffset = (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#
     frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 2
@@ -59,7 +63,7 @@ class RobotConstants:
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 2
-    frontRightAbsoluteEncoderOffset = 0.770 + (0.5*math.pi) #2 * math.pi
+    frontRightAbsoluteEncoderOffset =0.770 + (0.5*math.pi)  #0.623
     frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 3
@@ -67,7 +71,7 @@ class RobotConstants:
     backRightDrivingMotorReversed = False
     backRightTurningMotorReversed = False 
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = .256#.25
+    backRightAbsoluteEncoderOffset = .3 #0.812#
     backRightAbsoluteEncoderReversed = True
     
     backLeftDrivingMotorID = 4
@@ -75,10 +79,8 @@ class RobotConstants:
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 4
-    backLeftAbsoluteEncoderOffset = 0.319
+    backLeftAbsoluteEncoderOffset = 0.379 #0.813#
     backLeftAbsoluteEncoderReversed = True
-
-    
     
     #what is the fastest speed laterally our robot can go
     kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test, current is test based on 1/2 speeds
@@ -90,7 +92,7 @@ class RobotConstants:
     kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared * 2 / kWheelDiameterMeters
 
     #what is the max speed we allow teleop driver to move laterally
-    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 2 # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 4 # the /2 is the restriction we want to put on speed
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
 
     # ~ Intake Constants (minicim)
@@ -103,7 +105,7 @@ class RobotConstants:
     # ~ Outtake Constants (NEO)
     shooterMotor1ID = 55 
     shooterMotor2ID = 56
-    rotatingMotor1ID = 57
+    rotatingMotorID = 57
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
@@ -119,7 +121,7 @@ class RobotConstants:
     #radius of the fly wheels 6ft 6in ~198 cm
     flyWheelRadius = 0.051 
 
-    flyWheelPower = 0.5 #from 0-1. like what you'd do for a motor
+    flyWheelPower = 0.75 #from 0-1. like what you'd do for a motor
     gravityConstant = 9.8
     #time it takes for one full rotation of the fly wheels
     period = 60/(5676 * flyWheelPower)
@@ -128,17 +130,15 @@ class RobotConstants:
 
     backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
 
-
+    speakerToCenterOfFieldX = 8.3 #length in meters
+    heightOfField = 1.45 #length in meters
     # ~ Climber Constants (NEO)
     climbingMotorLeftID = 58
     climbingMotorRightID = 59
 
     #names are in relation to back of robot similar to the swerve modules
 
-    
-
-# ~ Swerve Constants 
-
+# ~ Swerve Constants
 
 #todo Change above
 class ModuleConstants:
@@ -156,7 +156,6 @@ class ModuleConstants:
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60 
 
     kPTurning = .2 #? turning PID controller per wheel
-
 
 # ~ Auto Constants
 
@@ -176,7 +175,7 @@ class AutoConstants:
                 kMaxAngularAccelerationRadiansPerSecondSquared,
         )
 
-        #^^Added this today (1/11)
+        #^Added this today (1/11)
         pathFollowerConfig = HolonomicPathFollowerConfig( 
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
                 PIDConstants(5.0, 0.0, 1.0), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
@@ -184,6 +183,11 @@ class AutoConstants:
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
                 ReplanningConfig() # Default path replanning config. See the API for the options here
             )
+
+        constraints = PathConstraints(
+            3.0, 4.0,
+            degreesToRadians(540), degreesToRadians(720)
+        )
 
 class sim:
     kSimTargetName = "SimTarget"

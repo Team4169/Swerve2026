@@ -21,10 +21,9 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.shooterMotor1 = rev.CANSparkMax(RobotConstants.shooterMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
         self.shooterMotor2 = rev.CANSparkMax(RobotConstants.shooterMotor2ID, rev.CANSparkLowLevel.MotorType.kBrushless)
 
-        self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.rotatingMotor = rev.CANSparkMax(RobotConstants.rotatingMotorID, rev.CANSparkLowLevel.MotorType.kBrushless)
 
         #* encoders
-        # self.shooterMotorEncoder = self.shooterMotor.getEncoder()
         self.rotatingMotorEncoder = self.rotatingMotor.getEncoder()
 
         self.rotatingMotorDegrees = self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
@@ -33,23 +32,38 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.shooterAnglePIDController = PIDController(RobotConstants.kPShooterAngle, 0, 0)
 
         #* limit Switches
-        #self.rotatingMotorEncoder = rotatingMotorEncoder
-        #!this is code the luc wrote, but could very much be wrong
         self.shooterMaxLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMaxLimitSwitchID)
         self.shooterMinLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMinLimitSwitchID)
 
-        #! this is the code that was written before, which luc commented out when he wrote the code above
-        # self.shooterMaxLimitSwitch = self.rotatingMotorEncoder.getForwardLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
-        # self.shooterMinLimitSwitch = self.rotatingMotorEncoder.getReverseLimitSwitch(rev.SparkMaxLimitSwitch.Type.kNormallyOpen)
+        self.network_tables = ntcore.NetworkTableInstance.getDefault()
+        self.camera_tables = self.network_tables.getTable("datatable")
 
-    def getShooterAngle(self, shooter_distance) -> Rotation2d(): 
+    def getShooterAngle(self): 
+        self.jetson1rotation = self.camera_tables.getEntry("r1").getValue()
+        self.jetson2rotation = self.camera_tables.getEntry("r2").getValue()
+        self.jetson1X = self.camera_tables.getEntry("x1").getValue()
+        self.jetson2X = self.camera_tables.getEntry("x2").getValue()
+        self.jetson1Y = self.camera_tables.getEntry("y1").getValue()
+        self.jetson2Y = self.camera_tables.getEntry("y2").getValue()
+        self.jetson1weight = self.camera_tables.getEntry("w1").getValue()
+        self.jetson2weight = self.camera_tables.getEntry("w2").getValue()
+        
+        self.rotationAve = (self.jetson1rotation + self.jetson2rotation) /2
+        self.xAve = (self.jetson1X + self.jetson2X) /2
+        self.yAve = (self.jetson1Y + self.jetson2Y) /2
+        self.weightAve = (self.jetson1weight + self.jetson2weight) / 2
+        
+        self.xDistance = self.RobotConstants.speakerToCenterOFField - self.xAve
+        self.yDistance = self.RobotConstants.heightoFField - self.yAve
+        self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+        
         #returns theta value for our shooter given distance from speaker
         velocity = RobotConstants.ringInitialVelocity
         height = RobotConstants.speakerHeight
         gravity = RobotConstants.gravityConstant
-        if shooter_distance == 0:
+        if self.distanceToShooter == 0:
             return Rotation2d(0)
-        theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity*((gravity*(shooter_distance**2)) + (2*height*(velocity**2))))/(gravity*shooter_distance))
+        theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity*((gravity*(self.distanceToShooter**2)) + (2*height*(velocity**2))))/(gravity*self.distanceToShooter))
         self.sd.putNumber('Theta', theta)
         return Rotation2d(theta)    
 
@@ -64,7 +78,6 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.shooterMotor1.set(0)
         self.shooterMotor2.set(0)
         
-
     def stopRotating(self):
         self.rotatingMotor.set(0)
     
@@ -76,5 +89,4 @@ class ShooterSubsystem(commands2.SubsystemBase):
 
     def rotateManually(self, speed):
         self.rotatingMotor.set(speed)
-    
     

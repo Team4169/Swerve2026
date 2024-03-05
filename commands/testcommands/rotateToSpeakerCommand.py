@@ -14,18 +14,18 @@ class rotateToSpeakerCommand(commands2.CommandBase):
         
 
     def initialize(self):
-        self.startRot = Rotation2d(0, 0)
-        self.swerve.frontLeft.setDesiredState(SwerveModuleState(0, self.startRot))
-        self.swerve.frontRight.setDesiredState(SwerveModuleState(0, self.startRot))
-        self.swerve.backLeft.setDesiredState(SwerveModuleState(0, self.startRot))
-        self.swerve.backRight.setDesiredState(SwerveModuleState(0, self.startRot))
-
-    def execute(self) -> None:
-        #! this might need to be in the end function idk
         self.frontLeft.setDesiredState(SwerveModuleState(0, self.rotation))
         self.frontRight.setDesiredState(SwerveModuleState(0, self.rotation))
         self.backLeft.setDesiredState(SwerveModuleState(0, self.rotation))
         self.backRight.setDesiredState(SwerveModuleState(0, self.rotation))
+        # self.startRot = Rotation2d(0, 0)
+        # self.swerve.frontLeft.setDesiredState(SwerveModuleState(0, self.startRot))
+        # self.swerve.frontRight.setDesiredState(SwerveModuleState(0, self.startRot))
+        # self.swerve.backLeft.setDesiredState(SwerveModuleState(0, self.startRot))
+        # self.swerve.backRight.setDesiredState(SwerveModuleState(0, self.startRot))
+
+    def execute(self) -> None:
+        pass
 
     def end(self, interrupted: bool) -> None:
         # self.rotation = Rotation2d(0, 0)

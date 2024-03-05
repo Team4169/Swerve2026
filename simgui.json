@@ -33,6 +33,7 @@
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
       "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
+      "/SmartDashboard/Autonomousff": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
@@ -58,6 +59,12 @@
         "open": true
       },
       "SmartDashboard": {
+        "Autonomousff": {
+          "open": true,
+          "string[]##v_/SmartDashboard/Autonomousff/options": {
+            "open": true
+          }
+        },
         "Field": {
           "open": true
         },

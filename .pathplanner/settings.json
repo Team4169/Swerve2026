@@ -3,14 +3,14 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Auto1",
-    "Auto2",
-    "Auto3",
-    "Auto4",
-    "Auto5",
-    "Auto6",
-    "GetOutOfTheWay1",
-    "Auto7"
+    "RF1B1B2",
+    "RB5B4B3",
+    "RF3F2",
+    "RF3B3B2",
+    "RB5B4_1",
+    "RF1B1F2",
+    "RB5B4_2",
+    "GetOutOfTheWay1"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

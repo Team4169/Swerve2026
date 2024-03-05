@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 #! TODO:
 #! 1. reflash talons
-#! 2. test auto rotate function when angling shooter
-#! 3. test the subsystems (especially the shooter angle code)
-#! 4. find rotatingMotorRevPerArmDegree in constants.py
-#! 5. find out what left and right sticks are in robotcontainer (they're for the backup to the backup)
-#! 6. test auto codes at max speed
-#! 7. test the pathplanner alliance side mirror code
-#! 8. test the limit switches for the shooter subsystem
-#! 9. merge code with object detection
-#! 10. get more accurate delta y for the height of speaker in constants.py 
-#! 11. pathfinder
+#! 2. zero swerve modules (values don't work, might try again) 
+#! 3. test auto rotate function when angling shooter
+#! 4. test the subsystems (especially the shooter angle code)
+#! 5. find rotatingMotorRevPerArmDegree in constants.py
+#! 6. test the pathplanner alliance side mirror code
+#! 7. test the limit switches for the shooter subsystem
+#! 8. get more accurate delta y for the height of speaker in constants.py 
+#! 9. pathfinder
+#* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 
 import typing
 import wpilib
@@ -18,12 +17,12 @@ from wpimath.geometry import Rotation2d
 import commands2
 import math
 import constants
-from constants import ModuleConstants
+from constants import ModuleConstants, RobotConstants
 from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
-import robotpy_apriltag
+# import robotpy_apriltag
 from wpilib import Timer
 from wpimath.kinematics import SwerveModuleState
 
@@ -62,9 +61,10 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.drive = self.container.drive
         self.swerve = self.Container.swerve
         CommandScheduler.getInstance().registerSubsystem(self.swerve)
+
         #~ LED commands and variables
-        self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
-        self.previousLEDCommand = 0
+        # self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
+        # self.previousLEDCommand = 0
         
 
     def disabledInit(self) -> None:
@@ -74,7 +74,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
-
 
 
     def disabledPeriodic(self) -> None:
@@ -103,21 +102,31 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
         # self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
 
-            
-
-
     def autonomousInit(self) -> None:
+        self.swerve.frontLeft.drivingEncoder.setPosition(0)
+        self.swerve.frontRight.drivingEncoder.setPosition(0)
+        self.swerve.backLeft.drivingEncoder.setPosition(0)
+        self.swerve.backRight.drivingEncoder.setPosition(0)
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
-        #~ will be needed for future use
+        #~ will be needed for future 
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
         #self.output("ato com", self.autonomousCommand)
        
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
+
+
+        # self.autoSelected = self.chooser.getSelected()
+        # print("Auto selected: " + self.autoSelected)
             
     def autonomousPeriodic(self) -> None:
+        self.swerve.frontRight.resetEncoders()
+        self.swerve.frontLeft.resetEncoders()
+        self.swerve.backLeft.resetEncoders()
+        self.swerve.backRight.resetEncoders()
         """This function is called periodically during autonomous"""
+
         try:
             #make a function that constantly updates robot pose/gyro based on apriltags
             #updatelocaiton()
@@ -132,14 +141,15 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # wpilib.CameraServer.launch()
         self.isRedAlliance = self.ds.getAlliance() == self.ds.Alliance.kRed
-        self.sendLEDCommand(3, self.isRedAlliance)
+        #self.sendLEDCommand(3, self.isRedAlliance)
         # self.drive.resetEncoders()
-        self.moveRestriction = 1
+        # self.moveRestriction = 1
         
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
         # this line or comment it out.
+
         if self.AutonomousCommand:
             self.AutonomousCommand.cancel()
         
@@ -152,10 +162,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backRight.drivingEncoder.setPosition(0)
 
     def teleopPeriodic(self):
-        self.xDistance = 0 #!These are the numbers that we need from ATAOD
-        self.zDistance = 0
-        self.distanceToShooter = math.sqrt(self.xDistance**2 + self.zDistance**2)
-
         self.swerve.frontRight.resetEncoders()
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
@@ -183,25 +189,14 @@ class MyRobot(commands2.TimedCommandRobot):
             self.Container.climber.stopRightClimbingMotor()
 
         
-
-        if self.operatorController.getAButton():
-            self.sd.putBoolean("A Button Pressed", True)
-            if self.distanceToShooter < 3.35: #robot can't find the tag if distance is too large (3.35m), so it won't set the angle
-                self.Container.shooter.setShooterAngle(2) #self.Container.shooter.getShooterAngle(self.distanceToShooter)
-                # self.rotation = Rotation2d(math.acos(self.zDistance/self.distanceToShooter)) 
-                # self.Container.rotateToSpesaker(self.rotation)     
-        else:
-            self.Container.shooter.stopRotating()
-            self.sd.putBoolean("A Button Pressed", False)
         
         #Attempt to code dpad (change it to another button if it doesn't work) 
-        # Turn robot until arctan(zDistance/xDistance) = 90 degrees
+        # Turn robot until arctan(xDistance/yDistance) = 90 degrees
             
         # if self.operatorController.POVRightPressed():
         #     self.rotation = Rotation2d() 
         #     self.swerve.rotateToSpeaker(self.rotation)
 
-        
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
             # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
@@ -227,38 +222,10 @@ class MyRobot(commands2.TimedCommandRobot):
             self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
             self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
 
-            
         except:
             if not self.ds.isFMSAttached():
                 raise
         
-
-        # print(wpilib.DriverStation.getAlliance())
-
-        # self.sd.putNumber("gyroYaw", self.swerve.getHeading())
-        # self.sd.putValue("gyroPitch", self.swerve.getPose())
-
-        # # self.drive.encoderTicks.set(self.drive.)
-        # self.sd.putNumber("left talon", self.leftTalon.getSelectedSensorPosition())
-        # self.sd.putNumber("right talon", self.rightTalon.getSelectedSensorPosition())
-        
-        
-        # #~ smartDashboard limit switch setting
-
-        # self.sd.putBoolean("grabbingArmLimitSwitchClosed", self.arm.getGrabbingArmLimitSwitchClosedPressed())
-        # self.sd.putBoolean("grabbingArmLimitSwitchOpen", self.arm.getGrabbingArmLimitSwitchOpenPressed())
-        # self.sd.putBoolean("extendingArmLimitSwitchMin", self.arm.getExtendingArmLimitSwitchMinPressed())
-        # self.sd.putBoolean("extendingArmLimitSwitchMax", self.arm.getExtendingArmLimitSwitchMaxPressed())
-        # self.sd.putBoolean("rotatingArmLimitSwitchMax", self.arm.getRotatingArmLimitSwitchMaxPressed())
-        # self.sd.putBoolean("rotatingArmLimitSwitchMin", self.arm.getRotatingArmLimitSwitchMinPressed())
-    
-        # self.sd.putNumber("rotatingArmEncoderDegrees", self.arm.rotatingArmEncoderDegrees)
-        # self.sd.putNumber("extendingArmEncoderPercent", self.arm.extendingArmEncoderPercent)
-        # self.sd.putNumber("grabbingArmEncoderDegrees", self.arm.grabbingArmEncoderDegrees)
-
-        # self.sd.putNumber("grabbingArmEncoderDegrees", self.arm.grabbingArmEncoderDegrees)
-        # self.sd.putNumber("extendingArmEncoderRevolutions", self.arm.extendingArmEncoder.getPosition())
-        # self.sd.putNumber("rotatingArmEncoderRevolutions", self.arm.rotatingArmEncoder.getPosition())
         pass
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
@@ -267,10 +234,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
+
     def testPeriodic(self) -> None:
         pass
             
-    
     def sendLEDCommand(self, command, isRedAlliance = None):
             # send the specified command to the LEDserver
             team_command = 0
@@ -285,7 +252,6 @@ class MyRobot(commands2.TimedCommandRobot):
                     print("Success sending command ", team_command)
                     return False
                 
-
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)

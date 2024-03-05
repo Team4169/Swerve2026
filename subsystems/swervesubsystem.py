@@ -16,6 +16,8 @@ from wpilib import DriverStation
 from pathplannerlib.auto import AutoBuilder #.auto
 from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
 
+import ntcore
+
 from wpimath.kinematics import ChassisSpeeds
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from wpimath.geometry import Rotation2d
@@ -27,7 +29,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
     def __init__(self):
         super().__init__()
         self.sd = wpilib.SmartDashboard
-
+        
         self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
                                 RobotConstants.frontLeftTurningMotorID, 
                                 RobotConstants.frontLeftDrivingMotorReversed, 
@@ -69,7 +71,6 @@ class SwerveSubsystem (commands2.SubsystemBase):
 
         thread.start()
         
-
         #^^Added this today (1/11)
         AutoBuilder.configureHolonomic(
             self.getPose,
@@ -80,16 +81,6 @@ class SwerveSubsystem (commands2.SubsystemBase):
             self.shouldFlipPath,
             self
         )
-
-        # AutoBuilder.configureHolonomic(
-        #     self.getPose,
-        #     self.resetOdometry,
-        #     self.getChassisSpeeds,
-        #     self.driveChassisSpeeds,
-        #     AutoConstants.pathFollowerConfig,
-        #     self.getAlliance,
-        #     self
-        # )
         
     #~ Gyro Commands
     def zeroHeading(self):
@@ -196,11 +187,18 @@ class SwerveSubsystem (commands2.SubsystemBase):
                             SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())))
                             )
                             )
+        
         self.sd.putString("Robot Odometer", str(self.getModulePositionsOld()))
         self.sd.putString("Robot Location, x", str(self.getPose().X()))
         self.sd.putString("Robot Location, y", str(self.getPose().Y()))
         self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))
         
+        #~ Camera Pose Updating
+        # self.robotR.get()
+        # self.robotY.get()
+        # self.robotX.get()
+        # self.weight.get()
+
     def lockWheels(self):
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d(1, -1)))
         self.frontRight.setDesiredState(SwerveModuleState(0, Rotation2d(1, 1)))

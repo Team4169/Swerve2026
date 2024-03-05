@@ -18,10 +18,6 @@ class IntakeSubsystem(commands2.SubsystemBase):
         #* Intake motors
         self.intakeMotor1 = phoenix5.WPI_TalonSRX(RobotConstants.intakeMotor1ID)
         self.intakeMotor2 = phoenix5.WPI_TalonSRX(RobotConstants.intakeMotor2ID)
-        
-        #* encoders
-        # self.intakeMotor1Encoder = self.intakeMotor1.getEncoder()
-        # self.intakeMotor2Encoder = self.intakeMotor2.getEncoder()
 
     def runIntake(self, speed: float):
         self.intakeMotor1.set(speed)

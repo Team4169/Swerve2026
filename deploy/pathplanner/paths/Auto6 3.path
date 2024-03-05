@@ -20,8 +20,8 @@
         "y": 5.539225686154654
       },
       "prevControl": {
-        "x": 0.9978270455827631,
-        "y": 7.975079687677208
+        "x": -0.25523246481585843,
+        "y": 6.9679477447399965
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Auto6",
+  "folder": "RF1B1F2",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
