@@ -123,30 +123,40 @@ class RobotContainer:
         self.shuffle.putData("Autonomousff", self.chooser)
 
         self.network_tables = ntcore.NetworkTableInstance.getDefault()
-        self.camera_tables = self.network_tables.getTable("datatable")
+        self.datatable = self.network_tables.getTable("datatable")
 
         # self.camera = photonvision.PhotonCamera("Microsoft_LifeCam_HD-3000")
-    def getAutonomousCommand(self) -> commands2.Command:
-        """Returns the autonomous command to run"""
+    
+    '''
+    def getObjectDetectionPathfinding(self) -> commands2.Command:
+        """Returns the pathfinding command from position"""
 
-        # return PathPlannerAuto('GetOutOfTheWay1')
-        # return PathPlannerAuto(self.chooser.getSelected())
+        changeHorizontal = datatable.getEntry("objHorizontal").getValue()
+        changeDistance = datatable.getEntry("objDistance").getValue()
 
-        self.targetPose = Pose2d(10, 5, Rotation2d.fromDegrees(180)) #! there is random stuff in here for right now
+        changeRot = math.atan2(changeHorizontal, changeDistance)
+        self.targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRadians(changeRot))
 
         pathfindingCommand = AutoBuilder.pathfindToPose(
             self.targetPose,
             AutoConstants.constraints,
-            goal_end_vel=0.0, # Goal end velocity in meters/sec
-            rotation_delay_distance=0.0 # Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+            goal_end_vel=0.0,
+            rotation_delay_distance=0.0
         )
         
-        return pathfindingCommand
+        autoCommand = PathPlannerAuto(pathfindingCommand)
+        if autoCommand:
+            autoCommand.schedule()
+    '''
 
-        #optimize clip https://youtu.be/0Xi9yb1IMyA?t=225
+    def getAutonomousCommand(self) -> commands2.Command:
+        """Returns the autonomous command to run"""
+
+        return PathPlannerAuto(self.chooser.getSelected())
 
     def configureButtonBindings(self):
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kY).onTrue(InstantCommand(lambda: self.getObjectDetectionPathfinding()))
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
 
         #*run intake and midstage to bring the ring into the robot
