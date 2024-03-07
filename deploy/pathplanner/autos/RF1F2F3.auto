@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3374413054104268,
-      "y": 3.9816844255657124
+      "x": 1.36086297850199,
+      "y": 7.014791090923124
     },
-    "rotation": 87.99478579603654
+    "rotation": 90.61605990839922
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto4 1"
+            "pathName": "Auto8 1"
           }
         },
         {
@@ -49,13 +49,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "stopMidstage"
+                  "name": "stopShooter"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "stopShooter"
+                  "name": "stopMidstage"
                 }
               }
             ]
@@ -87,28 +87,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "stopMidstage"
+                  "name": "stopIntake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "stopIntake"
+                  "name": "stopMidstage"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto3 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setShooterAngle"
           }
         },
         {
@@ -150,15 +138,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Auto3 4"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto8 2"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -238,9 +226,97 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto8 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickupRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setShooterAngle"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Auto3 5"
+            "pathName": "Auto8 4"
           }
         }
       ]

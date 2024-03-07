@@ -26,7 +26,7 @@ class ShooterSubsystem(commands2.SubsystemBase):
         #* encoders
         self.rotatingMotorEncoder = self.rotatingMotor.getEncoder()
 
-        self.rotatingMotorDegrees = self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree
+        self.rotatingMotorDegrees = float(self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree)
 
         #* shooterAngle PID controller
         self.shooterAnglePIDController = PIDController(RobotConstants.kPShooterAngle, 0, 0)
@@ -62,14 +62,18 @@ class ShooterSubsystem(commands2.SubsystemBase):
         height = RobotConstants.speakerHeight
         gravity = RobotConstants.gravityConstant
         if self.distanceToShooter == 0:
-            return Rotation2d(0)
+            return float(0)
+            #return Rotation2d(0)
         theta = math.atan((velocity**2) - math.sqrt((velocity**4) - gravity*((gravity*(self.distanceToShooter**2)) + (2*height*(velocity**2))))/(gravity*self.distanceToShooter))
         self.sd.putNumber('Theta', theta)
-        return Rotation2d(theta)    
+        return float(theta) 
+        #return Rotation2d(theta)
 
     def setShooterAngle(self, theta) -> None:
+        self.rotatingMotorDegrees = float(self.rotatingMotorEncoder.getPosition() / RobotConstants.rotatingMotorRevPerArmDegree)
         self.rotatingMotor.set(self.shooterAnglePIDController.calculate(self.rotatingMotorDegrees, theta))
-
+        
+        
     def runShooter(self):
         self.shooterMotor1.set(RobotConstants.flyWheelPower)
         self.shooterMotor2.set(RobotConstants.flyWheelPower)

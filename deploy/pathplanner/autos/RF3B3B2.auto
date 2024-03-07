@@ -5,7 +5,7 @@
       "x": 1.3374413054104268,
       "y": 3.9816844255657124
     },
-    "rotation": 90.81845546168863
+    "rotation": 89.13194855025442
   },
   "command": {
     "type": "sequential",
@@ -24,58 +24,47 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "pickupRing"
+                  "name": "midstageRing"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "midstageRing"
+                  "name": "shootRing"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto4 2"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -111,6 +100,94 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "setShooterAngle"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto4 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickupRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Auto4 3"
@@ -123,15 +200,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              }
+            ]
           }
         },
         {
@@ -147,13 +250,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "pickupRing"
+                  "name": "midstageRing"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "midstageRing"
+                  "name": "pickupRing"
                 }
               }
             ]

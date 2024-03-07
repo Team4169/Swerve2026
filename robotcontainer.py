@@ -24,7 +24,6 @@ from subsystems.ShooterSubsystem import ShooterSubsystem
 
 import math
 # import photonvision
-
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto
 from pathplannerlib.path import PathPlannerPath, PathConstraints
 from pathplannerlib.auto import AutoBuilder #.auto
@@ -97,26 +96,27 @@ class RobotContainer:
         # sendable chooser
         self.chooser = wpilib.SendableChooser()
 
-        self.RF1B1B2 = "RF1B1B2"
-        self.RB5B4B3 = "RB5B4B3"
-        self.RF3F2 = "RF3F2"
-        self.RF3B3B2 = "RF3B3B2"
-        self.RB5B4_1 = "RB5B4_1"
-        self.RF1B1F2 = "RF1B1F2"
-        self.RB5B4_2 = "RB5B4_2"
-        self.auto8 = "Auto8"
+        self.RF1B1B2 = "RF1B1B2" # Auto 1 
+        self.RB5B4B3 = "RB5B4B3" #Auto 2
+        self.RF3F2 = "RF3F2" #Auto 3 (4 1, 3 3 , 3 4, 3 5)
+        self.RF3B3B2 = "RF3B3B2" # Auto 4
+        self.RB5B4 = "RB5B4" # Auto 5
+        self.RF1B1F2 = "RF1B1F2" # Auto 6
+       # self.RB5B4_2 = "RB5B4_2" # Auto 7
         self.autogetoutoftheway1 = "GetOutOfTheWay1"
-        self.Auto = "Auto"
+        self.RF1F2F3 = "RF1F2F3" #Auto 8 
+        self.mirrorTest = "mirrorTest"
 
-        self.chooser.setDefaultOption("RF1B1B2", self.RF1B1B2)
-        self.chooser.addOption("RB5B4B3", self.RB5B4B3)
-        self.chooser.addOption("RF3F2", self.RF3F2)
-        self.chooser.addOption("RF3B3B2", self.RF3B3B2)
-        self.chooser.addOption("RB5B4_1", self.RB5B4_1)
-        self.chooser.addOption("RF1B1F2", self.RF1B1F2)
-        self.chooser.addOption("RB5B4_2", self.RB5B4_2)
+        self.chooser.setDefaultOption("RF1B1B2", self.RF1B1B2) # Auto 1
+        self.chooser.addOption("RB5B4B3", self.RB5B4B3) #Auto 2
+        self.chooser.addOption("RF3F2", self.RF3F2) #Auto 3
+        self.chooser.addOption("RF3B3B2", self.RF3B3B2) # Auto 4
+        self.chooser.addOption("RB5B4", self.RB5B4)# Auto 5
+        self.chooser.addOption("RF1B1F2", self.RF1B1F2) # Auto 6
+       # self.chooser.addOption("RB5B4_2", self.RB5B4_2) # Auto 7
         self.chooser.addOption("GetOutOfTheWay1", self.autogetoutoftheway1)
-        self.chooser.addOption("Auto", self.Auto)
+        self.chooser.addOption("RF1F2F3", self.RF1F2F3) # Auto 8 
+        self.chooser.addOption("mirrorTest", self.mirrorTest) 
 
         # # Put the chooser on the dashboard
         self.shuffle = wpilib.SmartDashboard
@@ -158,10 +158,11 @@ class RobotContainer:
             
         #*Shooter launch
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(lambda: self.shooter.stopShooter())
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(lambda: self.midstage.stopMidstage())
 
         #*Backup for if the rotating shooter doesn't work
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(Rotation2d(constants.RobotConstants.backupShooterAngle)))).onFalse(lambda: self.shooter.stopRotating())
-        #these are the backups for the backups
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(float(constants.RobotConstants.backupShooterAngle)))).onFalse(lambda: self.shooter.stopRotating())
+        #these are the backups for the backups#                                                                                                                 ^^^^   this was a Rotation2d before^^^
         #if the setShooter angle doesn't work and the backupshooterangle doesn't work
         #then the operator would rotate the shooter angle manually   
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(self.shooter.getShooterAngle()))).onFalse(lambda: self.shooter.stopRotating())
@@ -202,5 +203,6 @@ class RobotContainer:
         rotation = Rotation2d(math.acos(self.xDistance/self.distanceToShooter)) 
 
         self.rotateToSpeakerCommand = rotateToSpeakerCommand(self.swerve, rotation)
+        #print("running rotate to speaker")
         self.rotateToSpeakerCommand.schedule()
-        print("running rotate to speaker")
+        

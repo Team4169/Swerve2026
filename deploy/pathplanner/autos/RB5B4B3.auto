@@ -24,15 +24,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
           }
         },
         {
@@ -92,15 +118,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
           }
         },
         {
@@ -135,13 +187,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "stopIntake"
+                  "name": "stopMidstage"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "stopMidstage"
+                  "name": "stopIntake"
                 }
               }
             ]
@@ -160,15 +212,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
           }
         },
         {
@@ -228,15 +306,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shootRing"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shootRing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "midstageRing"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "stopShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stopMidstage"
+                }
+              }
+            ]
           }
         }
       ]
