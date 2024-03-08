@@ -187,8 +187,10 @@ class AutoConstants:
             )
 
         constraints = PathConstraints(
-            3.0, 4.0,
-            degreesToRadians(540), degreesToRadians(720)
+            kMaxSpeedMetersPerSecond,
+            kMaxAccelerationMetersPerSecondSquared,
+            kMaxAngularSpeedRadiansPerSecond,
+            kMaxAngularAccelerationRadiansPerSecondSquared
         )
 
 class sim:
