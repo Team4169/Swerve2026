@@ -118,10 +118,10 @@ class RobotConstants:
                                  #! to get the most accurate result, we need the 
                                  #! length of shooter * sin(launch angle). this is
                                  #! a bit difficult to get bc we don't know the launch angle.
-    #radius of the fly wheels 6ft 6in ~198 cm
+    #radius of the fly wheels 6ft 6in. ~198 cm
     flyWheelRadius = 0.051 
 
-    flyWheelPower = 0.75 #from 0-1. like what you'd do for a motor
+    flyWheelPower = -0.75 #from 0-1. like what you'd do for a motor
     gravityConstant = 9.8
     #time it takes for one full rotation of the fly wheels
     period = 60/(5676 * flyWheelPower)
@@ -135,6 +135,8 @@ class RobotConstants:
     # ~ Climber Constants (NEO)
     climbingMotorLeftID = 58
     climbingMotorRightID = 59
+    # climbingMotorLeftLimitSwitchID = 
+    # climbingMotorRightLimitSwitchID =    
 
     #names are in relation to back of robot similar to the swerve modules
 

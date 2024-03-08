@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 #! TODO:
-#! 1. reflash talons
 #! 2. test the subsystems (especially the shooter angle code)
 #! 3. find rotatingMotorRevPerArmDegree in constants.py
-#! 4. test the pathplanner alliance side mirror code and autos at max speed
-#! 5. test auto rotate function when angling shooter
-#! 6. test the limit switches for the shooter subsystem
-#! #! 2. zero swerve modules (values don't work, might try again) 
-#! 7. pathfinder
-#! 8. get more accurate delta y for the height of speaker in constants.py 
+#! 4. test auto rotate function when angling shooter
+#! 5. test the limit switches for the shooter subsystem
+#! 6. test the pathplanner alliance side mirror code and autos at max speed
+#! 7. zero swerve modules (values don't work, might try again) 
+#! 8. pathfinder
+#! 9. get more accurate delta y for the height of speaker in constants.py 
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 

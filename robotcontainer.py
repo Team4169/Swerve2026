@@ -150,25 +150,25 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
 
         #*run intake and midstage to bring the ring into the robot
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.25))).onFalse(lambda: self.intake.stopIntake())
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.25))).onFalse(lambda: self.midstage.stopMidstage())
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.75))).onFalse(lambda: self.intake.stopIntake())
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.75))).onFalse(lambda: self.midstage.stopMidstage())
         #run the intake and midstage to eject the ring
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.25))).onFalse(lambda: self.intake.stopIntake())
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.25))).onFalse(lambda: self.midstage.stopMidstage())                       
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.75))).onFalse(lambda: self.intake.stopIntake())
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.75))).onFalse(lambda: self.midstage.stopMidstage())                       
             
         #*Shooter launch
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(lambda: self.shooter.stopShooter())
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(lambda: self.midstage.stopMidstage())
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.75))).onFalse(lambda: self.midstage.stopMidstage())
 
-        #*Backup for if the rotating shooter doesn't work
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(float(constants.RobotConstants.backupShooterAngle)))).onFalse(lambda: self.shooter.stopRotating())
-        #these are the backups for the backups#                                                                                                                 ^^^^   this was a Rotation2d before^^^
-        #if the setShooter angle doesn't work and the backupshooterangle doesn't work
-        #then the operator would rotate the shooter angle manually   
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(self.shooter.getShooterAngle()))).onFalse(lambda: self.shooter.stopRotating())
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.rotateToSpeaker()))
+        # #*Backup for if the rotating shooter doesn't work
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(float(constants.RobotConstants.backupShooterAngle)))).onFalse(lambda: self.shooter.stopRotating())
+        # #these are the backups for the backups#                                                                                                                 ^^^^   this was a Rotation2d before^^^
+        # #if the setShooter angle doesn't work and the backupshooterangle doesn't work
+        # #then the operator would rotate the shooter angle manually   
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(self.shooter.getShooterAngle()))).onFalse(lambda: self.shooter.stopRotating())
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.rotateToSpeaker()))
 
-        #  (
+        # #  (
         # JoystickButton(self.driverController, XboxController.Button.kStart).whenPressed(lambda: self.swerve.zeroHeading())
         # )
         # (

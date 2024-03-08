@@ -32,8 +32,8 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.shooterAnglePIDController = PIDController(RobotConstants.kPShooterAngle, 0, 0)
 
         #* limit Switches
-        self.shooterMaxLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMaxLimitSwitchID)
-        self.shooterMinLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMinLimitSwitchID)
+        # self.shooterMaxLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMaxLimitSwitchID)
+        # self.shooterMinLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMinLimitSwitchID)
 
         self.network_tables = ntcore.NetworkTableInstance.getDefault()
         self.camera_tables = self.network_tables.getTable("datatable")
