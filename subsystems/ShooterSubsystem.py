@@ -36,7 +36,7 @@ class ShooterSubsystem(commands2.SubsystemBase):
         # self.shooterMinLimitSwitch = wpilib.DigitalInput(RobotConstants.shooterMinLimitSwitchID)
 
         self.network_tables = ntcore.NetworkTableInstance.getDefault()
-        self.camera_tables = self.network_tables.getTable("datatable")
+        self.camera_tables = self.network_tables.getTable("SmartDashboard")
 
     def getShooterAngle(self): 
         self.jetson1rotation = self.camera_tables.getEntry("r1").getValue()
@@ -48,10 +48,10 @@ class ShooterSubsystem(commands2.SubsystemBase):
         self.jetson1weight = self.camera_tables.getEntry("w1").getValue()
         self.jetson2weight = self.camera_tables.getEntry("w2").getValue()
         
-        self.rotationAve = (self.jetson1rotation + self.jetson2rotation) /2
-        self.xAve = (self.jetson1X + self.jetson2X) /2
-        self.yAve = (self.jetson1Y + self.jetson2Y) /2
-        self.weightAve = (self.jetson1weight + self.jetson2weight) / 2
+        self.rotationAve = math.atan2((math.sin(self.jetson1rotation) * self.jetson1weight + math.sin(self.jetson2rotation) * self.jetson2weight) / (self.jetson1weight + self.jetson2weight),
+                   (math.cos(self.jetson1rotation) * self.jetson1weight + math.cos(self.jetson2rotation) * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)) % (2 * math.pi)
+        self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight +self.jetson2weight)
+        self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight +self.jetson2weight)
         
         self.xDistance = self.RobotConstants.speakerToCenterOFField - self.xAve
         self.yDistance = self.RobotConstants.heightoFField - self.yAve

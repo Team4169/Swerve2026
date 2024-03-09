@@ -29,7 +29,7 @@ class OIConstants:
 
 #~ robot specifications
 class RobotConstants:
-    drivingSpeedLimiter = 0.9
+    drivingSpeedLimiter = 0.75
 
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
@@ -92,15 +92,15 @@ class RobotConstants:
     kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared * 2 / kWheelDiameterMeters
 
     #what is the max speed we allow teleop driver to move laterally
-    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond / 4 # the /2 is the restriction we want to put on speed
-    kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2
+    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond * (3/4) # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * (3/4)
 
     # ~ Intake Constants (minicim)
     intakeMotor1ID = 52
     intakeMotor2ID = 53
 
     # ~ Midstage Constants (minicim)
-    midstageMotor1ID = 54
+    midstageMotor1ID = 59
 
     # ~ Outtake Constants (NEO)
     shooterMotor1ID = 55 
@@ -121,7 +121,7 @@ class RobotConstants:
     #radius of the fly wheels 6ft 6in. ~198 cm
     flyWheelRadius = 0.051 
 
-    flyWheelPower = -0.75 #from 0-1. like what you'd do for a motor
+    flyWheelPower = -1 #from 0-1. like what you'd do for a motor
     gravityConstant = 9.8
     #time it takes for one full rotation of the fly wheels
     period = 60/(5676 * flyWheelPower)
@@ -133,8 +133,8 @@ class RobotConstants:
     speakerToCenterOfFieldX = 8.3 #length in meters
     heightOfField = 1.45 #length in meters
     # ~ Climber Constants (NEO)
-    climbingMotorLeftID = 58
-    climbingMotorRightID = 59
+    climbingMotorLeftID = 59
+    climbingMotorRightID = 58
     # climbingMotorLeftLimitSwitchID = 
     # climbingMotorRightLimitSwitchID =    
 

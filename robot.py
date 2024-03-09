@@ -167,26 +167,26 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
         self.sd.putNumber("Left Trigger Axis", self.operatorController.getLeftTriggerAxis())
-        if self.operatorController.getLeftTriggerAxis() > 0.2:
-            self.Container.climber.runLeftClimbingMotor(-0.25)
-        else:
-            self.Container.climber.stopLeftClimbingMotor()
+        # if self.operatorController.getLeftTriggerAxis() > 0.2:
+        #     self.Container.climber.runRightClimbingMotor(0.35)
+        # else:
+        #     self.Container.climber.stopRightClimbingMotor()
         
-        if self.operatorController.getRightTriggerAxis() > 0.2:
-            self.Container.climber.runRightClimbingMotor(-0.25)
+        # if self.operatorController.getRightTriggerAxis() > 0.2:
+        #     self.Container.climber.runLeftClimbingMotor(-0.35)
 
-        else:
-            self.Container.climber.stopRightClimbingMotor()
+        # else:
+        #     self.Container.climber.stopLeftClimbingMotor()
 
-        if self.operatorController.getLeftBumperPressed():
-            self.Container.climber.runLeftClimbingMotor(0.25)
-        else:
-            self.Container.climber.stopLeftClimbingMotor()
+        # if self.operatorController.getLeftBumperPressed():
+        #     self.Container.climber.runRightClimbingMotor(-0.35)
+        # else:
+        #     self.Container.climber.stopRightClimbingMotor()
             
-        if self.operatorController.getRightBumperPressed():
-            self.Container.climber.runRightClimbingMotor(-0.25)
-        else:
-            self.Container.climber.stopRightClimbingMotor()
+        # if self.operatorController.getRightBumperPressed():
+        #     self.Container.climber.runLeftClimbingMotor(-0.35)
+        # else:
+        #     self.Container.climber.stopLeftClimbingMotor()
 
         
         

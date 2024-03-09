@@ -33,12 +33,12 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "35,573",
-      "Size": "202,214"
+      "Size": "32,38"
     },
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "439,691",
-      "Size": "976,278"
+      "Size": "32,38"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -59,12 +59,12 @@
     "###System Joysticks": {
       "Collapsed": "0",
       "Pos": "18,265",
-      "Size": "232,254"
+      "Size": "32,38"
     },
     "###Timing": {
       "Collapsed": "0",
       "Pos": "40,766",
-      "Size": "154,168"
+      "Size": "32,38"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -74,7 +74,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "21,60",
-      "Size": "109,134"
+      "Size": "32,38"
     }
   }
 }

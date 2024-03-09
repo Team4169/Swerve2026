@@ -16,7 +16,7 @@ class MidstageSubsystem(commands2.SubsystemBase):
         self.sd = wpilib.SmartDashboard
 
         #* Intake motors
-        self.midstageMotor1 = phoenix5.WPI_TalonSRX(RobotConstants.midstageMotor1ID)
+        self.midstageMotor1 = rev.CANSparkMax(RobotConstants.midstageMotor1ID, rev.CANSparkLowLevel.MotorType.kBrushless)
         
         
     def runMidstage(self, speed: float):
@@ -24,3 +24,4 @@ class MidstageSubsystem(commands2.SubsystemBase):
 
     def stopMidstage(self):
         self.midstageMotor1.set(0)
+        
