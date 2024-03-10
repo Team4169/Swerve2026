@@ -100,27 +100,27 @@ class RobotContainer:
         # sendable chooser
         self.chooser = wpilib.SendableChooser()
 
-        self.RF1B1B2 = "RF1B1B2" # Auto 1 
-        self.RB5B4B3 = "RB5B4B3" #Auto 2
-        self.RF3F2 = "RF3F2" #Auto 3 (4 1, 3 3 , 3 4, 3 5)
-        self.RF3B3B2 = "RF3B3B2" # Auto 4
-        self.RB5B4 = "RB5B4" # Auto 5
-        self.RF1B1F2 = "RF1B1F2" # Auto 6
+        # self.RF1B1B2 = "RF1B1B2" # Auto 1 
+        # self.RB5B4B3 = "RB5B4B3" #Auto 2
+        # self.RF3F2 = "RF3F2" #Auto 3 (4 1, 3 3 , 3 4, 3 5)
+        # self.RF3B3B2 = "RF3B3B2" # Auto 4
+        # self.RB5B4 = "RB5B4" # Auto 5
+        # self.RF1B1F2 = "RF1B1F2" # Auto 6
        # self.RB5B4_2 = "RB5B4_2" # Auto 7
-        self.autogetoutoftheway1 = "GetOutOfTheWay1"
-        self.RF1F2F3 = "RF1F2F3" #Auto 8 
-        self.mirrorTest = "mirrorTest"
+        self.GetOutOfTheWay1 = "GetOutOfTheWay1"
+        # self.RF1F2F3 = "RF1F2F3" #Auto 8 
+        # self.mirrorTest = "mirrorTest"
 
-        self.chooser.setDefaultOption("RF1B1B2", self.RF1B1B2) # Auto 1
-        self.chooser.addOption("RB5B4B3", self.RB5B4B3) #Auto 2
-        self.chooser.addOption("RF3F2", self.RF3F2) #Auto 3
-        self.chooser.addOption("RF3B3B2", self.RF3B3B2) # Auto 4
-        self.chooser.addOption("RB5B4", self.RB5B4)# Auto 5
-        self.chooser.addOption("RF1B1F2", self.RF1B1F2) # Auto 6
+        # self.chooser.setDefaultOption("RF1B1B2", self.RF1B1B2) # Auto 1
+        # self.chooser.addOption("RB5B4B3", self.RB5B4B3) #Auto 2
+        # self.chooser.addOption("RF3F2", self.RF3F2) #Auto 3
+        # self.chooser.addOption("RF3B3B2", self.RF3B3B2) # Auto 4
+        # self.chooser.addOption("RB5B4", self.RB5B4)# Auto 5
+        # self.chooser.addOption("RF1B1F2", self.RF1B1F2) # Auto 6
        # self.chooser.addOption("RB5B4_2", self.RB5B4_2) # Auto 7
-        self.chooser.addOption("GetOutOfTheWay1", self.autogetoutoftheway1)
-        self.chooser.addOption("RF1F2F3", self.RF1F2F3) # Auto 8 
-        self.chooser.addOption("mirrorTest", self.mirrorTest) 
+        self.chooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
+        # self.chooser.addOption("RF1F2F3", self.RF1F2F3) # Auto 8 
+        # self.chooser.addOption("mirrorTest", self.mirrorTest) 
 
         # # Put the chooser on the dashboard
         self.shuffle = wpilib.SmartDashboard

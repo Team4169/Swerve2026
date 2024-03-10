@@ -92,7 +92,7 @@ class RobotConstants:
     kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared * 2 / kWheelDiameterMeters
 
     #what is the max speed we allow teleop driver to move laterally
-    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond * (3/4) # the /2 is the restriction we want to put on speed
+    kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond *1 # the /2 is the restriction we want to put on speed
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * (3/4)
 
     # ~ Intake Constants (minicim)
