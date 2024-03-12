@@ -38,9 +38,9 @@ class SwerveJoystickCmd(CommandBase):
         self.ySpeed = wpimath.applyDeadband(self.ySpeed, OIConstants.deadzone)
         self.zRotation = wpimath.applyDeadband(self.zRotation, OIConstants.deadzone)
         
-        self.swerve.sd.putNumber("xSpeed", self.xSpeed) 
-        self.swerve.sd.putNumber("ySpeed", self.ySpeed) 
-        self.swerve.sd.putNumber("Zspeed", self.zRotation)
+        # self.swerve.sd.putNumber("xSpeed", self.xSpeed) 
+        # self.swerve.sd.putNumber("ySpeed", self.ySpeed) 
+        # self.swerve.sd.putNumber("Zspeed", self.zRotation)
         # # 2. Add rateLimiter to smooth the joystick values
         self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
@@ -57,15 +57,15 @@ class SwerveJoystickCmd(CommandBase):
 
         # 3. convert chasis speeds to module states
         moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
-        self.swerve.sd.putNumber("ExpectedFL", float(moduleStates[0].angle.degrees()))
-        self.swerve.sd.putNumber("ExpectedFR", float(moduleStates[1].angle.degrees()))
-        self.swerve.sd.putNumber("ExpectedBL", float(moduleStates[2].angle.degrees()))
-        self.swerve.sd.putNumber("ExpectedBR", float(moduleStates[3].angle.degrees()))
+        # self.swerve.sd.putNumber("ExpectedFL", float(moduleStates[0].angle.degrees()))
+        # self.swerve.sd.putNumber("ExpectedFR", float(moduleStates[1].angle.degrees()))
+        # self.swerve.sd.putNumber("ExpectedBL", float(moduleStates[2].angle.degrees()))
+        # self.swerve.sd.putNumber("ExpectedBR", float(moduleStates[3].angle.degrees()))
 
-        self.swerve.sd.putNumber("ExpectedSpeedFL", float(moduleStates[0].speed))
-        self.swerve.sd.putNumber("ExpectedSpeedFR", float(moduleStates[1].speed))
-        self.swerve.sd.putNumber("ExpectedSpeedBL", float(moduleStates[2].speed))
-        self.swerve.sd.putNumber("ExpectedSpeedBR", float(moduleStates[3].speed))
+        # self.swerve.sd.putNumber("ExpectedSpeedFL", float(moduleStates[0].speed))
+        # self.swerve.sd.putNumber("ExpectedSpeedFR", float(moduleStates[1].speed))
+        # self.swerve.sd.putNumber("ExpectedSpeedBL", float(moduleStates[2].speed))
+        # self.swerve.sd.putNumber("ExpectedSpeedBR", float(moduleStates[3].speed))
 
 
 

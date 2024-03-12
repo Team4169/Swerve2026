@@ -65,7 +65,9 @@ class MyRobot(commands2.TimedCommandRobot):
         #~ LED commands and variables
         # self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
         # self.previousLEDCommand = 0
-        
+
+        self.network_tables = ntcore.NetworkTableInstance.getDefault()
+        self.camera_tables = self.network_tables.getTable("SmartDashboard")
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
@@ -77,10 +79,10 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def disabledPeriodic(self) -> None:
-        self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
+        # self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
+        # self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
+        # self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
+        # self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
 
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
@@ -101,6 +103,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
         # self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
         # self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
+        #self.sd.putBoolean("inMidstage", self.camera_tables.getEntry("inMid").getValue())
+
 
     def autonomousInit(self) -> None:
         self.swerve.frontLeft.drivingEncoder.setPosition(0)
@@ -166,7 +170,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
-        self.sd.putNumber("Left Trigger Axis", self.operatorController.getLeftTriggerAxis())
+        # self.sd.putNumber("Left Trigger Axis", self.operatorController.getLeftTriggerAxis())
+
         # if self.operatorController.getLeftTriggerAxis() > 0.2:
         #     self.Container.climber.runRightClimbingMotor(0.35)
         # else:
@@ -212,7 +217,7 @@ class MyRobot(commands2.TimedCommandRobot):
             #       round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
             #       round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
             #       round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
-            self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
+            # self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
             self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
             self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())
             self.sd.putNumber("Module Position (BR)", self.swerve.backRight.getDrivingPosition())

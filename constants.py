@@ -105,7 +105,7 @@ class RobotConstants:
     # ~ Outtake Constants (NEO)
     shooterMotor1ID = 55 
     shooterMotor2ID = 56
-    rotatingMotorID = 57
+    rotatingMotorID = 63 #! not used delete!!
     rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
     kPShooterAngle = .1
 
@@ -133,7 +133,7 @@ class RobotConstants:
     speakerToCenterOfFieldX = 8.3 #length in meters
     heightOfField = 1.45 #length in meters
     # ~ Climber Constants (NEO)
-    climbingMotorLeftID = 59
+    climbingMotorLeftID = 57
     climbingMotorRightID = 58
     # climbingMotorLeftLimitSwitchID = 
     # climbingMotorRightLimitSwitchID =    
