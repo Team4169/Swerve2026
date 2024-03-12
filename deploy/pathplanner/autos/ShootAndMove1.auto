@@ -18,25 +18,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shootRing"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
                   "name": "midstageRing"
                 }
               },

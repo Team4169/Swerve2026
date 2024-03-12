@@ -26,11 +26,13 @@ class OIConstants:
     kDriverControllerPort = 0
     kArmControllerPort = 1
     deadzone = .12 
+#~ driving constants
+class DrivingConstants:
+    drivingSpeedLimiter = 1
+    rotationSpeedLimiter = 1
 
-#~ robot specifications
+#~ robot specification
 class RobotConstants:
-    drivingSpeedLimiter = 0.75
-
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
     kTrackWidth = UtilCommands.inchesToMeters(22) #found with measuring tape

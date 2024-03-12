@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 #! TODO:
-#! 2. test the subsystems (especially the shooter angle code)
-#! 3. find rotatingMotorRevPerArmDegree in constants.py
-#! 4. test auto rotate function when angling shooter
-#! 5. test the limit switches for the shooter subsystem
-#! 6. test the pathplanner alliance side mirror code and autos at max speed
-#! 7. zero swerve modules (values don't work, might try again) 
-#! 8. pathfinder
-#! 9. get more accurate delta y for the height of speaker in constants.py 
+#! 1. test the pathplanner alliance side mirror code and autos at max speed
+#! 2. pathfinder
+#! 3. reduce note cycle time
+#! test roborio cables
+#! reduce cycle times 
+#!      object detection to ring test
+#!      test shooting from all subwoofer sides
+#!      april tag detection shooter warm up
+#!  test mode
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 
@@ -17,7 +18,7 @@ from wpimath.geometry import Rotation2d
 import commands2
 import math
 import constants
-from constants import ModuleConstants, RobotConstants
+from constants import ModuleConstants, RobotConstants, DrivingConstants
 from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
@@ -170,7 +171,29 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
-        # self.sd.putNumber("Left Trigger Axis", self.operatorController.getLeftTriggerAxis())
+
+        # self.jetson1X = self.camera_tables.getEntry("x1").getValue()
+        # self.jetson2X = self.camera_tables.getEntry("x2").getValue()
+        # self.jetson1Y = self.camera_tables.getEntry("y1").getValue()
+        # self.jetson2Y = self.camera_tables.getEntry("y2").getValue()
+        # self.jetson1weight = self.camera_tables.getEntry("w1").getValue()
+        # self.jetson2weight = self.camera_tables.getEntry("w2").getValue()
+        # self.jetson1rot = self.camera_tables.getEntry("r1").getValue()
+        # self.jetson2rot = self.camera_tables.getEntry("r2").getValue()
+
+        # self.xAve = (self.jetson1X + self.jetson2X) /2
+        # self.yAve = (self.jetson1Y + self.jetson2Y) /2
+        
+        # self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+
+        # self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
+        # self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
+        # self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+
+        # if self.distanceToShooter <= 3 and self.Container.autoShooterWarmup:
+        #     self.Container.shooter.runShooter()
+
+        self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)
 
         # if self.operatorController.getLeftTriggerAxis() > 0.2:
         #     self.Container.climber.runRightClimbingMotor(0.35)

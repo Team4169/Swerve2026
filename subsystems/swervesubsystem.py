@@ -171,6 +171,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
         # This will flip the path being followed to the red side of the field.
         # THE ORIGIN WILL REMAIN ON THE BLUE SIDE
         return DriverStation.getAlliance() == DriverStation.Alliance.kRed  #! or kBlue idk this needs testing
+    ####return DriverStation.getAlliance() == DriverStation.Alliance.kRed
+
       
     # def getAlliance(self):
     #     return True

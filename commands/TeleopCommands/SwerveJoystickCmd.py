@@ -1,5 +1,5 @@
 import commands2, constants, wpilib, navx, threading, time, math
-from constants import OIConstants, RobotConstants
+from constants import OIConstants, RobotConstants, DrivingConstants
 from wpimath.filter import SlewRateLimiter
 from commands2 import CommandBase 
 from wpilib import XboxController
@@ -25,10 +25,10 @@ class SwerveJoystickCmd(CommandBase):
     
     def execute(self):
         #these are multiplied by the drivingSpeedLimiter which limit the speed of the robot so it doesn't go too fast
-        self.xSpeed = self.driverController.getLeftX() * RobotConstants.drivingSpeedLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.ySpeed = self.driverController.getLeftY() * RobotConstants.drivingSpeedLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.driverController.getRightX() * -1 * RobotConstants.drivingSpeedLimiter
-
+        self.xSpeed = self.driverController.getLeftX() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter#* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.ySpeed = self.driverController.getLeftY() * DrivingConstants.drivingSpeedLimiter#self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        self.zRotation = self.driverController.getRightX() * -1 * DrivingConstants.rotationSpeedLimiter#self.drivingLimiter
+        
         # 1. Get the joystick values and apply deadzone
         
         # print(self.ySpeed)
