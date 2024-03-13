@@ -79,7 +79,7 @@ class RobotContainer:
             commands2.InstantCommand(lambda:self.intake.stopIntake())
         )
         NamedCommands.registerCommand("midstageRing",
-            commands2.InstantCommand(lambda:self.midstage.runMidstage(0.50))
+            commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.50))
         )
         NamedCommands.registerCommand("stopMidstage",
             commands2.InstantCommand(lambda:self.midstage.stopMidstage())
@@ -146,7 +146,7 @@ class RobotContainer:
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        return PathPlannerAuto('TestAuto')
+        return PathPlannerAuto('ShootAndMove1')
         # return PathPlannerAuto(self.chooser.getSelected())    
     
 
@@ -178,12 +178,13 @@ class RobotContainer:
 
 
         #*run intake and midstage to bring the ring into the robot
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.5))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))
         #run the intake and midstage to eject the ring
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.5))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))                       
-            
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue().onFalse()                       
+        
         #*Shooter launch
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(InstantCommand(lambda: self.shooter.stopShooter()))
         
