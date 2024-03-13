@@ -105,7 +105,7 @@ class swervemodule(commands2.SubsystemBase):
         self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
             #may or may not be due to the impresise conversion factor or som
 
-        self.sd.putNumber(f"pid output", self.turningPIDController.calculate(self.getTurningPostion(), self.state.angle.radians()))        
+        self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
         # self.sd.putString(f"Optimized state", str(self.state))
         # self.sd.putString(f"state", str(state))
 

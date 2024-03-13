@@ -61,4 +61,4 @@ class sCurve(commands2.SequentialCommandGroup):
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
     def getCommand(self):
-        return self.swerveControllerCommand1
+        return self.sCurve

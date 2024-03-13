@@ -34,18 +34,18 @@
   "globalConstraints": {
     "maxVelocity": 0.5,
     "maxAcceleration": 0.5,
-    "maxAngularVelocity": 180.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 89.57871509583141,
+    "rotation": -90.7440592028887,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "ShotAndMoveBack",
   "previewStartingState": {
-    "rotation": 90.49391689861875,
+    "rotation": 90.53545898556452,
     "velocity": 0
   },
   "useDefaultConstraints": false

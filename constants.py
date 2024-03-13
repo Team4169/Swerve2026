@@ -37,7 +37,7 @@ class RobotConstants:
 
     kTrackWidth = UtilCommands.inchesToMeters(22) #found with measuring tape
         # ? Distance between the right and left wheels
-    kWheelBase = UtilCommands.inchesToMeters(17.5) #todo: find the actual wheel base
+    kWheelBase = UtilCommands.inchesToMeters(17.5) 
         # ? Distance between the front and back wheels
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(-kTrackWidth / 2, -kWheelBase / 2), #Front Left       
@@ -182,7 +182,7 @@ class AutoConstants:
         #^Added this today (1/11)
         pathFollowerConfig = HolonomicPathFollowerConfig( 
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(5.0, 0.0, 1.0), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
+                PIDConstants(0.4, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
                 kMaxSpeedMetersPerSecond, # Max module speed, in m/s
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
                 ReplanningConfig() # Default path replanning config. See the API for the options here

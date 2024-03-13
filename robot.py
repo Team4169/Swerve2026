@@ -80,6 +80,38 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def disabledPeriodic(self) -> None:
+        self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
+        self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
+        self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
+        self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
+        self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
+        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
+        self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
+        self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
+        if self.jetson1weight + self.jetson2weight > 0:
+           self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+           self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+        
+           self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+
+        #    self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
+        #    self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
+        #    self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+           print(math.sqrt(self.xAve **2 + self.yAve **2))
+
+        self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
+
+           #print(self.distanceToShooter)
+
+        # self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
+        # self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
+        # print(self.jetson1X)
+        # if self.jetson1X == :
+        #     print("printong none")
+        # else:
+        #     self.sd.putData("Jetson2x", self.jetson2X)
+        # print(f'adding {self.jetson2X + self.jetson1X}')
+        # print(type(self.jetson1X))
         # self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
         # self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
         # self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
@@ -159,7 +191,7 @@ class MyRobot(commands2.TimedCommandRobot):
             self.AutonomousCommand.cancel()
         
         # print("Starting teleop...")
-        self.speed = 0
+        # self.speed = 0
 
         self.swerve.frontLeft.drivingEncoder.setPosition(0)
         self.swerve.frontRight.drivingEncoder.setPosition(0)
@@ -172,23 +204,26 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
 
-        # self.jetson1X = self.camera_tables.getEntry("x1").getValue()
-        # self.jetson2X = self.camera_tables.getEntry("x2").getValue()
-        # self.jetson1Y = self.camera_tables.getEntry("y1").getValue()
-        # self.jetson2Y = self.camera_tables.getEntry("y2").getValue()
-        # self.jetson1weight = self.camera_tables.getEntry("w1").getValue()
-        # self.jetson2weight = self.camera_tables.getEntry("w2").getValue()
-        # self.jetson1rot = self.camera_tables.getEntry("r1").getValue()
-        # self.jetson2rot = self.camera_tables.getEntry("r2").getValue()
-
-        # self.xAve = (self.jetson1X + self.jetson2X) /2
-        # self.yAve = (self.jetson1Y + self.jetson2Y) /2
+        self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
+        self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
+        self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
+        self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
+        self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
+        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
+        self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
+        self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
+        if self.jetson1weight + self.jetson2weight > 0:
+           self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+           self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
-        # self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+           self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
 
-        # self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
-        # self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
-        # self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+           self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
+           self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
+           self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+
+           print(self.distanceToShooter)
+        print(self.Container.autoShooterWarmup)
 
         # if self.distanceToShooter <= 3 and self.Container.autoShooterWarmup:
         #     self.Container.shooter.runShooter()
