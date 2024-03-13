@@ -212,9 +212,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
         self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
         self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
-        print('apriltag tests: getLastChange() =', self.camera_tables.getEntry("w1").getLastChange(), '_now() = ', ntcore._now())
         self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
         self.timeSinceLastDataReceivedFromJetson2 = self.camera_tables.getEntry("w2").getLastChange() - ntcore._now()
+        if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
+        if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
         if self.jetson1weight + self.jetson2weight > 0:
            self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
            self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
