@@ -71,13 +71,13 @@ class RobotContainer:
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
         NamedCommands.registerCommand("pickupRing",
-            commands2.InstantCommand(lambda:self.intake.runIntake(0.50))
+            commands2.InstantCommand(lambda:self.intake.runIntake(-0.75))
         )
         NamedCommands.registerCommand("stopIntake",
             commands2.InstantCommand(lambda:self.intake.stopIntake())
         )
         NamedCommands.registerCommand("midstageRing",
-            commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.50))
+            commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.75))
         )
         NamedCommands.registerCommand("stopMidstage",
             commands2.InstantCommand(lambda:self.midstage.stopMidstage())
@@ -149,7 +149,7 @@ class RobotContainer:
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        return PathPlannerAuto('ShootAndMove')
+        return PathPlannerAuto('ShootAndPickup')
         # return PathPlannerAuto(self.chooser.getSelected())    
     
 

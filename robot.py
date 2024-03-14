@@ -96,7 +96,7 @@ class MyRobot(commands2.TimedCommandRobot):
             # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
             self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
             self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
-            self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+            self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
         self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
