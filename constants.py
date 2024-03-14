@@ -57,7 +57,7 @@ class RobotConstants:
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 1 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#
+    frontLeftAbsoluteEncoderOffset = (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 2
@@ -65,7 +65,7 @@ class RobotConstants:
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 2
-    frontRightAbsoluteEncoderOffset =0.770 + (0.5*math.pi)  #0.623
+    frontRightAbsoluteEncoderOffset = 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 3
@@ -73,7 +73,7 @@ class RobotConstants:
     backRightDrivingMotorReversed = False
     backRightTurningMotorReversed = False 
     backRightAbsoluteEncoderId = 3
-    backRightAbsoluteEncoderOffset = .3 #0.812#
+    backRightAbsoluteEncoderOffset = 0.3
     backRightAbsoluteEncoderReversed = True
     
     backLeftDrivingMotorID = 4
@@ -81,7 +81,7 @@ class RobotConstants:
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 4
-    backLeftAbsoluteEncoderOffset = 0.379 #0.813#
+    backLeftAbsoluteEncoderOffset = 0.379 
     backLeftAbsoluteEncoderReversed = True
     
     #what is the fastest speed laterally our robot can go
@@ -123,17 +123,18 @@ class RobotConstants:
     #radius of the fly wheels 6ft 6in. ~198 cm
     flyWheelRadius = 0.051 
 
-    flyWheelPower = -1 #from 0-1. like what you'd do for a motor
+    flyWheelPower1 = -1 #from 0-1. like what you'd do for a motor
+    flyWheelPower2 = -0.75
     gravityConstant = 9.8
     #time it takes for one full rotation of the fly wheels
-    period = 60/(5676 * flyWheelPower)
+    period = 60/(5676 * flyWheelPower1)
     
     ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
 
     backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
 
-    speakerToCenterOfFieldX = 8.3 #length in meters
-    heightOfField = 1.45 #length in meters
+    speakerXPosition = 8.3 #length in meters
+    speakerYPosition = 1.45 #length in meters
     # ~ Climber Constants (NEO)
     climbingMotorLeftID = 57
     climbingMotorRightID = 58
@@ -182,7 +183,7 @@ class AutoConstants:
         #^Added this today (1/11)
         pathFollowerConfig = HolonomicPathFollowerConfig( 
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(.9, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
+                PIDConstants(0.0, 0.0, 0.0),#PIDConstants(.9, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
                 kMaxSpeedMetersPerSecond, # Max module speed, in m/s
                 math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
                 ReplanningConfig() # Default path replanning config. See the API for the options here

@@ -75,8 +75,8 @@ class ShooterSubsystem(commands2.SubsystemBase):
         
         
     def runShooter(self):
-        self.shooterMotor1.set(RobotConstants.flyWheelPower)
-        self.shooterMotor2.set(RobotConstants.flyWheelPower)
+        self.shooterMotor1.set(RobotConstants.flyWheelPower1)
+        self.shooterMotor2.set(RobotConstants.flyWheelPower2)
 
     def stopShooter(self):
         self.shooterMotor1.set(0)

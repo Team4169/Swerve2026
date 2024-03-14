@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 #! TODO:
-#! 1. test the pathplanner alliance side mirror code and autos at max speed
-#! 2. pathfinder
-#! 3. reduce note cycle time
-#! test roborio cables
-#! reduce cycle times 
-#!      object detection to ring test
-#!      test shooting from all subwoofer sides
-#!      april tag detection shooter warm up
-#!  test mode
+#! 1. april tag detection shooter warm up
+#! 2. auto codes
+#! 3. pathfinder 
+#! 4. test mode
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 
@@ -88,34 +83,31 @@ class MyRobot(commands2.TimedCommandRobot):
         self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
         self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
         self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
+        self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
+        self.timeSinceLastDataReceivedFromJetson2 = self.camera_tables.getEntry("w2").getLastChange() - ntcore._now()
+        if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
+        if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
         if self.jetson1weight + self.jetson2weight > 0:
-           self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
-           self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+            
+            self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+            self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
-           self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
-
-        #    self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
-        #    self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
-        #    self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
-           print(math.sqrt(self.xAve **2 + self.yAve **2))
+            self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+            # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+            self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
+            self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
+            self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+            # print(self.distanceToShooter)
 
         self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
 
            #print(self.distanceToShooter)
 
-        # self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
-        # self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
-        # print(self.jetson1X)
-        # if self.jetson1X == :
-        #     print("printong none")
-        # else:
-        #     self.sd.putData("Jetson2x", self.jetson2X)
-        # print(f'adding {self.jetson2X + self.jetson1X}')
-        # print(type(self.jetson1X))
-        # self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
-        # self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
-        # self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
-        # self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
+
+        self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
+        self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
 
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
@@ -149,8 +141,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
         #self.output("ato com", self.autonomousCommand)
-       
+        print("***********************************************************")
         if self.autonomousCommand:
+            print(self.autonomousCommand, "--------------------------------------------")
             self.autonomousCommand.schedule()
 
 
@@ -217,19 +210,19 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
         if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
         if self.jetson1weight + self.jetson2weight > 0:
-           self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
-           self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+            
+            self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+            self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
-           self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+            self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+            print('\n*$*$*$*$*\n'*12,f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+            self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
+            self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
+            self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+            print(self.distanceToShooter)
+        # print(self.Container.autoShooterWarmup)
 
-           self.xDistance = RobotConstants.speakerToCenterOfFieldX - self.xAve #8.3m 
-           self.yDistance = RobotConstants.heightOfField - self.yAve #1.45m
-           self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
-
-           print(self.distanceToShooter)
-        print(self.Container.autoShooterWarmup)
-
-        # if self.distanceToShooter <= 3 and self.Container.autoShooterWarmup:
+        # if self.distanceToShooter <= 3: # and self.Container.autoShooterWarmup:
         #     self.Container.shooter.runShooter()
 
         self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)

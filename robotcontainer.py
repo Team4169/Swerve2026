@@ -24,10 +24,8 @@ from subsystems.ShooterSubsystem import ShooterSubsystem
 
 import math
 # import photonvision
-from pathplannerlib.auto import NamedCommands, PathPlannerAuto
-from pathplannerlib.path import PathPlannerPath, PathConstraints
-from pathplannerlib.auto import AutoBuilder #.auto
-
+from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
+from pathplannerlib.commands import PathfindHolonomic
 
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
@@ -126,11 +124,15 @@ class RobotContainer:
     def getObjectDetectionPathfinding(self) -> commands2.Command:
         """Returns the pathfinding command from position"""
 
-        changeHorizontal = self.datatable.getEntry("objHorizontal").getValue()
-        changeDistance = self.datatable.getEntry("objDistance").getValue()
+        # changeHorizontal = self.datatable.getEntry("objHorizontal").getValue()
+        # changeDistance = self.datatable.getEntry("objDistance").getValue()
+        changeHorizontal = 1000
+        changeDistance = 1000
 
         changeRot = math.atan2(changeHorizontal, changeDistance)
-        targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRadians(changeRot))
+        print(f"Change Rot: {changeRot}")
+        targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRotations(changeRot / (math.pi * 2)))
+        print(f"Target Pose: {targetPose}")
 
         pathfindingCommand = AutoBuilder.pathfindToPose(
             targetPose,
@@ -138,15 +140,16 @@ class RobotContainer:
             goal_end_vel=0.0,
             rotation_delay_distance=0.0
         )
+
         
-        autoPathfindingCommand = PathPlannerAuto(pathfindingCommand)
-        if autoPathfindingCommand:
-            autoPathfindingCommand.schedule()
+        if pathfindingCommand:
+            print(pathfindingCommand)
+            pathfindingCommand.schedule()
 
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        return PathPlannerAuto('ShootAndMove1')
+        return PathPlannerAuto('ShootAndMove')
         # return PathPlannerAuto(self.chooser.getSelected())    
     
 
@@ -170,7 +173,7 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
         
         # Engage Object Detection
-        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getObjectDetectionPathfinding()))
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getObjectDetectionPathfinding()))
         
         # Toggle Slow Mode
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))

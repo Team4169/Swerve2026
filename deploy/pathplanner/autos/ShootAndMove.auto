@@ -5,31 +5,12 @@
       "x": 1.36086297850199,
       "y": 5.539225686154654
     },
-    "rotation": 90.78482460299188
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shootRing"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
-          }
-        },
         {
           "type": "parallel",
           "data": {
