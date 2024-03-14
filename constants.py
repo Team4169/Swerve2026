@@ -25,7 +25,7 @@ class FildConstants:
 class OIConstants:
     kDriverControllerPort = 0
     kArmControllerPort = 1
-    deadzone = .12 
+    deadzone = .2
 #~ driving constants
 class DrivingConstants:
     drivingSpeedLimiter = 1

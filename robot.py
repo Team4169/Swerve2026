@@ -94,7 +94,10 @@ class MyRobot(commands2.TimedCommandRobot):
         
             self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
             # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
-            self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
+            if True: #on red team
+                self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
+            else: #on blue team
+                self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
             self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
             self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)

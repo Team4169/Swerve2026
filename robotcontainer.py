@@ -155,7 +155,7 @@ class RobotContainer:
 
     def setSlowMode(self): #-> commands2.Command
         DrivingConstants.drivingSpeedLimiter = 0.3
-        DrivingConstants.rotationSpeedLimiter = 0.3
+        DrivingConstants.rotationSpeedLimiter = 0.2
         # return self.swerve.driveChassisSpeeds(self.drivingLimiter)
 
     def unbindSlowMode(self):
