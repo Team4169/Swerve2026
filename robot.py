@@ -9,11 +9,11 @@
 
 import typing
 import wpilib
-from wpimath.geometry import Rotation2d 
+from wpimath.geometry import Rotation2d, Pose2d
 import commands2
 import math
 import constants
-from constants import ModuleConstants, RobotConstants, DrivingConstants
+from constants import ModuleConstants, RobotConstants, DrivingConstants, AutoConstants
 from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
@@ -21,6 +21,8 @@ import ntcore
 # import robotpy_apriltag
 from wpilib import Timer
 from wpimath.kinematics import SwerveModuleState
+from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
+from pathplannerlib.commands import PathfindHolonomic
 
 import phoenix5
 
@@ -135,12 +137,14 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def autonomousInit(self) -> None:
+        """This autonomous runs the autonomous command selected by your RobotContainer class."""
+
         self.swerve.frontLeft.drivingEncoder.setPosition(0)
         self.swerve.frontRight.drivingEncoder.setPosition(0)
         self.swerve.backLeft.drivingEncoder.setPosition(0)
         self.swerve.backRight.drivingEncoder.setPosition(0)
-        """This autonomous runs the autonomous command selected by your RobotContainer class."""
-        #~ will be needed for future 
+        
+        '''
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
         #self.output("ato com", self.autonomousCommand)
@@ -148,7 +152,22 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.autonomousCommand:
             # print(self.autonomousCommand, "--------------------------------------------")
             self.autonomousCommand.schedule()
+        '''
+        changeHorizontal = 1000
+        changeDistance = 1000
 
+        changeRot = math.atan2(changeHorizontal, changeDistance)
+        targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRotations(changeRot / (math.pi * 2)))
+
+        pathfindingCommand = AutoBuilder.pathfindToPose(
+            targetPose,
+            AutoConstants.constraints,
+            goal_end_vel=0.0,
+            rotation_delay_distance=0.0
+        )
+
+        if pathfindingCommand:
+            pathfindingCommand.schedule()
 
         # self.autoSelected = self.chooser.getSelected()
         # print("Auto selected: " + self.autoSelected)
@@ -218,10 +237,13 @@ class MyRobot(commands2.TimedCommandRobot):
             self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
             self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
-            # print('\n*$*$*$*$*\n'*12,f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
-            self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
+            # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+            if self.isRedAlliance: #on red team
+                self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
+            else: #on blue team
+                self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
             self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
-            self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
+            self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
         # print(self.Container.autoShooterWarmup)
 
