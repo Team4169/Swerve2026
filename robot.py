@@ -104,7 +104,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
 
-           #print(self.distanceToShooter)
+           # print(self.distanceToShooter)
 
 
         self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
@@ -144,9 +144,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
         #self.output("ato com", self.autonomousCommand)
-        print("***********************************************************")
+        # print("***********************************************************")
         if self.autonomousCommand:
-            print(self.autonomousCommand, "--------------------------------------------")
+            # print(self.autonomousCommand, "--------------------------------------------")
             self.autonomousCommand.schedule()
 
 
@@ -218,11 +218,11 @@ class MyRobot(commands2.TimedCommandRobot):
             self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
             self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
-            print('\n*$*$*$*$*\n'*12,f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+            # print('\n*$*$*$*$*\n'*12,f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
             self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m 
             self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
             self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
-            print(self.distanceToShooter)
+            # print(self.distanceToShooter)
         # print(self.Container.autoShooterWarmup)
 
         # if self.distanceToShooter <= 3: # and self.Container.autoShooterWarmup:
@@ -309,10 +309,10 @@ class MyRobot(commands2.TimedCommandRobot):
             if self.previousLEDCommand != team_command:
                 self.previousLEDCommand = team_command
                 if self.LEDserver.writeBulk(memoryview(bytes([team_command]))):
-                    print("Got an error sending command ", team_command)
+                    # print("Got an error sending command ", team_command)
                     return True
                 else:
-                    print("Success sending command ", team_command)
+                    # print("Success sending command ", team_command)
                     return False
                 
 

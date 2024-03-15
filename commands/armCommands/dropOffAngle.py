@@ -11,7 +11,7 @@ class dropOffAngle(commands2.CommandBase):
 
     def initialize(self):
         # self.arm.shouldMove = True
-        print('in dropoff')
+        # print('in dropoff')
         
 
     def execute(self) -> None:
@@ -25,5 +25,5 @@ class dropOffAngle(commands2.CommandBase):
 
     def isFinished(self) -> bool:
         # self.drive.
-        print(abs(self.angle -self.arm.rotatingArmEncoderDegrees))
+        # print(abs(self.angle -self.arm.rotatingArmEncoderDegrees))
         return (abs(self.angle -self.arm.rotatingArmEncoderDegrees) <= self.arm.tolerance)

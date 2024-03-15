@@ -70,7 +70,7 @@ class PhysicsEngine:
         # rf_angle = self.rf_turning_motor.getInt("Velocity")
         # rr_motor = self.rr_motor.getInt("Velocity")
         # rr_angle = self.rr_turning_motor.getInt("Velocity")
-        print(self.lf_motor)
+        # print(self.lf_motor)
         
         # pose = self.physics_controller.drive(speeds, tm_diff)
         # Update the gyro simulation

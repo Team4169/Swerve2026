@@ -30,7 +30,7 @@ class move2motors(commands2.CommandBase):
 
     def execute(self) -> None:
         self.swerve.sd.putString("Motor Position", str(self.drivingEncoder.getVelocity()))
-        print("This code is being run. whoooo!")
+        # print("This code is being run. whoooo!")
 
         
 
@@ -42,7 +42,7 @@ class move2motors(commands2.CommandBase):
         self.currentTime = time.time()
         self.swerve.sd.putString("Delta time", str(self.currentTime - self.startTime))
         if self.currentTime - self.startTime > self.runTime:
-            print(9)
+            # print(9)
             return True
 
         return False

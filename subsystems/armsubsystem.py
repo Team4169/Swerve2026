@@ -94,7 +94,7 @@ class ArmSubsystem(commands2.SubsystemBase):
         # print(self.rotatingArmEncoderDegrees >= RobotConstants.lowerArmAngleLimit, self.rotatingArmEncoderDegrees <= 24, self.extendingArmEncoderPercent > 70)
         if self.rotatingArmEncoderDegrees <= 24 and \
             self.extendingArmEncoderPercent > 72:
-                print("should move down")
+                # print("should move down")
                 self.shouldMove = True
                 #& move down to 75 % extension
                 self.setExtendingArmPercentWithAuto(69, .25) 

@@ -130,9 +130,9 @@ class RobotContainer:
         changeDistance = 1000
 
         changeRot = math.atan2(changeHorizontal, changeDistance)
-        print(f"Change Rot: {changeRot}")
+        # print(f"Change Rot: {changeRot}")
         targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRotations(changeRot / (math.pi * 2)))
-        print(f"Target Pose: {targetPose}")
+        # print(f"Target Pose: {targetPose}")
 
         pathfindingCommand = AutoBuilder.pathfindToPose(
             targetPose,
@@ -143,7 +143,7 @@ class RobotContainer:
 
         
         if pathfindingCommand:
-            print(pathfindingCommand)
+            # print(pathfindingCommand)
             pathfindingCommand.schedule()
 
     def getAutonomousCommand(self):
@@ -252,6 +252,6 @@ class RobotContainer:
     #     rotation = Rotation2d(math.acos(self.xDistance/self.distanceToShooter)) 
 
     #     self.rotateToSpeakerCommand = rotateToSpeakerCommand(self.swerve, rotation)
-    #     #print("running rotate to speaker")
+    #     ## print("running rotate to speaker")
     #     self.rotateToSpeakerCommand.schedule()
         
