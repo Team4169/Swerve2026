@@ -144,7 +144,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backLeft.drivingEncoder.setPosition(0)
         self.swerve.backRight.drivingEncoder.setPosition(0)
         
-        '''
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
         #self.output("ato com", self.autonomousCommand)
@@ -171,6 +170,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # self.autoSelected = self.chooser.getSelected()
         # print("Auto selected: " + self.autoSelected)
+        '''
             
     def autonomousPeriodic(self) -> None:
         self.swerve.frontRight.resetEncoders()

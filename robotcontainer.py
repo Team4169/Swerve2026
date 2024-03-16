@@ -31,6 +31,7 @@ from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
 from commands.testcommands.move4modules import move4modules
 from commands.testcommands.MoveInACircle import MoveInACircle
+from commands.TeleopCommands.driveWaypoint import DriveWaypoint
 
 from commands.testcommands.rotateToSpeakerCommand import rotateToSpeakerCommand
 
@@ -93,6 +94,7 @@ class RobotContainer:
         )
 
        
+        self.driveWaypointCommand = DriveWaypoint(self.swerve)
         self.configureButtonBindings()
 
         # sendable chooser
@@ -102,12 +104,14 @@ class RobotContainer:
         self.ShootAndMove1 = "ShootAndMove1"
         self.ShootAndPickup1 = "ShootAndPickup1"
         self.TestAuto = "TestAuto"
+        self.MoveAuto = "MoveAuto(1R)"
 
 
         self.chooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
         self.chooser.addOption("ShootAndMove1", self.ShootAndMove1)
         self.chooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
         self.chooser.addOption("TestAuto", self.TestAuto) 
+        self.chooser.addOption("MoveAuto(1R)", self.MoveAuto)
 
 
         # # Put the chooser on the dashboard
@@ -118,34 +122,8 @@ class RobotContainer:
         self.datatable = self.network_tables.getTable("datatable")
 
         self.autoShooterWarmup = True
-        # self.shuffle.putData("AutoShooterWarmup", self.autoChooserWarmup)
+        # self.shuffle.putData("AutoShooterWarmup", self.autoChooserWarmup
     
-    
-    def getObjectDetectionPathfinding(self) -> commands2.Command:
-        """Returns the pathfinding command from position"""
-
-        # changeHorizontal = self.datatable.getEntry("objHorizontal").getValue()
-        # changeDistance = self.datatable.getEntry("objDistance").getValue()
-        changeHorizontal = 1000
-        changeDistance = 1000
-
-        changeRot = math.atan2(changeHorizontal, changeDistance)
-        # print(f"Change Rot: {changeRot}")
-        targetPose = Pose2d(changeDistance, changeHorizontal, Rotation2d.fromRotations(changeRot / (math.pi * 2)))
-        # print(f"Target Pose: {targetPose}")
-
-        pathfindingCommand = AutoBuilder.pathfindToPose(
-            targetPose,
-            AutoConstants.constraints,
-            goal_end_vel=0.0,
-            rotation_delay_distance=0.0
-        )
-
-        
-        if pathfindingCommand:
-            # print(pathfindingCommand)
-            pathfindingCommand.schedule()
-
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
@@ -173,7 +151,7 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
         
         # Engage Object Detection
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getObjectDetectionPathfinding()))
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(self.driveWaypointCommand)
         
         # Toggle Slow Mode
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
