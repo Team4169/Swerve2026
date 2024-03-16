@@ -24,8 +24,9 @@ from subsystems.ShooterSubsystem import ShooterSubsystem
 
 import math
 # import photonvision
-from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
+from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder, PathPlannerPath
 from pathplannerlib.commands import PathfindHolonomic
+from pathplannerlib.path import GoalEndState
 
 from commands.testcommands.move1module import move1module
 from commands.testcommands.move2motors import move2motors
@@ -130,6 +131,17 @@ class RobotContainer:
         return PathPlannerAuto('ShootAndPickup')
         # return PathPlannerAuto(self.chooser.getSelected())    
     
+    def runObjectDetectionPath(self):
+        start_pose = Pose2d(0, 0, Rotation2d.fromDegrees(0))
+        end_pose = Pose2d(10, 0, Rotation2d.fromDegrees(0))
+
+        bezier_points = PathPlannerPath.bezierFromPoses([start_pose, end_pose])
+        path = PathPlannerPath(
+            bezier_points,
+            AutoConstants.constraints,
+            GoalEndState(0, Rotation2d.fromDegrees(0))
+        )
+        return AutoBuilder.followPath(path)
 
     def setSlowMode(self): #-> commands2.Command
         DrivingConstants.drivingSpeedLimiter = 0.3
@@ -152,6 +164,7 @@ class RobotContainer:
         
         # Engage Object Detection
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(self.driveWaypointCommand)
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.runObjectDetectionPath()))
         
         # Toggle Slow Mode
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
