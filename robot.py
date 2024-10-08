@@ -18,6 +18,7 @@ from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
+import wpimath
 # import robotpy_apriltag
 from wpilib import Timer
 from wpimath.kinematics import SwerveModuleState
@@ -196,22 +197,24 @@ class MyRobot(commands2.TimedCommandRobot):
         #self.sendLEDCommand(3, self.isRedAlliance)
         # self.drive.resetEncoders()
         # self.moveRestriction = 1
-        
+        #wpimath.filter.SlewRateLimiter(0.5)
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
         # this line or comment it out.
-
         if self.AutonomousCommand:
             self.AutonomousCommand.cancel()
         
-        # print("Starting teleop...")
-        # self.speed = 0
-
         self.swerve.frontLeft.drivingEncoder.setPosition(0)
         self.swerve.frontRight.drivingEncoder.setPosition(0)
-        self.swerve.backLeft.drivingEncoder.setPosition(0)
         self.swerve.backRight.drivingEncoder.setPosition(0)
+        self.swerve.backLeft.drivingEncoder.setPosition(0)
+        
+
+    
+        
+        # print("Starting teleop...")
+        # self.speed = 0
 
     def teleopPeriodic(self):
         self.swerve.frontRight.resetEncoders()

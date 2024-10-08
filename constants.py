@@ -9,6 +9,7 @@ import UtilCommands
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry._geometry import Translation2d, Pose2d
 from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
+from wpimath.filter import SlewRateLimiter
 
 from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config
 from pathplannerlib.path import PathPlannerPath, PathConstraints
@@ -30,6 +31,7 @@ class OIConstants:
 class DrivingConstants:
     drivingSpeedLimiter = 1
     rotationSpeedLimiter = 1
+    voltageLimiter = SlewRateLimiter(0.5)
 
 #~ robot specification
 class RobotConstants:
@@ -71,7 +73,7 @@ class RobotConstants:
     backRightDrivingMotorID = 3
     backRightTurningMotorID = 33
     backRightDrivingMotorReversed = False
-    backRightTurningMotorReversed = False 
+    backRightTurningMotorReversed = False
     backRightAbsoluteEncoderId = 3
     backRightAbsoluteEncoderOffset = 0.3
     backRightAbsoluteEncoderReversed = True
@@ -83,6 +85,8 @@ class RobotConstants:
     backLeftAbsoluteEncoderId = 4
     backLeftAbsoluteEncoderOffset = 0.379 
     backLeftAbsoluteEncoderReversed = True
+
+    
     
     #what is the fastest speed laterally our robot can go
     kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test, current is test based on 1/2 speeds
