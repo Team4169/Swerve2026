@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #! TODO:
-#! 1. april tag detection shooter warm up
-#! 2. auto codes
-#! 3. pathfinder 
-#! 4. test mode
+
+#! 1. Cancoders
+#! 2. Continue testing Cancoders, slewratelimiter, lights
+
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 

@@ -11,6 +11,12 @@ from wpimath.geometry._geometry import Translation2d, Pose2d
 from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
 from wpimath.filter import SlewRateLimiter
 
+# import phoenix6
+# from phoenix6.configs import cancoder_configs
+# from phoenix6.configs import CANcoderConfiguration
+
+#?from phoenix6 import CANCoder
+
 from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config
 from pathplannerlib.path import PathPlannerPath, PathConstraints
 from wpimath.units import degreesToRadians
@@ -102,46 +108,46 @@ class RobotConstants:
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * (3/4)
 
     # ~ Intake Constants (minicim)
-    intakeMotor1ID = 52
-    intakeMotor2ID = 53
+    # intakeMotor1ID = 52
+    # intakeMotor2ID = 53
 
-    # ~ Midstage Constants (minicim)
-    midstageMotor1ID = 59
+    # # ~ Midstage Constants (minicim)
+    # midstageMotor1ID = 59
 
-    # ~ Outtake Constants (NEO)
-    shooterMotor1ID = 55 
-    shooterMotor2ID = 56
-    rotatingMotorID = 63 #! not used delete!!
-    rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
-    kPShooterAngle = .1
+    # # ~ Outtake Constants (NEO)
+    # shooterMotor1ID = 55 
+    # shooterMotor2ID = 56
+    # rotatingMotorID = 63 #! not used delete!!
+    # rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
+    # kPShooterAngle = .1
 
-    shooterMaxLimitSwitchID = 5
-    shooterMinLimitSwitchID = 6
+    # shooterMaxLimitSwitchID = 5
+    # shooterMinLimitSwitchID = 6
     
-    subwooferDistance = 0.92 + 0.29 #subwoofer distance + pivot-bumper distance
-    #height of the speaker - height of the outtake
-    speakerHeight = 2.1082 - 0.3 #! the 2.1082 might be 1.98 also. there are 2 values (look at speaker video)
-                                 #! to get the most accurate result, we need the 
-                                 #! length of shooter * sin(launch angle). this is
-                                 #! a bit difficult to get bc we don't know the launch angle.
-    #radius of the fly wheels 6ft 6in. ~198 cm
-    flyWheelRadius = 0.051 
+    # subwooferDistance = 0.92 + 0.29 #subwoofer distance + pivot-bumper distance
+    # #height of the speaker - height of the outtake
+    # speakerHeight = 2.1082 - 0.3 #! the 2.1082 might be 1.98 also. there are 2 values (look at speaker video)
+    #                              #! to get the most accurate result, we need the 
+    #                              #! length of shooter * sin(launch angle). this is
+    #                              #! a bit difficult to get bc we don't know the launch angle.
+    # #radius of the fly wheels 6ft 6in. ~198 cm
+    # flyWheelRadius = 0.051 
 
-    flyWheelPower1 = -1 #from 0-1. like what you'd do for a motor
-    flyWheelPower2 = -0.75
-    gravityConstant = 9.8
-    #time it takes for one full rotation of the fly wheels
-    period = 60/(5676 * flyWheelPower1)
+    # flyWheelPower1 = -1 #from 0-1. like what you'd do for a motor
+    # flyWheelPower2 = -0.75
+    # gravityConstant = 9.8
+    # #time it takes for one full rotation of the fly wheels
+    # period = 60/(5676 * flyWheelPower1)
     
-    ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
+    # ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
 
-    backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
+    # backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
 
-    speakerXPosition = 8.3 #length in meters
-    speakerYPosition = 1.45 #length in meters
-    # ~ Climber Constants (NEO)
-    climbingMotorLeftID = 57
-    climbingMotorRightID = 58
+    # speakerXPosition = 8.3 #length in meters
+    # speakerYPosition = 1.45 #length in meters
+    # # ~ Climber Constants (NEO)
+    # climbingMotorLeftID = 57
+    # climbingMotorRightID = 58
     # climbingMotorLeftLimitSwitchID = 
     # climbingMotorRightLimitSwitchID =    
 

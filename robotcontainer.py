@@ -14,13 +14,13 @@ from commands2.button.trigger import Trigger
 from commands2.button import JoystickButton, CommandXboxController
 from wpilib import XboxController, Joystick
 
-from subsystems.armsubsystem import ArmSubsystem 
+#from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
 
-from subsystems.intakeSubsystem import IntakeSubsystem
-from subsystems.midstageSubsystem import MidstageSubsystem
-from subsystems.climbingSubsystem import ClimbingSubsystem
-from subsystems.ShooterSubsystem import ShooterSubsystem
+# from subsystems.intakeSubsystem import IntakeSubsystem
+# from subsystems.midstageSubsystem import MidstageSubsystem
+# from subsystems.climbingSubsystem import ClimbingSubsystem
+#from subsystems.ShooterSubsystem import ShooterSubsystem
 
 import math
 # import photonvision
@@ -54,10 +54,10 @@ class RobotContainer:
         # The robot's subsystems
         self.swerve = SwerveSubsystem()
 
-        self.intake = IntakeSubsystem()
-        self.midstage = MidstageSubsystem()
-        self.climber = ClimbingSubsystem()
-        self.shooter = ShooterSubsystem()
+        # self.intake = IntakeSubsystem()
+        # self.midstage = MidstageSubsystem()
+        # self.climber = ClimbingSubsystem()
+        #self.shooter = ShooterSubsystem()
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
                 swerve=self.swerve,
@@ -72,18 +72,18 @@ class RobotContainer:
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        NamedCommands.registerCommand("pickupRing",
-            commands2.InstantCommand(lambda:self.intake.runIntake(-0.75))
-        )
-        NamedCommands.registerCommand("stopIntake",
-            commands2.InstantCommand(lambda:self.intake.stopIntake())
-        )
-        NamedCommands.registerCommand("midstageRing",
-            commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.75))
-        )
-        NamedCommands.registerCommand("stopMidstage",
-            commands2.InstantCommand(lambda:self.midstage.stopMidstage())
-        )
+        # NamedCommands.registerCommand("pickupRing",
+        #     commands2.InstantCommand(lambda:self.intake.runIntake(-0.75))
+        # )
+        # NamedCommands.registerCommand("stopIntake",
+        #     commands2.InstantCommand(lambda:self.intake.stopIntake())
+        # )
+        # NamedCommands.registerCommand("midstageRing",
+        #     commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.75))
+        # )
+        # NamedCommands.registerCommand("stopMidstage",
+        #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
+        # )
         NamedCommands.registerCommand("setShooterAngle",
             commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
         )
@@ -102,15 +102,15 @@ class RobotContainer:
         self.chooser = wpilib.SendableChooser()
 
         self.GetOutOfTheWay1 = "GetOutOfTheWay1"
-        self.ShootAndMove1 = "ShootAndMove1"
-        self.ShootAndPickup1 = "ShootAndPickup1"
+        # self.ShootAndMove1 = "ShootAndMove1"
+        # self.ShootAndPickup1 = "ShootAndPickup1"
         self.TestAuto = "TestAuto"
         self.MoveAuto = "MoveAuto(1R)"
 
 
         self.chooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
-        self.chooser.addOption("ShootAndMove1", self.ShootAndMove1)
-        self.chooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
+        # self.chooser.addOption("ShootAndMove1", self.ShootAndMove1)
+        # self.chooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
         self.chooser.addOption("TestAuto", self.TestAuto) 
         self.chooser.addOption("MoveAuto(1R)", self.MoveAuto)
 

@@ -3,10 +3,12 @@ import rev
 import wpilib
 import math
 import wpimath
+import phoenix5 #.configs.cancoder_configs.CANcoderConfiguration
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
-from wpilib import DutyCycleEncoder
+from phoenix6.configs.cancoder_configs import CANcoderConfiguration
+# from wpilib import DutyCycleEncoder
 
 from constants import ModuleConstants, RobotConstants
 class swervemodule(commands2.SubsystemBase):
@@ -20,7 +22,7 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoderOffsetRad = absouteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
 
-        self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
+        self.absoluteEncoder = CANcoderConfiguration(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
