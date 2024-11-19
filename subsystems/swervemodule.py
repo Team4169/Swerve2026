@@ -7,8 +7,13 @@ import phoenix5 #.configs.cancoder_configs.CANcoderConfiguration
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
-from phoenix6.configs.cancoder_configs import CANcoderConfiguration
-# from wpilib import DutyCycleEncoder
+#from phoenix6.configs.cancoder_configs import CANcoderConfiguration
+import phoenix6.hardware
+from phoenix6.hardware import CANcoder
+from commands2 import CommandScheduler
+#from wpilib import DutyCycleEncoder
+# import pandas 
+# from pandas import Series
 
 from constants import ModuleConstants, RobotConstants
 class swervemodule(commands2.SubsystemBase):
@@ -22,7 +27,8 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoderOffsetRad = absouteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
 
-        self.absoluteEncoder = CANcoderConfiguration(absoluteEncoderId)
+        self.absoluteEncoder = CANcoder(absoluteEncoderId)
+        #self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -67,18 +73,32 @@ class swervemodule(commands2.SubsystemBase):
         return self.turningEncoder.getVelocity()
     
     def getAbsoluteEncoderRad(self) -> float:
-        wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.getAbsolutePosition())
-        # print(self.absoluteEncoder.getAbsolutePosition())
-        angle = self.absoluteEncoder.getAbsolutePosition()  #? percent of full rotation
+
+        #? Change getAbsolutePosition to get_absolute_postion for cancoder
+
+        wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().value)
+        #wpilib.SmartDashboard.putData("absEncoder", self.absoluteEncoder.get_absolute_position())
+       # print(self.absoluteEncoder.getAbsolutePosition())
+        
+        # angle = self.absoluteEncoder.getAbsolutePosition()  #? percent of full rotation
+        # angle *= 2 * math.pi #? convert to radians
+        # angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
+        # return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
+
+        angle = self.absoluteEncoder.get_absolute_position().value
+            # ? percent of full rotation
         angle *= 2 * math.pi #? convert to radians
         angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
-        return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
-    
+        
+        return angle * (-1 if self.absoluteEncoderReversed else 1) #?
+        #reverse if needed
+        
+        
     def getSwerveModulePosition(self) -> SwerveModulePosition:
             return SwerveModulePosition(self.getDrivingPosition(), Rotation2d(self.getAbsoluteEncoderRad()))
 
     def resetEncoders(self):
-        # self.drivingEncoder.setPosition(0)
+        self.drivingEncoder.setPosition(0)
         self.turningEncoder.setPosition(self.getAbsoluteEncoderRad())
 
     def getState(self) -> SwerveModuleState:
@@ -90,9 +110,8 @@ class swervemodule(commands2.SubsystemBase):
         # if (abs(state.speed) < 0.001):
         #     self.stop()
         #     return
-        self.state = SwerveModuleState.optimize(state, self.getState().angle)
+        self.state = SwerveModuleState.optimize(state, self.getState().angle) 
         self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
-        
         
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
         #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
@@ -104,7 +123,7 @@ class swervemodule(commands2.SubsystemBase):
         # print(state.speed)
 
       
-        self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
+        #self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
             #may or may not be due to the impresise conversion factor or som
 
         self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        

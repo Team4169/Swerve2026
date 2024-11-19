@@ -32,7 +32,7 @@ class FildConstants:
 class OIConstants:
     kDriverControllerPort = 0
     kArmControllerPort = 1
-    deadzone = .2
+    deadzone = 0.2
 #~ driving constants
 class DrivingConstants:
     drivingSpeedLimiter = 1
@@ -64,7 +64,7 @@ class RobotConstants:
     frontLeftTurningMotorID = 11
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
-    frontLeftAbsoluteEncoderId = 1 #DIO port ID
+    frontLeftAbsoluteEncoderId = 2 #DIO port ID
     frontLeftAbsoluteEncoderOffset = (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
@@ -72,7 +72,7 @@ class RobotConstants:
     frontRightTurningMotorID = 22
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
-    frontRightAbsoluteEncoderId = 2
+    frontRightAbsoluteEncoderId = 0
     frontRightAbsoluteEncoderOffset = 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
@@ -88,11 +88,11 @@ class RobotConstants:
     backLeftTurningMotorID = 44
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
-    backLeftAbsoluteEncoderId = 4
+    backLeftAbsoluteEncoderId = 1
     backLeftAbsoluteEncoderOffset = 0.379 
     backLeftAbsoluteEncoderReversed = True
 
-    
+
     
     #what is the fastest speed laterally our robot can go
     kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test, current is test based on 1/2 speeds

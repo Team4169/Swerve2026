@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 #! TODO:
 
-#! 1. Cancoders
-#! 2. Continue testing Cancoders, slewratelimiter, lights
+#! 1. Turning motors don't work (test)
+#! 2. Continue testing Slewratelimiter
+#! 3. Cancoders (test old code on new cancoders. See if it works)
+#! 4. Look into the new radio on westcoast products
+#! 5. Difference + similarities between roborio 1 vs 2
 
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
@@ -109,17 +112,12 @@ class MyRobot(commands2.TimedCommandRobot):
 
            # print(self.distanceToShooter)
 
-
-        self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.getAbsolutePosition())
-        self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.getAbsolutePosition())
-
         """This function is called periodically when disabled"""
         # self.sd.putNumber("absEncoder", self.testabsoluteEncoder.getAbsolutePosition())
         # print(self.testabsoluteEncoder.getAbsolutePosition())
                 
         # print(self.swerve.frontRight.getTurningPostion())
+
         # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
         # self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
         # self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
@@ -134,7 +132,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
         # self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
         # self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
-        #self.sd.putBoolean("inMidstage", self.camera_tables.getEntry("inMid").getValue())
+        # self.sd.putBoolean("inMidstage", self.camera_tables.getEntry("inMid").getValue())
 
 
     def autonomousInit(self) -> None:
@@ -209,10 +207,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontRight.drivingEncoder.setPosition(0)
         self.swerve.backRight.drivingEncoder.setPosition(0)
         self.swerve.backLeft.drivingEncoder.setPosition(0)
-        
 
-    
-        
+
         # print("Starting teleop...")
         # self.speed = 0
 
@@ -221,6 +217,16 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
+
+        self.sd.putNumber("BackLeft Turning Position", self.swerve.backLeft.getTurningPostion())
+        self.sd.putNumber("BackRight Turning Position", self.swerve.backRight.getTurningPostion())
+        self.sd.putNumber("FrontLeft Turning Position", self.swerve.frontLeft.getTurningPostion())
+        self.sd.putNumber("FrontRight Turning Position", self.swerve.frontRight.getTurningPostion())
+
+        #self.swerve.frontLeft.turningMotor.setSpeed(0.3)
+        #self.swerve.frontRight.turningMotor.setSpeed(0.3)
+        #self.swerve.backRight.turningMotor.setSpeed(0.3)
+        #self.swerve.backLeft.turningMotor.setSpeed(0.3)
 
         self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
         self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
@@ -253,7 +259,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # if self.distanceToShooter <= 3: # and self.Container.autoShooterWarmup:
         #     self.Container.shooter.runShooter()
 
-        self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)
+        # self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)
 
         # if self.operatorController.getLeftTriggerAxis() > 0.2:
         #     self.Container.climber.runRightClimbingMotor(0.35)
@@ -278,7 +284,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
         
         
-        #Attempt to code dpad (change it to another button if it doesn't work) 
+        # Attempt to code dpad (change it to another button if it doesn't work) 
         # Turn robot until arctan(xDistance/yDistance) = 90 degrees
             
         # if self.operatorController.POVRightPressed():
@@ -287,10 +293,10 @@ class MyRobot(commands2.TimedCommandRobot):
 
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
         try:
-            # self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
-            # self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
-            # self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
-            # self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+            self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
 
             # self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
             # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
@@ -300,7 +306,7 @@ class MyRobot(commands2.TimedCommandRobot):
             #       round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
             #       round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
             #       round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
-            # self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
+            self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
             self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
             self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())
             self.sd.putNumber("Module Position (BR)", self.swerve.backRight.getDrivingPosition())
@@ -310,6 +316,11 @@ class MyRobot(commands2.TimedCommandRobot):
             self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
             self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
 
+            self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.get_absolute_position().value)
+            self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value)
+            self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value)
+            self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value)
+    
         except:
             if not self.ds.isFMSAttached():
                 raise

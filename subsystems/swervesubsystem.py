@@ -156,6 +156,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                 SwerveModuleState(self.backLeft.getDrivingVelocity(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
                 SwerveModuleState(self.backRight.getDrivingVelocity(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
         )
+
     def getChassisSpeeds(self):
         return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
     

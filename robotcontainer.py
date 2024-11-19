@@ -179,12 +179,19 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))                       
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue().onFalse()                       
         
+
+        #Test Buttons
+        #self.driverController.Y().whileActiveContinous(commands2.cmd.run(self.swerve.frontLeft.turningMotor.set(0.3))
+
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(self.swerve.frontLeft.turningMotor.set(0.3)))
+
         #*Shooter launch
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(InstantCommand(lambda: self.shooter.stopShooter()))
         
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.toggleShooterMode()))
 
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.75))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))
+
         #Climbers
         #Up-Down Separate Climbers
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.5))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
@@ -196,7 +203,6 @@ class RobotContainer:
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runLeftClimbingMotor(-0.75))).onFalse(InstantCommand(lambda: self.climber.stopLeftClimbingMotor()))
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.climber.runRightClimbingMotor(0.75))).onFalse(InstantCommand(lambda: self.climber.stopRightClimbingMotor()))
 
-        
         # #*Backup for if the rotating shooter doesn't work 
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.shooter.setShooterAngle(float(constants.RobotConstants.backupShooterAngle)))).onFalse(lambda: self.shooter.stopRotating())
         # #these are the backups for the backups#                                                                                                                 ^^^^   this was a Rotation2d before^^^
