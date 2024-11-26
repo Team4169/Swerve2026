@@ -77,6 +77,7 @@ class swervemodule(commands2.SubsystemBase):
         #? Change getAbsolutePosition to get_absolute_postion for cancoder
 
         wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().value)
+        
         #wpilib.SmartDashboard.putData("absEncoder", self.absoluteEncoder.get_absolute_position())
        # print(self.absoluteEncoder.getAbsolutePosition())
         
@@ -123,8 +124,7 @@ class swervemodule(commands2.SubsystemBase):
         # print(state.speed)
 
       
-        #self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
-            #may or may not be due to the impresise conversion factor or som
+        self.turningMotor.set(0) # self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
 
         self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
         # self.sd.putString(f"Optimized state", str(self.state))

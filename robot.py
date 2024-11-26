@@ -135,6 +135,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.sd.putBoolean("inMidstage", self.camera_tables.getEntry("inMid").getValue())
 
 
+
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
 
@@ -208,6 +209,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.backRight.drivingEncoder.setPosition(0)
         self.swerve.backLeft.drivingEncoder.setPosition(0)
 
+        self.sd.putNumber("BackLeft Starting Turning Position", self.swerve.backLeft.getTurningPostion())
+        self.sd.putNumber("BackRight Starting Turning Position", self.swerve.backRight.getTurningPostion())
+        self.sd.putNumber("FrontLeft Starting Turning Position", self.swerve.frontLeft.getTurningPostion())
+        self.sd.putNumber("FrontRight Starting Turning Position", self.swerve.frontRight.getTurningPostion())
 
         # print("Starting teleop...")
         # self.speed = 0
@@ -222,11 +227,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.sd.putNumber("BackRight Turning Position", self.swerve.backRight.getTurningPostion())
         self.sd.putNumber("FrontLeft Turning Position", self.swerve.frontLeft.getTurningPostion())
         self.sd.putNumber("FrontRight Turning Position", self.swerve.frontRight.getTurningPostion())
-
-        #self.swerve.frontLeft.turningMotor.setSpeed(0.3)
-        #self.swerve.frontRight.turningMotor.setSpeed(0.3)
-        #self.swerve.backRight.turningMotor.setSpeed(0.3)
-        #self.swerve.backLeft.turningMotor.setSpeed(0.3)
 
         self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
         self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
@@ -320,12 +320,21 @@ class MyRobot(commands2.TimedCommandRobot):
             self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value)
             self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value)
             self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value)
-    
+
+            self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value)
+            self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value)
+            self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value)
+            self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value)
+
+            self.sd.putNumber("Back Left Encoder Velocity: ", self.swerve.backLeft.absoluteEncoder.get_velocity().value)
+            self.sd.putNumber("Back Right Encoder Velocity: ", self.swerve.backRight.absoluteEncoder.get_velocity().value)
+            self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value)
+            self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value)
+
         except:
             if not self.ds.isFMSAttached():
                 raise
         
-        pass
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()

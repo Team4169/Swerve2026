@@ -65,7 +65,7 @@ class RobotConstants:
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 2 #DIO port ID
-    frontLeftAbsoluteEncoderOffset = (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
+    frontLeftAbsoluteEncoderOffset = 0.27 # (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 2
@@ -73,7 +73,7 @@ class RobotConstants:
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 0
-    frontRightAbsoluteEncoderOffset = 0.770 + (0.5*math.pi)# = 2.340
+    frontRightAbsoluteEncoderOffset = 0.22 # 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 3
@@ -89,7 +89,7 @@ class RobotConstants:
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 1
-    backLeftAbsoluteEncoderOffset = 0.379 
+    backLeftAbsoluteEncoderOffset = 0.32
     backLeftAbsoluteEncoderReversed = True
 
 
