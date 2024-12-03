@@ -11,6 +11,7 @@ from wpimath.controller import PIDController
 import phoenix6.hardware
 from phoenix6.hardware import CANcoder
 from commands2 import CommandScheduler
+from phoenix6 import status_signal
 #from wpilib import DutyCycleEncoder
 # import pandas 
 # from pandas import Series
@@ -75,7 +76,7 @@ class swervemodule(commands2.SubsystemBase):
     def getAbsoluteEncoderRad(self) -> float:
 
         #? Change getAbsolutePosition to get_absolute_postion for cancoder
-
+        # wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().getValue())
         wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().value)
         
         #wpilib.SmartDashboard.putData("absEncoder", self.absoluteEncoder.get_absolute_position())
@@ -85,9 +86,9 @@ class swervemodule(commands2.SubsystemBase):
         # angle *= 2 * math.pi #? convert to radians
         # angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
         # return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
-
+        
+        #angle = self.absoluteEncoder.get_absolute_position().getValue() # ? percent of full rotation
         angle = self.absoluteEncoder.get_absolute_position().value
-            # ? percent of full rotation
         angle *= 2 * math.pi #? convert to radians
         angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
         
@@ -124,7 +125,8 @@ class swervemodule(commands2.SubsystemBase):
         # print(state.speed)
 
       
-        self.turningMotor.set(0) # self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
+        self.turningMotor.set(0) 
+        #self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
 
         self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
         # self.sd.putString(f"Optimized state", str(self.state))

@@ -331,6 +331,11 @@ class MyRobot(commands2.TimedCommandRobot):
             self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value)
             self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value)
 
+            self.sd.putNumber("Back Left Encoder Supply Voltage: ", self.swerve.backLeft.absoluteEncoder.get_supply_voltage().value)
+            self.sd.putNumber("Back Right Encoder Supply Voltage: ", self.swerve.backRight.absoluteEncoder.get_supply_voltage().value)
+            self.sd.putNumber("Front Left Encoder Supply Voltage: ", self.swerve.frontLeft.absoluteEncoder.get_supply_voltage().value)
+            self.sd.putNumber("Front Right Encoder Supply Voltage: ", self.swerve.frontRight.absoluteEncoder.get_supply_voltage().value)
+
         except:
             if not self.ds.isFMSAttached():
                 raise
