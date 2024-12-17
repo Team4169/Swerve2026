@@ -316,25 +316,25 @@ class MyRobot(commands2.TimedCommandRobot):
             self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
             self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
 
-            self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.get_absolute_position().value)
-            self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value)
-            self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value)
-            self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value)
+            self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.get_absolute_position().value_as_double)
+            self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value_as_double)
+            self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value_as_double)
+            self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value)
-            self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value)
-            self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value)
-            self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value)
+            self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value_as_double)
+            self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value_as_double)
+            self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value_as_double)
+            self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Velocity: ", self.swerve.backLeft.absoluteEncoder.get_velocity().value)
-            self.sd.putNumber("Back Right Encoder Velocity: ", self.swerve.backRight.absoluteEncoder.get_velocity().value)
-            self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value)
-            self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value)
+            self.sd.putNumber("Back Left Encoder Velocity: ", self.swerve.backLeft.absoluteEncoder.get_velocity().value_as_double)
+            self.sd.putNumber("Back Right Encoder Velocity: ", self.swerve.backRight.absoluteEncoder.get_velocity().value_as_double)
+            self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value_as_double)
+            self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Supply Voltage: ", self.swerve.backLeft.absoluteEncoder.get_supply_voltage().value)
-            self.sd.putNumber("Back Right Encoder Supply Voltage: ", self.swerve.backRight.absoluteEncoder.get_supply_voltage().value)
-            self.sd.putNumber("Front Left Encoder Supply Voltage: ", self.swerve.frontLeft.absoluteEncoder.get_supply_voltage().value)
-            self.sd.putNumber("Front Right Encoder Supply Voltage: ", self.swerve.frontRight.absoluteEncoder.get_supply_voltage().value)
+            self.sd.putNumber("Back Left Encoder Supply Voltage: ", self.swerve.backLeft.absoluteEncoder.get_supply_voltage().value_as_double)
+            self.sd.putNumber("Back Right Encoder Supply Voltage: ", self.swerve.backRight.absoluteEncoder.get_supply_voltage().value_as_double)
+            self.sd.putNumber("Front Left Encoder Supply Voltage: ", self.swerve.frontLeft.absoluteEncoder.get_supply_voltage().value_as_double)
+            self.sd.putNumber("Front Right Encoder Supply Voltage: ", self.swerve.frontRight.absoluteEncoder.get_supply_voltage().value_as_double)
 
         except:
             if not self.ds.isFMSAttached():

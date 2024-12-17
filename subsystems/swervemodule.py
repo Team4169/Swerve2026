@@ -2,16 +2,17 @@ import commands2
 import rev
 import wpilib
 import math
-import wpimath
-import phoenix5 #.configs.cancoder_configs.CANcoderConfiguration
+# import wpimath
+# import phoenix5 #.configs.cancoder_configs.CANcoderConfiguration
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
-#from phoenix6.configs.cancoder_configs import CANcoderConfiguration
+#   from phoenix6.configs.cancoder_configs import CANcoderConfiguration
 import phoenix6.hardware
 from phoenix6.hardware import CANcoder
 from commands2 import CommandScheduler
-from phoenix6 import status_signal
+
+
 #from wpilib import DutyCycleEncoder
 # import pandas 
 # from pandas import Series
@@ -27,6 +28,7 @@ class swervemodule(commands2.SubsystemBase):
         #~This is useful for when the robot is turned off and on again.
         self.absoluteEncoderOffsetRad = absouteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
+        #self.cancoderConfig = CANcoderConfiguration
 
         self.absoluteEncoder = CANcoder(absoluteEncoderId)
         #self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
@@ -77,7 +79,7 @@ class swervemodule(commands2.SubsystemBase):
 
         #? Change getAbsolutePosition to get_absolute_postion for cancoder
         # wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().getValue())
-        wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().value)
+        wpilib.SmartDashboard.putNumber("absEncoder", self.absoluteEncoder.get_absolute_position().value_as_double)
         
         #wpilib.SmartDashboard.putData("absEncoder", self.absoluteEncoder.get_absolute_position())
        # print(self.absoluteEncoder.getAbsolutePosition())
@@ -88,7 +90,7 @@ class swervemodule(commands2.SubsystemBase):
         # return angle * (-1 if self.absoluteEncoderReversed else 1) #? reverse if needed
         
         #angle = self.absoluteEncoder.get_absolute_position().getValue() # ? percent of full rotation
-        angle = self.absoluteEncoder.get_absolute_position().value
+        angle = self.absoluteEncoder.get_absolute_position().value_as_double
         angle *= 2 * math.pi #? convert to radians
         angle -= self.absoluteEncoderOffsetRad #? get acual location depending on the offset
         
@@ -104,8 +106,8 @@ class swervemodule(commands2.SubsystemBase):
         self.turningEncoder.setPosition(self.getAbsoluteEncoderRad())
 
     def getState(self) -> SwerveModuleState:
-        return SwerveModuleState(self.getDrivingVelocity(), Rotation2d(self.getTurningPostion()))
-
+        #return SwerveModuleState(self.getDrivingVelocity(), Rotation2d(self.getTurningPostion()))
+        return SwerveModuleState(self.drivingEncoder.getVelocity(), Rotation2d(self.getAbsoluteEncoderRad()))
     def setDesiredState(self, state:SwerveModuleState):
         #^ this prevents the wheels from resetting their position after every input is made
         #https://youtu.be/0Xi9yb1IMyA?t=577
@@ -125,13 +127,28 @@ class swervemodule(commands2.SubsystemBase):
         # print(state.speed)
 
       
-        self.turningMotor.set(0) 
-        #self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
+        #self.turningMotor.set(0) 
+        self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
 
         self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
         # self.sd.putString(f"Optimized state", str(self.state))
         # self.sd.putString(f"state", str(state))
 
+        
+# def setDesiredState(self, state: SwerveModuleState):
+#     self.state = SwerveModuleState.optimize(state, self.getState().angle)
+
+#     # Normalize speed to [-1, 1] range
+#     driving_speed = self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond
+#     self.drivingMotor.set(driving_speed)
+
+#     # PID control for turning
+#     turning_output = self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
+#     self.turningMotor.set(turning_output)
+
+#     # Debugging
+#     self.sd.putNumber("Driving Speed", driving_speed)
+#     self.sd.putNumber("Turning Output", turning_output)
 
     def stop(self):
         self.drivingMotor.set(0)

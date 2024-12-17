@@ -64,7 +64,7 @@ class RobotConstants:
     frontLeftTurningMotorID = 11
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
-    frontLeftAbsoluteEncoderId = 15 #DIO port ID
+    frontLeftAbsoluteEncoderId = 14 #Front Left #DIO port ID
     frontLeftAbsoluteEncoderOffset = 0.27 # (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
@@ -72,7 +72,7 @@ class RobotConstants:
     frontRightTurningMotorID = 22
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
-    frontRightAbsoluteEncoderId = 14
+    frontRightAbsoluteEncoderId = 12 #Front Right
     frontRightAbsoluteEncoderOffset = 0.22 # 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
@@ -80,7 +80,7 @@ class RobotConstants:
     backRightTurningMotorID = 33
     backRightDrivingMotorReversed = False
     backRightTurningMotorReversed = False
-    backRightAbsoluteEncoderId = 17
+    backRightAbsoluteEncoderId = 15 #Back Right
     backRightAbsoluteEncoderOffset = 0.3
     backRightAbsoluteEncoderReversed = True
     
@@ -88,7 +88,7 @@ class RobotConstants:
     backLeftTurningMotorID = 44
     backLeftDrivingMotorReversed = False
     backLeftTurningMotorReversed = False
-    backLeftAbsoluteEncoderId = 16
+    backLeftAbsoluteEncoderId = 13 # Back Left
     backLeftAbsoluteEncoderOffset = 0.32
     backLeftAbsoluteEncoderReversed = True
 
@@ -191,6 +191,7 @@ class AutoConstants:
         )
 
         #^Added this today (1/11)
+        
         pathFollowerConfig = HolonomicPathFollowerConfig( 
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
                 PIDConstants(0.0, 0.0, 0.0),#PIDConstants(.9, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
@@ -206,42 +207,42 @@ class AutoConstants:
             kMaxAngularAccelerationRadiansPerSecondSquared
         )
 
-class sim:
-    kSimTargetName = "SimTarget"
-    # kSimDefaultTargetLocation = Pose2d(
-    #     kFieldLength / 2, kFieldWidth / 2, 180 * kRadiansPerDegree
-    # )
-    """[meters, meters, radians]"""
+# class sim:
+#     kSimTargetName = "SimTarget"
+#     # kSimDefaultTargetLocation = Pose2d(
+#     #     kFieldLength / 2, kFieldWidth / 2, 180 * kRadiansPerDegree
+#     # )
+#     """[meters, meters, radians]"""
 
-    kSimDefaultRobotLocation = Pose2d(FildConstants.kFieldLength / 2, FildConstants.kFieldWidth / 2, 0)
-    # kSimDefaultTargetHeight = 8 * kMetersPerFoot + 8 * kMetersPerInch  # 8ft 8in
-    # kSimBallName = "SimBall"
-    # kSimDefaultBallLocation = Pose2d(kFieldLength / 4, kFieldWidth / 2, 0)
+#     kSimDefaultRobotLocation = Pose2d(FildConstants.kFieldLength / 2, FildConstants.kFieldWidth / 2, 0)
+#     # kSimDefaultTargetHeight = 8 * kMetersPerFoot + 8 * kMetersPerInch  # 8ft 8in
+#     # kSimBallName = "SimBall"
+#     # kSimDefaultBallLocation = Pose2d(kFieldLength / 4, kFieldWidth / 2, 0)
 
-    """meters"""
+#     """meters"""
 
-    kSimRobotPoseArrayKey = "SimRobotPoseArray"
-    kSimTargetPoseArrayKey = "SimTargetPoseArray"
-    kSimBallPoseArrayKey = "SimBallPoseArray"
-    kSimTargetHeightKey = "SimTargetHeight"
-    kSimTargetTrackingModuleName = "sim_target_tracker"
-    kSimTargetUpperHubRadius = 2
+#     kSimRobotPoseArrayKey = "SimRobotPoseArray"
+#     kSimTargetPoseArrayKey = "SimTargetPoseArray"
+#     kSimBallPoseArrayKey = "SimBallPoseArray"
+#     kSimTargetHeightKey = "SimTargetHeight"
+#     kSimTargetTrackingModuleName = "sim_target_tracker"
+#     kSimTargetUpperHubRadius = 2
 
-    kSimFrontLeftDriveMotorPort = 0
-    kSimFrontLeftSteerMotorPort = 1
-    kSimFrontRightDriveMotorPort = 2
-    kSimFrontRightSteerMotorPort = 3
-    kSimBackLeftDriveMotorPort = 4
-    kSimBackLeftSteerMotorPort = 5
-    kSimBackRightDriveMotorPort = 6
-    kSimBackRightSteerMotorPort = 7
+#     kSimFrontLeftDriveMotorPort = 0
+#     kSimFrontLeftSteerMotorPort = 1
+#     kSimFrontRightDriveMotorPort = 2
+#     kSimFrontRightSteerMotorPort = 3
+#     kSimBackLeftDriveMotorPort = 4
+#     kSimBackLeftSteerMotorPort = 5
+#     kSimBackRightDriveMotorPort = 6
+#     kSimBackRightSteerMotorPort = 7
 
 
-    kSimFrontLeftDriveEncoderPorts = (16, 1)
-    kSimFrontLeftSteerEncoderPorts = (2, 3)
-    kSimFrontRightDriveEncoderPorts = (4, 5)
-    kSimFrontRightSteerEncoderPorts = (6, 7)
-    kSimBackLeftDriveEncoderPorts = (8, 9)
-    kSimBackLeftSteerEncoderPorts = (10, 11)
-    kSimBackRightDriveEncoderPorts = (12, 13)
-    kSimBackRightSteerEncoderPorts = (14, 15)
+#     kSimFrontLeftDriveEncoderPorts = (16, 1)
+#     kSimFrontLeftSteerEncoderPorts = (2, 3)
+#     kSimFrontRightDriveEncoderPorts = (4, 5)
+#     kSimFrontRightSteerEncoderPorts = (6, 7)
+#     kSimBackLeftDriveEncoderPorts = (8, 9)
+#     kSimBackLeftSteerEncoderPorts = (10, 11)
+#     kSimBackRightDriveEncoderPorts = (12, 13)
+#     kSimBackRightSteerEncoderPorts = (14, 15)
