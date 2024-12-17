@@ -97,7 +97,6 @@ class swervemodule(commands2.SubsystemBase):
         return angle * (-1 if self.absoluteEncoderReversed else 1) #?
         #reverse if needed
         
-        
     def getSwerveModulePosition(self) -> SwerveModulePosition:
             return SwerveModulePosition(self.getDrivingPosition(), Rotation2d(self.getAbsoluteEncoderRad()))
 
@@ -108,6 +107,7 @@ class swervemodule(commands2.SubsystemBase):
     def getState(self) -> SwerveModuleState:
         #return SwerveModuleState(self.getDrivingVelocity(), Rotation2d(self.getTurningPostion()))
         return SwerveModuleState(self.drivingEncoder.getVelocity(), Rotation2d(self.getAbsoluteEncoderRad()))
+    
     def setDesiredState(self, state:SwerveModuleState):
         #^ this prevents the wheels from resetting their position after every input is made
         #https://youtu.be/0Xi9yb1IMyA?t=577
@@ -128,7 +128,7 @@ class swervemodule(commands2.SubsystemBase):
 
       
         #self.turningMotor.set(0) 
-        self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians())
+        self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
 
         self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
         # self.sd.putString(f"Optimized state", str(self.state))
