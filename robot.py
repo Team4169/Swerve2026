@@ -12,6 +12,7 @@
 
 import typing
 import wpilib
+import wpilib.shuffleboard
 from wpimath.geometry import Rotation2d, Pose2d
 import commands2
 import math
@@ -27,6 +28,7 @@ from wpilib import Timer
 from wpimath.kinematics import SwerveModuleState
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
 from pathplannerlib.commands import PathfindHolonomic
+from wpilib import Field2d
 
 import phoenix5
 
@@ -71,6 +73,10 @@ class MyRobot(commands2.TimedCommandRobot):
         self.network_tables = ntcore.NetworkTableInstance.getDefault()
         self.camera_tables = self.network_tables.getTable("SmartDashboard")
 
+        self.field = Field2d()
+        self.sd.putData("Field", self.field)
+
+
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
         # self.testabsoluteEncoder = wpilib.DutyCycleEncoder(5)
@@ -81,31 +87,40 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def disabledPeriodic(self) -> None:
+
         self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
         self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
         self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
         self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
         self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
-        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
+        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(20)
         self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
         self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
         self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
         self.timeSinceLastDataReceivedFromJetson2 = self.camera_tables.getEntry("w2").getLastChange() - ntcore._now()
-        if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
-        if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
-        if self.jetson1weight + self.jetson2weight > 0:
+
+        self.robot_pose = Pose2d(self.jetson2X, self.jetson2Y, self.jetson2rot)
+        self.field.setRobotPose(self.robot_pose)
+
+        # self.sd.putNumber("w2", self.jetson2weight)
+
+        # print("w2 _______________", self.jetson2weight)
+
+        # if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
+        # if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
+        # if self.jetson1weight + self.jetson2weight > 0:
             
-            self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
-            self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+        #     self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+        #     self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
-            self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
-            # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
-            if True: #on red team
-                self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
-            else: #on blue team
-                self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
-            self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
-            self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
+        #     self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+        #     # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+        #     if True: #on red team
+        #         self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
+        #     else: #on blue team
+        #         self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
+        #     self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
+        #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
         self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())

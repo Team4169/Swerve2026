@@ -228,7 +228,7 @@ class RobotContainer:
         
     # def rotateToSpeaker(self):
     # def rotateToSpeaker(self):
-    # def rotateToSpeaker(self):
+    # # def rotateToSpeaker(self):
     #     self.jetson1rotation = self.camera_tables.getEntry("r1").getValue()
     #     self.jetson2rotation = self.camera_tables.getEntry("r2").getValue()
     #     self.jetson1X = self.camera_tables.getEntry("x1").getValue()
@@ -247,9 +247,9 @@ class RobotContainer:
     #     self.yDistance = self.RobotConstants.heightOfField - self.yAve #1.45m
     #     self.distanceToShooter = math.sqrt(self.xDistance**2 + self.yDistance**2)
 
-    #     rotation = Rotation2d(math.acos(self.xDistance/self.distanceToShooter)) 
+    #     # rotation = Rotation2d(math.acos(self.xDistance/self.distanceToShooter)) 
 
-    #     self.rotateToSpeakerCommand = rotateToSpeakerCommand(self.swerve, rotation)
-    #     ## print("running rotate to speaker")
-    #     self.rotateToSpeakerCommand.schedule()
+    #     # self.rotateToSpeakerCommand = rotateToSpeakerCommand(self.swerve, rotation)
+    #     # ## print("running rotate to speaker")
+    #     # self.rotateToSpeakerCommand.schedule()
         
