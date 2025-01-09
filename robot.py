@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 #! TODO:
 
-#! 1. Turning motors don't work (test)
+#! 1. Test pathplanner
 #! 2. Continue testing Slewratelimiter
-#! 3. Cancoders (test old code on new cancoders. See if it works)
-#! 4. Look into the new radio on westcoast products
-#! 5. Difference + similarities between roborio 1 vs 2
+#! 3. Hear back from design 
+
+
 
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
@@ -29,6 +29,8 @@ from wpimath.kinematics import SwerveModuleState
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
 from pathplannerlib.commands import PathfindHolonomic
 from wpilib import Field2d
+
+from wpimath.filter import SlewRateLimiter
 
 import phoenix5
 
@@ -62,6 +64,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.Container = RobotContainer()
         self.driverController = self.Container.driverController
         self.operatorController = self.Container.operatorController
+
         # self.drive = self.container.drive
         self.swerve = self.Container.swerve
         CommandScheduler.getInstance().registerSubsystem(self.swerve)
@@ -72,6 +75,12 @@ class MyRobot(commands2.TimedCommandRobot):
 
         self.network_tables = ntcore.NetworkTableInstance.getDefault()
         self.camera_tables = self.network_tables.getTable("SmartDashboard")
+
+        #self.slew_limiter = SlewRateLimiter(1.0)  # 1 volt per second
+
+        # Assume this is a motor controller (replace with your actual motor controller)
+        #self.motor_controller = MotorController(0)
+
 
         self.field = Field2d()
         self.sd.putData("Field", self.field)
@@ -211,7 +220,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #self.sendLEDCommand(3, self.isRedAlliance)
         # self.drive.resetEncoders()
         # self.moveRestriction = 1
-        #wpimath.filter.SlewRateLimiter(0.5)
+        
         # This makes sure that the autonomous stops running when
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
@@ -232,11 +241,21 @@ class MyRobot(commands2.TimedCommandRobot):
         # print("Starting teleop...")
         # self.speed = 0
 
+        
+
     def teleopPeriodic(self):
         self.swerve.frontRight.resetEncoders()
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
+
+        #voltageLimiter = SlewRateLimiter(0.5)
+
+        #self.sd.putNumber(voltageLimiter.calculate(self.SwerveJoystickCmd.xSpeed))
+        # self.sd.putNumber(voltageLimiter.calculate(self.SwerveJoystickCmd.ySpeed))
+        # self.sd.putNumber(voltageLimiter.calculate(self.SwerveJoystickCmd.zRotation))
+        
+
 
         self.sd.putNumber("BackLeft Turning Position", self.swerve.backLeft.getTurningPostion())
         self.sd.putNumber("BackRight Turning Position", self.swerve.backRight.getTurningPostion())

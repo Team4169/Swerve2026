@@ -107,6 +107,7 @@ class RobotContainer:
         # self.ShootAndPickup1 = "ShootAndPickup1"
         self.TestAuto = "TestAuto"
         self.MoveAuto = "MoveAuto(1R)"
+        self.NewAuto = "New Auto"
 
 
         self.chooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
@@ -115,6 +116,7 @@ class RobotContainer:
         self.chooser.addOption("TestAuto", self.TestAuto) 
         self.chooser.addOption("MoveAuto(1R)", self.MoveAuto)
 
+        self.chooser.addOption("New Auto", self.NewAuto)
 
         # # Put the chooser on the dashboard
         self.shuffle = wpilib.SmartDashboard

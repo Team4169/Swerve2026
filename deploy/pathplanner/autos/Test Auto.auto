@@ -1,12 +1,5 @@
 {
-  "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.5059719106599396,
-      "y": 2.1079505782406716
-    },
-    "rotation": 91.95806742923403
-  },
+  "version": "2025.0",
   "command": {
     "type": "sequential",
     "data": {
@@ -14,12 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Get out of the way1"
+            "pathName": "MirrorTest"
           }
         }
       ]
     }
   },
+  "resetOdom": true,
   "folder": null,
   "choreoAuto": false
 }
