@@ -6,7 +6,7 @@ from wpimath.kinematics import SwerveModuleState
 from wpimath.geometry import Rotation2d
 import time
 
-class rotateToSpeakerCommand(commands2.CommandBase):
+class rotateToSpeakerCommand(commands2.Command):
     def __init__(self, swerve: SwerveSubsystem, rotation) -> None:
         super().__init__()
         self.swerve = swerve

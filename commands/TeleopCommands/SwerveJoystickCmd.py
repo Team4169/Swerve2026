@@ -1,14 +1,14 @@
 import commands2, constants, wpilib, navx, threading, time, math
 from constants import OIConstants, RobotConstants, DrivingConstants
 from wpimath.filter import SlewRateLimiter
-from commands2 import CommandBase 
+from commands2 import Command 
 from wpilib import XboxController
 from commands2.button import CommandXboxController
 import wpimath
 from subsystems.swervesubsystem import SwerveSubsystem
 from wpimath.kinematics import ChassisSpeeds
 
-class SwerveJoystickCmd(CommandBase):
+class SwerveJoystickCmd(Command):
 
     def __init__(self, swerve: SwerveSubsystem, driverController:XboxController):
         super().__init__()

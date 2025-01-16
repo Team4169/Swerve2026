@@ -27,12 +27,12 @@ import wpimath
 from wpilib import Timer
 from wpimath.kinematics import SwerveModuleState
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
-from pathplannerlib.commands import PathfindHolonomic
+#from pathplannerlib.commands import PathfindHolonomic
 from wpilib import Field2d
 
 from wpimath.filter import SlewRateLimiter
 
-import phoenix5
+import phoenix6
 
 # -----------------
 # code adopted from FRC 0 to Autonomous: #6 Swerve Drive Auto (https://www.youtube.com/watch?v=0Xi9yb1IMyA)
@@ -102,7 +102,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
         self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
         self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
-        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(20)
+        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
         self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
         self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
         self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
@@ -225,8 +225,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # teleop starts running. If you want the autonomous to
         # continue until interrupted by another command, remove
         # this line or comment it out.
-        if self.AutonomousCommand:
-            self.AutonomousCommand.cancel()
+        # if self.AutonomousCommand:
+        #     self.AutonomousCommand.cancel()
         
         self.swerve.frontLeft.drivingEncoder.setPosition(0)
         self.swerve.frontRight.drivingEncoder.setPosition(0)
@@ -262,54 +262,54 @@ class MyRobot(commands2.TimedCommandRobot):
         self.sd.putNumber("FrontLeft Turning Position", self.swerve.frontLeft.getTurningPostion())
         self.sd.putNumber("FrontRight Turning Position", self.swerve.frontRight.getTurningPostion())
 
-        self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
-        self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
-        self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
-        self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
-        self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
-        self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
-        self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
-        self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
-        self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
-        self.timeSinceLastDataReceivedFromJetson2 = self.camera_tables.getEntry("w2").getLastChange() - ntcore._now()
-        if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
-        if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
-        if self.jetson1weight + self.jetson2weight > 0:
+        # self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
+        # self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
+        # self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)
+        # self.jetson2Y = self.camera_tables.getEntry("y2").getDouble(0)
+        # self.jetson1weight = self.camera_tables.getEntry("w1").getDouble(0)
+        # self.jetson2weight = self.camera_tables.getEntry("w2").getDouble(0)
+        # self.jetson1rot = self.camera_tables.getEntry("r1").getDouble(0)
+        # self.jetson2rot = self.camera_tables.getEntry("r2").getDouble(0)
+        # self.timeSinceLastDataReceivedFromJetson1 = self.camera_tables.getEntry("w1").getLastChange() - ntcore._now()
+        # self.timeSinceLastDataReceivedFromJetson2 = self.camera_tables.getEntry("w2").getLastChange() - ntcore._now()
+        # if self.timeSinceLastDataReceivedFromJetson1 > 2: self.jetson1weight = 0
+        # if self.timeSinceLastDataReceivedFromJetson2 > 2: self.jetson2weight = 0
+        # if self.jetson1weight + self.jetson2weight > 0:
             
-            self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
-            self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+        #     self.xAve = (self.jetson1X * self.jetson1weight + self.jetson2X * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
+        #     self.yAve = (self.jetson1Y * self.jetson1weight + self.jetson2Y * self.jetson2weight) / (self.jetson1weight + self.jetson2weight)
         
-            self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
-            # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
-            if self.isRedAlliance: #on red team
-                self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
-            else: #on blue team
-                self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
-            self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
-            self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
-            # print(self.distanceToShooter)
-        # print(self.Container.autoShooterWarmup)
+        #     self.rotAve = math.atan2(math.sin(self.jetson1rot) * self.jetson1weight + math.sin(self.jetson2rot) * self.jetson2weight, math.cos(self.jetson1rot) * self.jetson1weight + math.cos(self.jetson2rot) * self.jetson2weight)
+        #     # print('\n*$*$*$*$*\n',f"OurX: {self.xAve}, OurY: {self.yAve}, ConstX: {RobotConstants.speakerXPosition}, ConstY: {RobotConstants.speakerYPosition}")
+        #     if self.isRedAlliance: #on red team
+        #         self.xDistance = -RobotConstants.speakerXPosition - self.xAve #8.3m
+        #     else: #on blue team
+        #         self.xDistance = RobotConstants.speakerXPosition - self.xAve #8.3m
+        #     self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
+        #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
+        #     # print(self.distanceToShooter)
+        # # print(self.Container.autoShooterWarmup)
 
-        # if self.distanceToShooter <= 3: # and self.Container.autoShooterWarmup:
-        #     self.Container.shooter.runShooter()
+        # # if self.distanceToShooter <= 3: # and self.Container.autoShooterWarmup:
+        # #     self.Container.shooter.runShooter()
 
-        # self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)
+        # # self.sd.putNumber("drivingLimiter", DrivingConstants.drivingSpeedLimiter)
 
-        # if self.operatorController.getLeftTriggerAxis() > 0.2:
-        #     self.Container.climber.runRightClimbingMotor(0.35)
-        # else:
-        #     self.Container.climber.stopRightClimbingMotor()
+        # # if self.operatorController.getLeftTriggerAxis() > 0.2:
+        # #     self.Container.climber.runRightClimbingMotor(0.35)
+        # # else:
+        # #     self.Container.climber.stopRightClimbingMotor()
         
-        # if self.operatorController.getRightTriggerAxis() > 0.2:
-        #     self.Container.climber.runLeftClimbingMotor(-0.35)
+        # # if self.operatorController.getRightTriggerAxis() > 0.2:
+        # #     self.Container.climber.runLeftClimbingMotor(-0.35)
 
-        # else:
-        #     self.Container.climber.stopLeftClimbingMotor()
+        # # else:
+        # #     self.Container.climber.stopLeftClimbingMotor()
 
-        # if self.operatorController.getLeftBumperPressed():
-        #     self.Container.climber.runRightClimbingMotor(-0.35)
-        # else:
-        #     self.Container.climber.stopRightClimbingMotor()
+        # # if self.operatorController.getLeftBumperPressed():
+        # #     self.Container.climber.runRightClimbingMotor(-0.35)
+        # # else:
+        # #     self.Container.climber.stopRightClimbingMotor()
             
         # if self.operatorController.getRightBumperPressed():
         #     self.Container.climber.runLeftClimbingMotor(-0.35)
@@ -403,3 +403,8 @@ class MyRobot(commands2.TimedCommandRobot):
 if __name__ == "__main__":
     wpilib.run(MyRobot)
 # #!/usr/bin/env python3
+
+# robotpy-commands-v2==2024.3.1
+# robotpy-pathplannerlib==2024.2.3
+
+ #robotpy_version = "2024.3.1.0"

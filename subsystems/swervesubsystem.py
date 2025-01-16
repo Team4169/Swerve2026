@@ -13,8 +13,11 @@ from wpimath.geometry import Pose2d
 
 from wpilib import DriverStation
 
-from pathplannerlib.auto import AutoBuilder #.auto
-from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
+# from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
+
+from pathplannerlib.auto import AutoBuilder
+from pathplannerlib.controller import PPHolonomicDriveController
+from pathplannerlib.config import RobotConfig, PIDConstants
 
 import ntcore
 
@@ -72,14 +75,30 @@ class SwerveSubsystem (commands2.SubsystemBase):
         thread.start()
         
         #^^Added this today (1/11)
-        AutoBuilder.configureHolonomic(
-            self.getPose,
-            self.resetOdometry,
-            self.getChassisSpeeds,
-            self.driveChassisSpeeds,
-            AutoConstants.pathFollowerConfig,
-            self.shouldFlipPath,
-            self
+
+        # AutoBuilder.configureHolonomic( # 2024 config
+        #     self.getPose,
+        #     self.resetOdometry,
+        #     self.getChassisSpeeds,
+        #     self.driveChassisSpeeds,
+        #     AutoConstants.pathFollowerConfig,
+        #     self.shouldFlipPath,
+        #     self
+        # )
+
+        config = RobotConfig.fromGUISettings()
+        AutoBuilder.configureHolonomic( # 2025
+            self.getPose, # Robot pose supplier
+            self.resetOdometry, # Method to reset odometry (will be called if your auto has a starting pose)
+            self.getChassisSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            lambda speeds, feedforwards: self.driveChassisSpeeds(speeds), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
+            PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
+                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+                PIDConstants(5.0, 0.0, 0.0) # Rotation PID constants
+            ),
+            config, # The robot configuration
+            self.shouldFlipPath, # Supplier to control path flipping based on alliance color
+            self # Reference to this subsystem to set requirements
         )
         
     #~ Gyro Commands

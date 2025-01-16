@@ -17,7 +17,11 @@ from wpimath.filter import SlewRateLimiter
 
 #?from phoenix6 import CANCoder
 
-from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config
+from pathplannerlib.auto import AutoBuilder
+from pathplannerlib.controller import PPHolonomicDriveController
+from pathplannerlib.config import RobotConfig, PIDConstants
+from wpilib import DriverStation
+
 from pathplannerlib.path import PathPlannerPath, PathConstraints
 from wpimath.units import degreesToRadians
 
@@ -159,7 +163,7 @@ class RobotConstants:
 class ModuleConstants:
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
-    kDriveMotorGearRatio = 1/6.75 
+    kDriveMotorGearRatio = 1/6.75 # ask design
     kTurningMotorGearRatio = 1/13.3714 #*found through wcp site https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options#:~:text=35%3A1%20or-,13.3714,-%3A1
 
     kDrivingEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
@@ -190,15 +194,15 @@ class AutoConstants:
                 kMaxAngularAccelerationRadiansPerSecondSquared,
         )
 
-        #^Added this today (1/11)
+        #^Added this today (1/11/2024)
         
-        pathFollowerConfig = HolonomicPathFollowerConfig( 
-                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(0.0, 0.0, 0.0),#PIDConstants(.9, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
-                kMaxSpeedMetersPerSecond, # Max module speed, in m/s
-                math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
-                ReplanningConfig() # Default path replanning config. See the API for the options here
-            )
+        # pathFollowerConfig = PPHolonomicPathFollowerConfig( 
+        #         PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+        #         PIDConstants(0.0, 0.0, 0.0),#PIDConstants(.9, 0.0, 0.07), # Rotation PID constants , # PIDConstants(9.0, 0.0, 0.5),
+        #         kMaxSpeedMetersPerSecond, # Max module speed, in m/s
+        #         math.sqrt(RobotConstants.kTrackWidth**2 + RobotConstants.kWheelBase**2), # Drive base radius in meters. Distance from robot center to furthest module.
+        #         ReplanningConfig() # Default path replanning config. See the API for the options here
+        #     )
 
         constraints = PathConstraints(
             kMaxSpeedMetersPerSecond,

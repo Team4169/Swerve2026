@@ -26,18 +26,18 @@ import math
 # import photonvision
 
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder, PathPlannerPath
-from pathplannerlib.commands import PathfindHolonomic
+#from pathplannerlib.commands import PathfindHolonomic
 from pathplannerlib.path import GoalEndState
 
-from commands.testcommands.move1module import move1module
-from commands.testcommands.move2motors import move2motors
-from commands.testcommands.move4modules import move4modules
-from commands.testcommands.MoveInACircle import MoveInACircle
-from commands.TeleopCommands.driveWaypoint import DriveWaypoint
+# from commands.testcommands.move1module import move1module
+# from commands.testcommands.move2motors import move2motors
+# from commands.testcommands.move4modules import move4modules
+# from commands.testcommands.MoveInACircle import MoveInACircle
+# from commands.TeleopCommands.driveWaypoint import DriveWaypoint
 
 from commands.testcommands.rotateToSpeakerCommand import rotateToSpeakerCommand
 
-from commands.AutonCommands.sCurve import sCurve
+# from commands.AutonCommands.sCurve import sCurve
 from commands2 import InstantCommand
 
 class RobotContainer:
@@ -58,11 +58,11 @@ class RobotContainer:
         # self.intake = IntakeSubsystem()
         # self.midstage = MidstageSubsystem()
         # self.climber = ClimbingSubsystem()
-        #self.shooter = ShooterSubsystem()
+        # self.shooter = ShooterSubsystem()
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
                 swerve=self.swerve,
-                driverController = self.driverController
+                driverController=self.driverController
             ))
         
         #^^Added this today (1/11)
@@ -85,22 +85,24 @@ class RobotContainer:
         # NamedCommands.registerCommand("stopMidstage",
         #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
         # )
-        NamedCommands.registerCommand("setShooterAngle",
-            commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
-        )
-        NamedCommands.registerCommand("stopShooter",
-            commands2.InstantCommand(lambda:self.shooter.stopShooter())
-        )
-        NamedCommands.registerCommand("shootRing",
-            commands2.InstantCommand(lambda:self.shooter.runShooter())
-        )
+        # NamedCommands.registerCommand("setShooterAngle",
+        #     commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
+        # )
+        # NamedCommands.registerCommand("stopShooter",
+        #     commands2.InstantCommand(lambda:self.shooter.stopShooter())
+        # )
+        # NamedCommands.registerCommand("shootRing",
+        #     commands2.InstantCommand(lambda:self.shooter.runShooter())
+        # )
 
        
-        self.driveWaypointCommand = DriveWaypoint(self.swerve)
+        #self.driveWaypointCommand = DriveWaypoint(self.swerve)
         self.configureButtonBindings()
 
         # sendable chooser
-        self.chooser = wpilib.SendableChooser()
+        #self.chooser = wpilib.SendableChooser()
+
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
         self.GetOutOfTheWay1 = "GetOutOfTheWay1"
         # self.ShootAndMove1 = "ShootAndMove1"
@@ -110,41 +112,41 @@ class RobotContainer:
         self.NewAuto = "New Auto"
 
 
-        self.chooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
-        # self.chooser.addOption("ShootAndMove1", self.ShootAndMove1)
-        # self.chooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
-        self.chooser.addOption("TestAuto", self.TestAuto) 
-        self.chooser.addOption("MoveAuto(1R)", self.MoveAuto)
+        self.autoChooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
+        # self.autoChooser.addOption("ShootAndMove1", self.ShootAndMove1)
+        # self.autoChooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
+        self.autoChooser.addOption("TestAuto", self.TestAuto) 
+        self.autoChooser.addOption("MoveAuto(1R)", self.MoveAuto)
 
-        self.chooser.addOption("New Auto", self.NewAuto)
+        self.autoChooser.addOption("New Auto", self.NewAuto)
 
-        # # Put the chooser on the dashboard
+        # # Put the autoChooser on the dashboard
         self.shuffle = wpilib.SmartDashboard
-        self.shuffle.putData("Autonomousff", self.chooser)
+        self.shuffle.putData("Autonomousff", self.autoChooser)
 
-        self.network_tables = ntcore.NetworkTableInstance.getDefault()
-        self.datatable = self.network_tables.getTable("datatable")
+        # self.network_tables = ntcore.NetworkTableInstance.getDefault()
+        # self.datatable = self.network_tables.getTable("datatable")
 
-        self.autoShooterWarmup = True
+        # self.autoShooterWarmup = True
         # self.shuffle.putData("AutoShooterWarmup", self.autoChooserWarmup
     
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        return PathPlannerAuto('ShootAndPickup')
+        return PathPlannerAuto("TestAuto")
         # return PathPlannerAuto(self.chooser.getSelected())    
     
-    def runObjectDetectionPath(self):
-        start_pose = Pose2d(0, 0, Rotation2d.fromDegrees(0))
-        end_pose = Pose2d(10, 0, Rotation2d.fromDegrees(0))
+    # def runObjectDetectionPath(self):
+    #     start_pose = Pose2d(0, 0, Rotation2d.fromDegrees(0))
+    #     end_pose = Pose2d(10, 0, Rotation2d.fromDegrees(0))
 
-        bezier_points = PathPlannerPath.bezierFromPoses([start_pose, end_pose])
-        path = PathPlannerPath(
-            bezier_points,
-            AutoConstants.constraints,
-            GoalEndState(0, Rotation2d.fromDegrees(0))
-        )
-        return AutoBuilder.followPath(path)
+    #     bezier_points = PathPlannerPath.bezierFromPoses([start_pose, end_pose])
+    #     path = PathPlannerPath(
+    #         bezier_points,
+    #         AutoConstants.constraints,
+    #         GoalEndState(0, Rotation2d.fromDegrees(0))
+    #     )
+    #     return AutoBuilder.followPath(path)
 
     def setSlowMode(self): #-> commands2.Command
         DrivingConstants.drivingSpeedLimiter = 0.3
@@ -175,11 +177,11 @@ class RobotContainer:
 
 
         #*run intake and midstage to bring the ring into the robot
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))
-        #run the intake and midstage to eject the ring
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))                       
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))
+        # #run the intake and midstage to eject the ring
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.intake.runIntake(0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(0.5))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))                       
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue().onFalse()                       
         
 

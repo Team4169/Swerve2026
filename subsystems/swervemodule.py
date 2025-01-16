@@ -30,7 +30,7 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoderReversed = absoluteEncoderReversed
         #self.cancoderConfig = CANcoderConfiguration
 
-        self.absoluteEncoder = CANcoder(absoluteEncoderId)
+        self.absoluteEncoder = CANcoder(absoluteEncoderId, "canivore")
         #self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
