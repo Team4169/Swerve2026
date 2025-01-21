@@ -12,7 +12,8 @@
 
 import typing
 import wpilib
-import wpilib.shuffleboard
+#import wpilib.shuffleboard
+from wpilib import shuffleboard
 from wpimath.geometry import Rotation2d, Pose2d
 import commands2
 import math
