@@ -36,8 +36,8 @@ class swervemodule(commands2.SubsystemBase):
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
         
-        self.drivingMotor = rev.CANSparkMax(drivingMotorID, rev.CANSparkLowLevel.MotorType.kBrushless)
-        self.turningMotor = rev.CANSparkMax(turningMotorID, rev.CANSparkLowLevel.MotorType.kBrushless)
+        self.drivingMotor = rev.SparkMax(drivingMotorID, rev.SparkLowLevel.MotorType.kBrushless)
+        self.turningMotor = rev.SparkMax(turningMotorID, rev.SparkLowLevel.MotorType.kBrushless)
 
         self.drivingMotor.setInverted(drivingMotorReversed)
         self.turningMotor.setInverted(turningMotorReversed)
@@ -47,11 +47,12 @@ class swervemodule(commands2.SubsystemBase):
         
         #~ this converts encoder ticks to meters, not entirely sure about how velocity works
         
-        self.drivingEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderRot2Meter)
-        self.drivingEncoder.setVelocityConversionFactor(ModuleConstants.KDrivingEncoderRPM2MeterPerSec)
+        # self.drivingEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderRot2Meter)
+        # self.drivingEncoder.setVelocityConversionFactor(ModuleConstants.KDrivingEncoderRPM2MeterPerSec)
+        
 
-        self.turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
-        self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
+        # self.turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
+        # self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
 
         #* PID Controllers
         self.turningPIDController = PIDController(ModuleConstants.kPTurning, 0, 0)

@@ -135,7 +135,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
-        self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
+        # self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
 
            # print(self.distanceToShooter)
 

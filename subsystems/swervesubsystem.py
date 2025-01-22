@@ -15,9 +15,9 @@ from wpilib import DriverStation
 
 # from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
 
-from pathplannerlib.auto import AutoBuilder
-from pathplannerlib.controller import PPHolonomicDriveController
-from pathplannerlib.config import RobotConfig, PIDConstants
+# from pathplannerlib.auto import AutoBuilder
+# from pathplannerlib.controller import PPHolonomicDriveController
+# from pathplannerlib.config import RobotConfig, PIDConstants
 
 import ntcore
 
@@ -65,10 +65,10 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
         
-        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
-            #the odometry class tracks the robot position over time
-            #we can use the gyro in order to determnine the error from our auton path and correct it
-        self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModulePositionsOld())
+        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1)
+        #     #the odometry class tracks the robot position over time
+        #     #we can use the gyro in order to determnine the error from our auton path and correct it
+        # self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModulePositionsOld())
 
         thread = threading.Thread(target=self.zero_heading_after_delay)
 
@@ -86,20 +86,20 @@ class SwerveSubsystem (commands2.SubsystemBase):
         #     self
         # )
 
-        config = RobotConfig.fromGUISettings()
-        AutoBuilder.configureHolonomic( # 2025
-            self.getPose, # Robot pose supplier
-            self.resetOdometry, # Method to reset odometry (will be called if your auto has a starting pose)
-            self.getChassisSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            lambda speeds, feedforwards: self.driveChassisSpeeds(speeds), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
-            PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
-                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(5.0, 0.0, 0.0) # Rotation PID constants
-            ),
-            config, # The robot configuration
-            self.shouldFlipPath, # Supplier to control path flipping based on alliance color
-            self # Reference to this subsystem to set requirements
-        )
+        # config = RobotConfig.fromGUISettings()
+        # AutoBuilder.configureHolonomic( # 2025
+        #     self.getPose, # Robot pose supplier
+        #     self.resetOdometry, # Method to reset odometry (will be called if your auto has a starting pose)
+        #     self.getChassisSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        #     lambda speeds, feedforwards: self.driveChassisSpeeds(speeds), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
+        #     PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
+        #         PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+        #         PIDConstants(5.0, 0.0, 0.0) # Rotation PID constants
+        #     ),
+        #     config, # The robot configuration
+        #     self.shouldFlipPath, # Supplier to control path flipping based on alliance color
+        #     self # Reference to this subsystem to set requirements
+        # )
         
     #~ Gyro Commands
     def zeroHeading(self):
@@ -119,8 +119,8 @@ class SwerveSubsystem (commands2.SubsystemBase):
         except Exception as e:
             pass
         
-    def getHeading(self):
-        return  math.remainder(self.gyro.getAngle(), 360)
+    # def getHeading(self):
+    #     return  math.remainder(self.gyro.getAngle(), 360)
         
     
     def getRotation2d(self) -> Rotation2d:
@@ -199,22 +199,22 @@ class SwerveSubsystem (commands2.SubsystemBase):
     #     #~use FMS to find the allinace side
 
     def periodic(self) -> None:
-        self.sd.putNumber("Gyro", self.getHeading())
-        self.odometer.update(
-                            self.getRotation2d(), 
-                            (
-                            (SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
-                            SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
-                            SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
-                            SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())))
-                            )
-                            )
+        # self.sd.putNumber("Gyro", self.getHeading())
+        # self.odometer.update(
+        #                     self.getRotation2d(), 
+        #                     (
+        #                     (SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
+        #                     SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
+        #                     SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
+        #                     SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad())))
+        #                     )
+        #                     )
         
-        self.sd.putString("Robot Odometer", str(self.getModulePositionsOld()))
-        self.sd.putString("Robot Location, x", str(self.getPose().X()))
-        self.sd.putString("Robot Location, y", str(self.getPose().Y()))
-        self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))
-        
+        # self.sd.putString("Robot Odometer", str(self.getModulePositionsOld()))
+        # self.sd.putString("Robot Location, x", str(self.getPose().X()))
+        # self.sd.putString("Robot Location, y", str(self.getPose().Y()))
+        # self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))
+        pass
         #~ Camera Pose Updating
         # self.robotR.get()
         # self.robotY.get()
