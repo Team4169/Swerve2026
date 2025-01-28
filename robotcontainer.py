@@ -102,7 +102,7 @@ class RobotContainer:
         # sendable chooser
         #self.chooser = wpilib.SendableChooser()
 
-        # self.autoChooser = AutoBuilder.buildAutoChooser()
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
         self.GetOutOfTheWay1 = "GetOutOfTheWay1"
         # self.ShootAndMove1 = "ShootAndMove1"
@@ -112,17 +112,17 @@ class RobotContainer:
         self.NewAuto = "New Auto"
 
 
-        # self.autoChooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
+        self.autoChooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
         # self.autoChooser.addOption("ShootAndMove1", self.ShootAndMove1)
         # self.autoChooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
-        # self.autoChooser.addOption("TestAuto", self.TestAuto) 
-        # self.autoChooser.addOption("MoveAuto(1R)", self.MoveAuto)
+        self.autoChooser.addOption("TestAuto", self.TestAuto) 
+        self.autoChooser.addOption("MoveAuto(1R)", self.MoveAuto)
 
-        # self.autoChooser.addOption("New Auto", self.NewAuto)
+        self.autoChooser.addOption("New Auto", self.NewAuto)
 
         # # Put the autoChooser on the dashboard
         self.shuffle = wpilib.SmartDashboard
-        # self.shuffle.putData("Autonomousff", self.autoChooser)
+        self.shuffle.putData("Autonomousff", self.autoChooser)
 
         # self.network_tables = ntcore.NetworkTableInstance.getDefault()
         # self.datatable = self.network_tables.getTable("datatable")

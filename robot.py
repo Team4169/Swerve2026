@@ -68,7 +68,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.driverController = self.Container.driverController
         self.operatorController = self.Container.operatorController
 
-        # self.drive = self.container.drive
+        #self.drive = self.Container.drive
         self.swerve = self.Container.swerve
         CommandScheduler.getInstance().registerSubsystem(self.swerve)
 
@@ -135,7 +135,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
-        # self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw())
+        #self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw()) #! AttributeError: 'SwerveSubsystem' object has no attribute 'gyro'
 
            # print(self.distanceToShooter)
 
@@ -387,24 +387,13 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def testPeriodic(self) -> None:
         pass
-            
-    def sendLEDCommand(self, command, isRedAlliance = None):
-            # send the specified command to the LEDserver
-            team_command = 0
-            if not isRedAlliance:
-                team_command = command + 3
-            if self.previousLEDCommand != team_command:
-                self.previousLEDCommand = team_command
-                if self.LEDserver.writeBulk(memoryview(bytes([team_command]))):
-                    # print("Got an error sending command ", team_command)
-                    return True
-                else:
-                    # print("Success sending command ", team_command)
-                    return False
                 
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
+
+
+    
 # #!/usr/bin/env python3
 
 # robotpy-commands-v2==2024.3.1

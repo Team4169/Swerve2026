@@ -22,7 +22,7 @@ from pathplannerlib.controller import PPHolonomicDriveController
 from pathplannerlib.config import RobotConfig, PIDConstants
 from wpilib import DriverStation
 
-#from pathplannerlib.path import PathPlannerPath, PathConstraints
+from pathplannerlib.path import PathPlannerPath, PathConstraints
 from wpimath.units import degreesToRadians
 
 
@@ -204,12 +204,12 @@ class AutoConstants:
         #         ReplanningConfig() # Default path replanning config. See the API for the options here
         #     )
 
-        # constraints = PathConstraints(
-        #     kMaxSpeedMetersPerSecond,
-        #     kMaxAccelerationMetersPerSecondSquared,
-        #     kMaxAngularSpeedRadiansPerSecond,
-        #     kMaxAngularAccelerationRadiansPerSecondSquared
-        # )
+        constraints = PathConstraints(
+            kMaxSpeedMetersPerSecond,
+            kMaxAccelerationMetersPerSecondSquared,
+            kMaxAngularSpeedRadiansPerSecond,
+            kMaxAngularAccelerationRadiansPerSecondSquared
+        )
 
 # class sim:
 #     kSimTargetName = "SimTarget"

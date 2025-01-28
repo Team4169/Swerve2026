@@ -23,6 +23,7 @@ class swervemodule(commands2.SubsystemBase):
                  absoluteEncoderId: int, absouteEncoderOffset: float, absoluteEncoderReversed: bool) -> None:
         super().__init__()
 
+
         #* Absolute Encoder
         #~Absolute Encoders help "remember" the location of the module.
         #~This is useful for when the robot is turned off and on again.
@@ -35,11 +36,24 @@ class swervemodule(commands2.SubsystemBase):
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
-        
+
         self.drivingMotor = rev.SparkMax(drivingMotorID, rev.SparkLowLevel.MotorType.kBrushless)
         self.turningMotor = rev.SparkMax(turningMotorID, rev.SparkLowLevel.MotorType.kBrushless)
+        
+        drivingMotorConfig = rev.SparkMaxConfig()
+        drivingMotorConfig.inverted(True)
+        drivingMotorConfig.setIdleMode(rev.SparkBaseConfig.IdleMode.kBrake)
+        self.drivingMotor.configure(drivingMotorConfig, rev.SparkMax.ResetMode.kResetSafeParameters, rev.SparkMax.PersistMode.kPersistParameters)
 
-        self.drivingMotor.setInverted(drivingMotorReversed)
+
+        # drivingMotorConfig = rev._rev.SparkBaseConfig()
+        # drivingMotorConfig.encoder.inverted(True)
+        # self.drivingMotor.configure(config=drivingMotorConfig)
+
+        
+        # drivingMotorConfig = rev.SparkBaseConfig().inverted(drivingMotorReversed)
+
+        # self.drivingMotor.setInverted(drivingMotorReversed)
         self.turningMotor.setInverted(turningMotorReversed)
 
         self.drivingEncoder = self.drivingMotor.getEncoder()
@@ -47,12 +61,12 @@ class swervemodule(commands2.SubsystemBase):
         
         #~ this converts encoder ticks to meters, not entirely sure about how velocity works
         
-        # self.drivingEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderRot2Meter)
-        # self.drivingEncoder.setVelocityConversionFactor(ModuleConstants.KDrivingEncoderRPM2MeterPerSec)
+        #Set these in REV Hardware Client instead
+        # self.drivingEncoder.positionConversionFactor(ModuleConstants.kDrivingEncoderRot2Meter)
+        # self.drivingEncoder.velocityConversionFactor(ModuleConstants.KDrivingEncoderRPM2MeterPerSec)
         
-
-        # self.turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
-        # self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
+        # self.turningEncoder.positionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
+        # self.turningEncoder.velocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
 
         #* PID Controllers
         self.turningPIDController = PIDController(ModuleConstants.kPTurning, 0, 0)
@@ -115,8 +129,14 @@ class swervemodule(commands2.SubsystemBase):
         # if (abs(state.speed) < 0.001):
         #     self.stop()
         #     return
-        self.state = SwerveModuleState.optimize(state, self.getState().angle) 
-        self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+
+        self.state = SwerveModuleState.optimize(state, self.getState().angle)
+
+        # Adam on 1/28/25: added try except bypass for if self.state.speed is undefined
+        try:
+            self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+        except:
+            self.drivingMotor.set(0)
         
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
         #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
@@ -127,11 +147,16 @@ class swervemodule(commands2.SubsystemBase):
         # self.drivingMotor.set(self.state.speed)
         # print(state.speed)
 
-      
-        #self.turningMotor.set(0) 
-        self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
+        #? Adam on 1/28/25: added try except bypass for if self.state.angle and self.state.speed is undefined
+        try:
+            self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
+        except:
+            self.turningMotor.set(0)
 
-        self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)        
+        try:
+            self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
+        except:
+            self.sd.putNumber(f"Speed output", 0)
         # self.sd.putString(f"Optimized state", str(self.state))
         # self.sd.putString(f"state", str(state))
 
