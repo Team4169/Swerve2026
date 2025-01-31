@@ -14,21 +14,19 @@ class ClimbingSubsystem(commands2.SubsystemBase):
         # ~ smartdashboard
         self.sd = wpilib.SmartDashboard
 
-        #* Climbing motors
-        self.leftClimbingMotor = rev.CANSparkMax(RobotConstants.climbingMotorLeftID, rev.CANSparkLowLevel.MotorType.kBrushless)
-        self.rightClimbingMotor = rev.CANSparkMax(RobotConstants.climbingMotorRightID, rev.CANSparkLowLevel.MotorType.kBrushless)
-
-
-    def runLeftClimbingMotor(self, speed: float):
-        self.leftClimbingMotor.set(speed)
+        #* Climbing motor
+        self.ClimbingMotor1 = rev.SparkMax(RobotConstants.climbingMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
+        self.ClimbingMotor2 = rev.SparkMax(RobotConstants.climbingMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
     
-    def runRightClimbingMotor(self, speed: float):
-        self.rightClimbingMotor.set(speed)
+    def runClimbingMotor1(self, speed: float):
+        self.ClimbingMotor1.set(speed)
 
-    def stopLeftClimbingMotor(self):
-        self.leftClimbingMotor.set(0)
+    def stopClimbingMotor1(self):
+        self.ClimbingMotor1.set(0)
     
-    def stopRightClimbingMotor(self):
-        self.rightClimbingMotor.set(0)
-    
+    def runClimbingMotor2(self, speed: float):
+        self.ClimbingMotor2.set(speed)
+
+    def stopClimbingMotor2(self):
+        self.ClimbingMotor2.set(0)
     

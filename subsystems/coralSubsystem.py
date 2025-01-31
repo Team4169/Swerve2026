@@ -6,9 +6,11 @@ from constants import RobotConstants
 import ntcore
 import rev
 import math
-import phoenix5
+import phoenix6
 
-class IntakeSubsystem(commands2.SubsystemBase):
+
+
+class CoralSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
         # commands2.SubsystemBase.__init__(self)
@@ -16,13 +18,19 @@ class IntakeSubsystem(commands2.SubsystemBase):
         self.sd = wpilib.SmartDashboard
 
         #* Intake motors
-        self.intakeMotor1 = phoenix5.WPI_TalonSRX(RobotConstants.intakeMotor1ID)
-        self.intakeMotor2 = phoenix5.WPI_TalonSRX(RobotConstants.intakeMotor2ID)
+        self.coralEntranceMotor = rev.SparkMax(RobotConstants.coralIntakeMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
+        self.coralLiftMotor = rev.SparkMax(RobotConstants.coralIntakeMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
 
-    def runIntake(self, speed: float):
-        self.intakeMotor1.set(speed)
-        self.intakeMotor2.set(speed)
-    
-    def stopIntake(self):
-        self.intakeMotor1.set(0)
-        self.intakeMotor2.set(0)
+
+         
+    def startCoral(self, speed: float):
+        self.coralEntranceMotor.set(speed)
+
+    def stopCoral(self, speed: float):
+        self.coralEntranceMotor.set(0)
+
+    def liftCoral(self, speed: float):
+        self.coralLiftMotor.set(speed)
+
+    def stopLiftCoral(self):
+        self.coralLiftMotor.set(0)

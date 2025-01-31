@@ -14,12 +14,14 @@ from commands2.button.trigger import Trigger
 from commands2.button import JoystickButton, CommandXboxController
 from wpilib import XboxController, Joystick
 
-#from subsystems.armsubsystem import ArmSubsystem 
 from subsystems.swervesubsystem import SwerveSubsystem
+from subsystems.algaeSubsystem import AlgaeSubsystem
+from subsystems.climbingSubsystem import ClimbingSubsystem
+from subsystems.coralSubsystem import CoralSubsystem
 
+#from subsystems.armsubsystem import ArmSubsystem
 # from subsystems.intakeSubsystem import IntakeSubsystem
 # from subsystems.midstageSubsystem import MidstageSubsystem
-# from subsystems.climbingSubsystem import ClimbingSubsystem
 #from subsystems.ShooterSubsystem import ShooterSubsystem
 
 import math
@@ -54,10 +56,12 @@ class RobotContainer:
 
         # The robot's subsystems
         self.swerve = SwerveSubsystem()
+        self.algae = AlgaeSubsystem()
+        self.climber = ClimbingSubsystem()
+        self.coral = CoralSubsystem()
 
         # self.intake = IntakeSubsystem()
         # self.midstage = MidstageSubsystem()
-        # self.climber = ClimbingSubsystem()
         # self.shooter = ShooterSubsystem()
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
@@ -73,15 +77,24 @@ class RobotContainer:
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        # NamedCommands.registerCommand("pickupRing",
-        #     commands2.InstantCommand(lambda:self.intake.runIntake(-0.75))
+        NamedCommands.registerCommand("liftCoral",
+            commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
+        )
+        # NamedCommands.registerCommand("lowerCoral", #? Ofir claims it goes down by itself so this isnt needed. check and make sure
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(-0.75))
         # )
-        # NamedCommands.registerCommand("stopIntake",
-        #     commands2.InstantCommand(lambda:self.intake.stopIntake())
-        # )
-        # NamedCommands.registerCommand("midstageRing",
-        #     commands2.InstantCommand(lambda:self.midstage.runMidstage(-0.75))
-        # )
+        NamedCommands.registerCommand("stopLiftCoral",
+            commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
+        )
+        NamedCommands.registerCommand("openCoral",
+             commands2.InstantCommand(lambda:self.coral.startCoral(0.75)) # check if positive is open and negative is close
+        )
+        NamedCommands.registerCommand("closeCoral",
+             commands2.InstantCommand(lambda:self.coral.startCoral(-0.75))
+        )
+        NamedCommands.registerCommand("stopCoral",
+             commands2.InstantCommand(lambda:self.coral.stopCoral())
+        )
         # NamedCommands.registerCommand("stopMidstage",
         #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
         # )
@@ -129,7 +142,12 @@ class RobotContainer:
 
         # self.autoShooterWarmup = True
         # self.shuffle.putData("AutoShooterWarmup", self.autoChooserWarmup
-    
+
+        self.climberSpeed = 0.75
+        self.algaeIntakeSpeed = .5
+        self.algaeLiftSpeed = .5
+
+       
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
@@ -148,23 +166,23 @@ class RobotContainer:
     #     )
     #     return AutoBuilder.followPath(path)
 
-    def setSlowMode(self): #-> commands2.Command
-        DrivingConstants.drivingSpeedLimiter = 0.3
-        DrivingConstants.rotationSpeedLimiter = 0.2
-        # return self.swerve.driveChassisSpeeds(self.drivingLimiter)
+    # def setSlowMode(self): #-> commands2.Command
+    #     DrivingConstants.drivingSpeedLimiter = 0.3
+    #     DrivingConstants.rotationSpeedLimiter = 0.2
+    #     # return self.swerve.driveChassisSpeeds(self.drivingLimiter)
 
-    def unbindSlowMode(self):
-        DrivingConstants.drivingSpeedLimiter = 1
-        DrivingConstants.rotationSpeedLimiter = 1
+    # def unbindSlowMode(self):
+    #     DrivingConstants.drivingSpeedLimiter = 1
+    #     DrivingConstants.rotationSpeedLimiter = 1
     
-    def toggleShooterMode(self):
-        if self.autoShooterWarmup == True:
-            self.autoShooterWarmup = False
-        else:
-            self.autoShooterWarmup = True
+    # def toggleShooterMode(self):
+    #     if self.autoShooterWarmup == True:
+    #         self.autoShooterWarmup = False
+    #     else:
+    #         self.autoShooterWarmup = True
         
     def configureButtonBindings(self):
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
         
         # Engage Object Detection
@@ -172,9 +190,40 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.runObjectDetectionPath()))
         
         # Toggle Slow Mode
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
+        #DRIVER
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
 
 
+
+        #OPERATOR
+
+        #CLIMER
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
+
+        #ALGAE
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.algae.runAlgae(-self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.algae.runAlgae(self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae()))
+
+        #CORAL
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.coral.openCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.closeCoral()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.coral.liftCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral()))
+
+        #might have to change/create more variables
+        #Could also create new file and copy from SwerveJoystickCmd.py
+        # self.xSpeed = self.operatorController.getLeftX() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter#* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        #self.ySpeed = self.operatorController.getLeftY() * DrivingConstants.drivingSpeedLimiter#self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
+        #self.zRotation = self.operatorController.getRightX() * -1 * DrivingConstants.rotationSpeedLimiter
+        # self.xSpeed = wpimath.applyDeadband(self.xSpeed, OIConstants.deadzone)
+        # self.ySpeed = wpimath.applyDeadband(self.ySpeed, OIConstants.deadzone)
+        # self.zRotation = wpimath.applyDeadband(self.zRotation, OIConstants.deadzone)
+        
+
+
+    
 
         #*run intake and midstage to bring the ring into the robot
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.intake.runIntake(-0.75))).onFalse(InstantCommand(lambda: self.intake.stopIntake()))
@@ -193,7 +242,7 @@ class RobotContainer:
         #*Shooter launch
         #commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.shooter.runShooter())).onFalse(InstantCommand(lambda: self.shooter.stopShooter()))
         
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.toggleShooterMode()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.toggleShooterMode()))
 
         # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.midstage.runMidstage(-0.75))).onFalse(InstantCommand(lambda: self.midstage.stopMidstage()))
 

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-#! TODO:
+#TODO:
 
-#! 
+#! 0. Deploy
 #! 1. Test pathplanner
 #! 2. Continue testing Slewratelimiter
 #! 3. Hear back from design 
 
-
-
-
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 #* " we still have this quote" - Annie Huang 1/22/2025 (grady wrote this)
+#* "Okay whats the quotes?" - Ofir van Creveld 1/31/2025 (adam wrote this)
+#* "This thing goes down and stops the motor" - Grady May 1/31/2025 (annie wrote this)
+#* "We need 6 of the same file. trust." - Adam Mokdad 1/31/2025 (ofir wrote this)
+#* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
+
 
 import typing
 import wpilib
@@ -264,6 +266,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.sd.putNumber("BackRight Turning Position", self.swerve.backRight.getTurningPostion())
         self.sd.putNumber("FrontLeft Turning Position", self.swerve.frontLeft.getTurningPostion())
         self.sd.putNumber("FrontRight Turning Position", self.swerve.frontRight.getTurningPostion())
+
+        self.swerve.sd.putNumber("ActualFL", float(self.swerve.getModuleStates()[0].angle.degrees()))
+        self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
 
         # self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
         # self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)

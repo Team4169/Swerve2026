@@ -34,12 +34,12 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "33,565",
-      "Size": "336,158"
+      "Size": "202,214"
     },
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "367,668",
-      "Size": "976,82"
+      "Size": "976,278"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -59,7 +59,7 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "18,265",
+      "Pos": "33,271",
       "Size": "232,254"
     },
     "###Timing": {

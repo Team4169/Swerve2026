@@ -112,8 +112,14 @@ class RobotConstants:
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * (3/4)
 
     # ~ Intake Constants (minicim)
-    # intakeMotor1ID = 52
-    # intakeMotor2ID = 53
+    coralIntakeMotor1ID = 49 #! change to actual values
+    coralIntakeMotor2ID = 50
+    algaeIntakeMotor1ID = 51 #! change to actual values (all of these 49-55)
+    algaeIntakeMotor2ID = 52
+    liftMotorID = 53
+    climbingMotor1ID = 54
+    climbingMotor2ID = 55
+
 
     # # ~ Midstage Constants (minicim)
     # midstageMotor1ID = 59
@@ -150,9 +156,10 @@ class RobotConstants:
     # speakerXPosition = 8.3 #length in meters
     # speakerYPosition = 1.45 #length in meters
     # # ~ Climber Constants (NEO)
-    # climbingMotorLeftID = 57
-    # climbingMotorRightID = 58
-    # climbingMotorLeftLimitSwitchID = 
+    # climbingMotorID1 = 57 #Gotta change these
+    # climbingMotorID2 = 57
+    #climbingMotorRightID = 58
+    #climbingMotorLeftLimitSwitchID = 
     # climbingMotorRightLimitSwitchID =    
 
     #names are in relation to back of robot similar to the swerve modules
