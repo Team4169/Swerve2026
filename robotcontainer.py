@@ -15,9 +15,9 @@ from commands2.button import JoystickButton, CommandXboxController
 from wpilib import XboxController, Joystick
 
 from subsystems.swervesubsystem import SwerveSubsystem
-from subsystems.algaeSubsystem import AlgaeSubsystem
-from subsystems.climbingSubsystem import ClimbingSubsystem
-from subsystems.coralSubsystem import CoralSubsystem
+# from subsystems.algaeSubsystem import AlgaeSubsystem
+# from subsystems.climbingSubsystem import ClimbingSubsystem
+# from subsystems.coralSubsystem import CoralSubsystem
 
 #from subsystems.armsubsystem import ArmSubsystem
 # from subsystems.intakeSubsystem import IntakeSubsystem
@@ -28,7 +28,7 @@ import math
 # import photonvision
 
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder, PathPlannerPath
-#from pathplannerlib.commands import PathfindHolonomic
+# #from pathplannerlib.commands import PathfindHolonomic
 from pathplannerlib.path import GoalEndState
 
 # from commands.testcommands.move1module import move1module
@@ -56,9 +56,9 @@ class RobotContainer:
 
         # The robot's subsystems
         self.swerve = SwerveSubsystem()
-        self.algae = AlgaeSubsystem()
-        self.climber = ClimbingSubsystem()
-        self.coral = CoralSubsystem()
+        # self.algae = AlgaeSubsystem()
+        # self.climber = ClimbingSubsystem()
+        # self.coral = CoralSubsystem()
 
         # self.intake = IntakeSubsystem()
         # self.midstage = MidstageSubsystem()
@@ -77,24 +77,36 @@ class RobotContainer:
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        NamedCommands.registerCommand("liftCoral",
-            commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
-        )
+        # NamedCommands.registerCommand("liftCoral",
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
+        # )
         # NamedCommands.registerCommand("lowerCoral", #? Ofir claims it goes down by itself so this isnt needed. check and make sure
         #     commands2.InstantCommand(lambda:self.coral.liftCoral(-0.75))
         # )
-        NamedCommands.registerCommand("stopLiftCoral",
-            commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
-        )
-        NamedCommands.registerCommand("openCoral",
-             commands2.InstantCommand(lambda:self.coral.startCoral(0.75)) # check if positive is open and negative is close
-        )
-        NamedCommands.registerCommand("closeCoral",
-             commands2.InstantCommand(lambda:self.coral.startCoral(-0.75))
-        )
-        NamedCommands.registerCommand("stopCoral",
-             commands2.InstantCommand(lambda:self.coral.stopCoral())
-        )
+        # NamedCommands.registerCommand("stopLiftCoral",
+        #     commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
+        # )
+        # NamedCommands.registerCommand("openCoral",
+        #      commands2.InstantCommand(lambda:self.coral.startCoral(0.75)) # check if positive is open and negative is close
+        # )
+        # NamedCommands.registerCommand("closeCoral",
+        #      commands2.InstantCommand(lambda:self.coral.startCoral(-0.75))
+        # )
+        # NamedCommands.registerCommand("stopCoral",
+        #      commands2.InstantCommand(lambda:self.coral.stopCoral())
+        # )
+        # NamedCommands.registerCommand("liftAlgae",
+        #     commands2.InstantCommand(lambda:self.algae.runLiftAlgae(0.75))                          
+        # )
+        # NamedCommands.registerCommand("stopLiftAlgae",
+        #     commands2.InstantCommand(lambda:self.algae.stopLiftAlgae())                          
+        # )
+        # NamedCommands.registerCommand("runAlgae",
+        #     commands2.InstantCommand(lambda:self.algae.runAlgae(0.75))                          
+        # )
+        # NamedCommands.registerCommand("stopAlgae",
+        #     commands2.InstantCommand(lambda:self.algae.stopAlgae())                          
+        # )
         # NamedCommands.registerCommand("stopMidstage",
         #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
         # )
@@ -115,29 +127,33 @@ class RobotContainer:
         # sendable chooser
         #self.chooser = wpilib.SendableChooser()
 
-        self.autoChooser = AutoBuilder.buildAutoChooser()
+        # self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        self.GetOutOfTheWay1 = "GetOutOfTheWay1"
-        # self.ShootAndMove1 = "ShootAndMove1"
-        # self.ShootAndPickup1 = "ShootAndPickup1"
-        self.TestAuto = "TestAuto"
-        self.MoveAuto = "MoveAuto(1R)"
-        self.NewAuto = "New Auto"
+        # self.putCoralInReef = "Put Coral in Reef"
+        # self.knockOutAndScore = "Knock out and score"
+        # self.escape = "Escape"
+        # self.knockOutCoral = "Knock out Coral"
+        # self.escapeBottom = "Escape Bottom"
+        # self.pickupAlgaeandScoreB = "Pickup Algae + Score Bottom"
+        # self.pickupAlgaeandScore = "Pickup Algae + Score"
+        # # self.NewAuto = "New Auto"
 
 
-        self.autoChooser.addOption("GetOutOfTheWay1", self.GetOutOfTheWay1)
-        # self.autoChooser.addOption("ShootAndMove1", self.ShootAndMove1)
-        # self.autoChooser.addOption("ShootAndPickup1", self.ShootAndPickup1) 
-        self.autoChooser.addOption("TestAuto", self.TestAuto) 
-        self.autoChooser.addOption("MoveAuto(1R)", self.MoveAuto)
+        # self.autoChooser.addOption("Put Coral in Reef", self.putCoralInReef)
+        # self.autoChooser.addOption("Knock out and score", self.knockOutAndScore)
+        # self.autoChooser.addOption("Escape", self.escape)
+        # self.autoChooser.addOption("Knock out Coral", self.knockOutCoral)
+        # self.autoChooser.addOption("Escape Bottom", self.escapeBottom)
+        # self.autoChooser.addOption("Pickup Algae + score Bottom", self.pickupAlgaeandScoreB)
+        # self.autoChooser.addOption("Pickup Algae + score", self.pickupAlgaeandScore)
+       
 
-        self.autoChooser.addOption("New Auto", self.NewAuto)
 
-        # # Put the autoChooser on the dashboard
-        self.shuffle = wpilib.SmartDashboard
-        self.shuffle.putData("Autonomousff", self.autoChooser)
+        # # # Put the autoChooser on the dashboard
+        # self.shuffle = wpilib.SmartDashboard
+        # self.shuffle.putData("Autonomousff", self.autoChooser)
 
-        # self.network_tables = ntcore.NetworkTableInstance.getDefault()
+        # # self.network_tables = ntcore.NetworkTableInstance.getDefault()
         # self.datatable = self.network_tables.getTable("datatable")
 
         # self.autoShooterWarmup = True
@@ -151,7 +167,7 @@ class RobotContainer:
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        return PathPlannerAuto("TestAuto")
+        # return PathPlannerAuto("Put Coral in Reef")
         # return PathPlannerAuto(self.chooser.getSelected())    
     
     # def runObjectDetectionPath(self):
@@ -182,6 +198,8 @@ class RobotContainer:
     #         self.autoShooterWarmup = True
         
     def configureButtonBindings(self):
+        pass
+        
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
         
@@ -198,19 +216,19 @@ class RobotContainer:
         #OPERATOR
 
         #CLIMER
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightStick).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor1(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor1()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotor2(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotor2()))
 
         #ALGAE
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.algae.runAlgae(-self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.algae.runAlgae(self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.algae.runAlgae(-self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.algae.runAlgae(self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae()))
 
         #CORAL
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.coral.openCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.closeCoral()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.coral.liftCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kStart).whileTrue(InstantCommand(lambda: self.coral.openCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.closeCoral()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.coral.liftCoral(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral()))
 
         #might have to change/create more variables
         #Could also create new file and copy from SwerveJoystickCmd.py
@@ -305,4 +323,3 @@ class RobotContainer:
     #     # self.rotateToSpeakerCommand = rotateToSpeakerCommand(self.swerve, rotation)
     #     # ## print("running rotate to speaker")
     #     # self.rotateToSpeakerCommand.schedule()
-        

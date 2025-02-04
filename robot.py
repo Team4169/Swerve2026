@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 #TODO:
 
+
+#! -1. Wait for new Roborio
 #! 0. Deploy
+#! 1/2. Homework
 #! 1. Test pathplanner
 #! 2. Continue testing Slewratelimiter
-#! 3. Hear back from design 
+#! 3. Hear back from rest of team 
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 #* " we still have this quote" - Annie Huang 1/22/2025 (grady wrote this)
@@ -12,8 +15,7 @@
 #* "This thing goes down and stops the motor" - Grady May 1/31/2025 (annie wrote this)
 #* "We need 6 of the same file. trust." - Adam Mokdad 1/31/2025 (ofir wrote this)
 #* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
-
-
+#* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
 import typing
 import wpilib
 #import wpilib.shuffleboard
@@ -30,9 +32,9 @@ import ntcore
 import wpimath
 # import robotpy_apriltag
 from wpilib import Timer
-from wpimath.kinematics import SwerveModuleState
+# from wpimath.kinematics import SwerveModuleStates
 from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
-#from pathplannerlib.commands import PathfindHolonomic
+# from pathplannerlib.commands import PathfindHolonomic
 from wpilib import Field2d
 
 from wpimath.filter import SlewRateLimiter
@@ -175,6 +177,7 @@ class MyRobot(commands2.TimedCommandRobot):
         
         self.autonomousCommand = self.Container.getAutonomousCommand()
 
+
         #self.output("ato com", self.autonomousCommand)
         # print("***********************************************************")
         if self.autonomousCommand:
@@ -206,6 +209,25 @@ class MyRobot(commands2.TimedCommandRobot):
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
+
+        self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value_as_double)
+
+        self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+
+        self.swerve.sd.putNumber("ActualFL", float(self.swerve.getModuleStates()[0].angle.degrees()))
+        self.swerve.sd.putNumber("ActualFR", float(self.swerve.getModuleStates()[1].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBL", float(self.swerve.getModuleStates()[2].angle.degrees()))
+        self.swerve.sd.putNumber("ActualBR", float(self.swerve.getModuleStates()[3].angle.degrees()))
+
+
+
+
         """This function is called periodically during autonomous"""
 
         try:

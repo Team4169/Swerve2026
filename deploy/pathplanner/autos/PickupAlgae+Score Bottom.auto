@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": " PickupAlgae+Score1 Bottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "liftAlgae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopLiftAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PickupAlgae+Score2 Bottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runAlgae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopAlgae"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

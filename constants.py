@@ -64,32 +64,32 @@ class RobotConstants:
     kBackLeftWheelPosition = Translation2d(kTrackWidth / 2, -kWheelBase / 2)
     kBackRightWheelPosition = Translation2d(-kTrackWidth / 2, -kWheelBase / 2)
 
-    frontLeftDrivingMotorID = 1
-    frontLeftTurningMotorID = 11
+    frontLeftDrivingMotorID = 58
+    frontLeftTurningMotorID = 1
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 14 #Front Left #DIO port ID
     frontLeftAbsoluteEncoderOffset = -(math.pi/2 - 1.628) + math.pi # (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
-    frontRightDrivingMotorID = 2
-    frontRightTurningMotorID = 22
+    frontRightDrivingMotorID = 4
+    frontRightTurningMotorID = 44
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 12 #Front Right
     frontRightAbsoluteEncoderOffset = math.pi/6 - 0.01587 + math.pi #(0.421-0.5*math.pi) - math.pi/6 # 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
-    backRightDrivingMotorID = 3
-    backRightTurningMotorID = 33
+    backRightDrivingMotorID = 2
+    backRightTurningMotorID = 3
     backRightDrivingMotorReversed = True
     backRightTurningMotorReversed = False
     backRightAbsoluteEncoderId = 15 #Back Right
     backRightAbsoluteEncoderOffset = 2*math.pi/6 + math.pi/4 + math.pi #math.pi/2 - 0.379
     backRightAbsoluteEncoderReversed = True
     
-    backLeftDrivingMotorID = 4
-    backLeftTurningMotorID = 44
+    backLeftDrivingMotorID = 59
+    backLeftTurningMotorID = 11
     backLeftDrivingMotorReversed = True #False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 13 # Back Left
