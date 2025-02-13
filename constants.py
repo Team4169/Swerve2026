@@ -64,7 +64,7 @@ class RobotConstants:
     kBackLeftWheelPosition = Translation2d(kTrackWidth / 2, -kWheelBase / 2)
     kBackRightWheelPosition = Translation2d(-kTrackWidth / 2, -kWheelBase / 2)
 
-    frontLeftDrivingMotorID = 58
+    frontLeftDrivingMotorID = 8
     frontLeftTurningMotorID = 1
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
@@ -73,7 +73,7 @@ class RobotConstants:
     frontLeftAbsoluteEncoderReversed = True
 
     frontRightDrivingMotorID = 4
-    frontRightTurningMotorID = 44
+    frontRightTurningMotorID = 6
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 12 #Front Right
@@ -88,8 +88,8 @@ class RobotConstants:
     backRightAbsoluteEncoderOffset = 2*math.pi/6 + math.pi/4 + math.pi #math.pi/2 - 0.379
     backRightAbsoluteEncoderReversed = True
     
-    backLeftDrivingMotorID = 59
-    backLeftTurningMotorID = 11
+    backLeftDrivingMotorID = 7
+    backLeftTurningMotorID = 5
     backLeftDrivingMotorReversed = True #False
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 13 # Back Left

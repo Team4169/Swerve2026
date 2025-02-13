@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 #TODO:
-
-
-#! -1. Wait for new Roborio
+#! -1. Spark max IDs
 #! 0. Deploy
 #! 1/2. Homework
 #! 1. Test pathplanner
@@ -16,6 +14,7 @@
 #* "We need 6 of the same file. trust." - Adam Mokdad 1/31/2025 (ofir wrote this)
 #* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
 #* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
+
 import typing
 import wpilib
 #import wpilib.shuffleboard
@@ -96,7 +95,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
         # self.testabsoluteEncoder = wpilib.DutyCycleEncoder(5)
-        self.swerve.frontRight.resetEncoders()
+        self.swerve.frontRight.resetEncoders()   
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
         self.swerve.backRight.resetEncoders()
@@ -139,7 +138,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
-        #self.sd.putNumber("gyro", self.Container.swerve.gyro.getYaw()) #! AttributeError: 'SwerveSubsystem' object has no attribute 'gyro'
+        self.sd.putNumber("gyro", self.Container.swerve.gyro.getAngle()) #! AttributeError: 'SwerveSubsystem' object has no attribute 'gyro'
 
            # print(self.distanceToShooter)
 
@@ -231,8 +230,8 @@ class MyRobot(commands2.TimedCommandRobot):
         """This function is called periodically during autonomous"""
 
         try:
-            #make a function that constantly updates robot pose/gyro based on apriltags
-            #updatelocaiton()
+            # #make a function that constantly updates robot pose/gyro based on apriltags
+            # updatelocaiton()
             pass
         except:
             if not self.ds.isFMSAttached():
@@ -358,53 +357,53 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.swerve.rotateToSpeaker(self.rotation)
 
         #TODO put code in try and except functions, shown here https://robotpy.readthedocs.io/en/stable/guide/guidelines.html#don-t-die-during-the-competition
-        try:
-            self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
-            self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
+        # try:
+        self.sd.putNumber(f"turning position FL(rad, AbsEnc)", self.swerve.frontLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position FR(rad, AbsEnc)", self.swerve.frontRight.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BL(rad, AbsEnc)", self.swerve.backLeft.getAbsoluteEncoderRad())
+        self.sd.putNumber(f"turning position BR(rad, AbsEnc)", self.swerve.backRight.getAbsoluteEncoderRad())
 
-            # self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
-            # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
-            # self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
-            # self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
-            # print(Timer.getFPGATimestamp(),  
-            #       round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
-            #       round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
-            #       round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
-            self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
-            self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
-            self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())
-            self.sd.putNumber("Module Position (BR)", self.swerve.backRight.getDrivingPosition())
+        # self.sd.putNumber(f"turning position FL(rad, MotEnc)", self.swerve.frontLeft.getTurningPostion())
+        # self.sd.putNumber(f"turning position FR(rad, MotEnc)", self.swerve.frontRight.getTurningPostion())
+        # self.sd.putNumber(f"turning position BL(rad, MotEnc)", self.swerve.backLeft.getTurningPostion())
+        # self.sd.putNumber(f"turning position BR(rad, MotEnc)", self.swerve.backRight.getTurningPostion())
+        # print(Timer.getFPGATimestamp(),  
+        #       round(self.swerve.frontRight.getDrivingPosition(), 4), round(self.swerve.frontRight.getDrivingVelocity(), 4), 
+        #       round(self.swerve.backLeft.getDrivingPosition(), 4), round(self.swerve.backLeft.getDrivingVelocity(), 4),
+        #       round(self.swerve.backRight.getDrivingPosition(), 4), round(self.swerve.backRight.getDrivingVelocity(), 4), sep=",")
+        self.sd.putNumber("Module Position (FL)", self.swerve.frontLeft.getDrivingPosition())
+        self.sd.putNumber("Module Position (FR)", self.swerve.frontRight.getDrivingPosition())
+        self.sd.putNumber("Module Position (BL)", self.swerve.backLeft.getDrivingPosition())
+        self.sd.putNumber("Module Position (BR)", self.swerve.backRight.getDrivingPosition())
 
-            self.sd.putNumber("Module Velocity (FL)", self.swerve.frontLeft.getDrivingVelocity())
-            self.sd.putNumber("Module Velocity (FR)", self.swerve.frontRight.getDrivingVelocity())
-            self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
-            self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
+        self.sd.putNumber("Module Velocity (FL)", self.swerve.frontLeft.getDrivingVelocity())
+        self.sd.putNumber("Module Velocity (FR)", self.swerve.frontRight.getDrivingVelocity())
+        self.sd.putNumber("Module Velocity (BL)", self.swerve.backLeft.getDrivingVelocity())
+        self.sd.putNumber("Module Velocity (BR)", self.swerve.backRight.getDrivingVelocity())
 
-            self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.get_absolute_position().value_as_double)
-            self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value_as_double)
-            self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value_as_double)
-            self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value_as_double)
+        self.sd.putNumber("Back Left Abs Encoder: ", self.swerve.backLeft.absoluteEncoder.get_absolute_position().value_as_double)
+        self.sd.putNumber("Back Right Abs Encoder: ", self.swerve.backRight.absoluteEncoder.get_absolute_position().value_as_double)
+        self.sd.putNumber("Front Left Abs Encoder: ", self.swerve.frontLeft.absoluteEncoder.get_absolute_position().value_as_double)
+        self.sd.putNumber("Front Right Abs Encoder: ", self.swerve.frontRight.absoluteEncoder.get_absolute_position().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value_as_double)
-            self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value_as_double)
-            self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value_as_double)
-            self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Back Left Encoder Position: ", self.swerve.backLeft.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Back Right Encoder Position: ", self.swerve.backRight.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Front Left Encoder Position: ", self.swerve.frontLeft.absoluteEncoder.get_position().value_as_double)
+        self.sd.putNumber("Front Right Encoder Position: ", self.swerve.frontRight.absoluteEncoder.get_position().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Velocity: ", self.swerve.backLeft.absoluteEncoder.get_velocity().value_as_double)
-            self.sd.putNumber("Back Right Encoder Velocity: ", self.swerve.backRight.absoluteEncoder.get_velocity().value_as_double)
-            self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value_as_double)
-            self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value_as_double)
+        self.sd.putNumber("Back Left Encoder Velocity: ", self.swerve.backLeft.absoluteEncoder.get_velocity().value_as_double)
+        self.sd.putNumber("Back Right Encoder Velocity: ", self.swerve.backRight.absoluteEncoder.get_velocity().value_as_double)
+        self.sd.putNumber("Front Left Encoder Velocity: ", self.swerve.frontLeft.absoluteEncoder.get_velocity().value_as_double)
+        self.sd.putNumber("Front Right Encoder Velocity: ", self.swerve.frontRight.absoluteEncoder.get_velocity().value_as_double)
 
-            self.sd.putNumber("Back Left Encoder Supply Voltage: ", self.swerve.backLeft.absoluteEncoder.get_supply_voltage().value_as_double)
-            self.sd.putNumber("Back Right Encoder Supply Voltage: ", self.swerve.backRight.absoluteEncoder.get_supply_voltage().value_as_double)
-            self.sd.putNumber("Front Left Encoder Supply Voltage: ", self.swerve.frontLeft.absoluteEncoder.get_supply_voltage().value_as_double)
-            self.sd.putNumber("Front Right Encoder Supply Voltage: ", self.swerve.frontRight.absoluteEncoder.get_supply_voltage().value_as_double)
+        self.sd.putNumber("Back Left Encoder Supply Voltage: ", self.swerve.backLeft.absoluteEncoder.get_supply_voltage().value_as_double)
+        self.sd.putNumber("Back Right Encoder Supply Voltage: ", self.swerve.backRight.absoluteEncoder.get_supply_voltage().value_as_double)
+        self.sd.putNumber("Front Left Encoder Supply Voltage: ", self.swerve.frontLeft.absoluteEncoder.get_supply_voltage().value_as_double)
+        self.sd.putNumber("Front Right Encoder Supply Voltage: ", self.swerve.frontRight.absoluteEncoder.get_supply_voltage().value_as_double)
 
-        except:
-            if not self.ds.isFMSAttached():
-                raise
+        # except:
+            # if not self.ds.isFMSAttached():
+            #     raise
         
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
