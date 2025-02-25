@@ -96,7 +96,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
             self.getPose, # Robot pose supplier
             self.resetOdometry, # Method to reset odometry (will be called if your auto has a starting pose)
             self.getChassisSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            lambda speeds, feedforwards: self.driveChassisSpeeds(speeds), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
+            self.driveChassisSpeeds, # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
             PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
                 PIDConstants(5.0, 0.0, 0.0) # Rotation PID constants

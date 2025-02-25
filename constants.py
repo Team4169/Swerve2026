@@ -15,7 +15,7 @@ from wpimath.filter import SlewRateLimiter
 # from phoenix6.configs import cancoder_configs
 # from phoenix6.configs import CANcoderConfiguration
 
-#?from phoenix6 import CANCoder
+# from phoenix6 import CANCoder
 
 from pathplannerlib.auto import AutoBuilder
 from pathplannerlib.controller import PPHolonomicDriveController
@@ -65,7 +65,7 @@ class RobotConstants:
     kBackRightWheelPosition = Translation2d(-kTrackWidth / 2, -kWheelBase / 2)
 
     frontLeftDrivingMotorID = 8
-    frontLeftTurningMotorID = 1
+    frontLeftTurningMotorID = 9
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 14 #Front Left #DIO port ID
@@ -77,7 +77,7 @@ class RobotConstants:
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 12 #Front Right
-    frontRightAbsoluteEncoderOffset = math.pi/6 - 0.01587 + math.pi #(0.421-0.5*math.pi) - math.pi/6 # 0.770 + (0.5*math.pi)# = 2.340
+    frontRightAbsoluteEncoderOffset = math.pi/6 - 0.01587 #(0.421-0.5*math.pi) - math.pi/6 # 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
     backRightDrivingMotorID = 2

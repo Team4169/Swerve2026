@@ -24,6 +24,7 @@ class SwerveJoystickCmd(Command):
         pass
     
     def execute(self):
+        print("joystick execute")
         #these are multiplied by the drivingSpeedLimiter which limit the speed of the robot so it doesn't go too fast
         self.xSpeed = self.driverController.getLeftX() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter#* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.driverController.getLeftY() * DrivingConstants.drivingSpeedLimiter#self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond

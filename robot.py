@@ -71,7 +71,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.driverController = self.Container.driverController
         self.operatorController = self.Container.operatorController
 
-        #self.drive = self.Container.drive
+        # self.drive = self.Container.drive
         self.swerve = self.Container.swerve
         CommandScheduler.getInstance().registerSubsystem(self.swerve)
 
@@ -102,7 +102,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def disabledPeriodic(self) -> None:
-
+        
         self.jetson1X = self.camera_tables.getEntry("x1").getDouble(0)
         self.jetson2X = self.camera_tables.getEntry("x2").getDouble(0)
         self.jetson1Y = self.camera_tables.getEntry("y1").getDouble(0)

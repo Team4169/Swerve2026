@@ -31,7 +31,7 @@ class swervemodule(commands2.SubsystemBase):
         self.absoluteEncoderReversed = absoluteEncoderReversed
         #self.cancoderConfig = CANcoderConfiguration
 
-        self.absoluteEncoder = CANcoder(absoluteEncoderId, "canivore")
+        self.absoluteEncoder = CANcoder(absoluteEncoderId, "")
         
         #self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
         
@@ -131,13 +131,10 @@ class swervemodule(commands2.SubsystemBase):
         #     self.stop()
         #     return
 
-        self.state = SwerveModuleState.optimize(state, self.getState().angle)
-
-        # Adam on 1/28/25: added try except bypass for if self.state.speed is undefined
-        try:
-            self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
-        except:
-            self.drivingMotor.set(0)
+        self.state = state
+        SwerveModuleState.optimize(self.state, self.getState().angle)
+        print("speed: " + str(self.state.speed))
+        self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.
         #^ as a result, dividing a set mps / max mps gets a value between 0 - 1 or -1 - 0 depending on if state.speed is negative
@@ -148,16 +145,9 @@ class swervemodule(commands2.SubsystemBase):
         # self.drivingMotor.set(self.state.speed)
         # print(state.speed)
 
-        #? Adam on 1/28/25: added try except bypass for if self.state.angle and self.state.speed is undefined
-        try:
-            self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
-        except:
-            self.turningMotor.set(0)
-
-        try:
-            self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
-        except:
-            self.sd.putNumber(f"Speed output", 0)
+        self.turningMotor.set(self.turningPIDController.calculate(self.getAbsoluteEncoderRad(), self.state.angle.radians()))
+        
+        self.sd.putNumber(f"Speed output", self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         # self.sd.putString(f"Optimized state", str(self.state))
         # self.sd.putString(f"state", str(state))
 
