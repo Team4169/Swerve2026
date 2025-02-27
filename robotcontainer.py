@@ -55,7 +55,7 @@ class RobotContainer:
         self.operatorController = wpilib.XboxController(OIConstants.kArmControllerPort)
 
         # The robot's subsystems
-        self.swerve = SwerveSubsystem()
+        self.swerve = SwerveSubsystem() #! test
         # self.algae = AlgaeSubsystem()
         # self.climber = ClimbingSubsystem()
         # self.coral = CoralSubsystem()
@@ -79,48 +79,48 @@ class RobotContainer:
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        # NamedCommands.registerCommand("liftCoral",
-        #     commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
-        # )
-        # NamedCommands.registerCommand("lowerCoral", #? Ofir claims it goes down by itself so this isnt needed. check and make sure
-        #     commands2.InstantCommand(lambda:self.coral.liftCoral(-0.75))
-        # )
-        # NamedCommands.registerCommand("stopLiftCoral",
-        #     commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
-        # )
-        # NamedCommands.registerCommand("openCoral",
-        #      commands2.InstantCommand(lambda:self.coral.startCoral(0.75)) # check if positive is open and negative is close
-        # )
-        # NamedCommands.registerCommand("closeCoral",
-        #      commands2.InstantCommand(lambda:self.coral.startCoral(-0.75))
-        # )
-        # NamedCommands.registerCommand("stopCoral",
-        #      commands2.InstantCommand(lambda:self.coral.stopCoral())
-        # )
-        # NamedCommands.registerCommand("liftAlgae",
-        #     commands2.InstantCommand(lambda:self.algae.runLiftAlgae(0.75))                          
-        # )
-        # NamedCommands.registerCommand("stopLiftAlgae",
-        #     commands2.InstantCommand(lambda:self.algae.stopLiftAlgae())                          
-        # )
-        # NamedCommands.registerCommand("runAlgae",
-        #     commands2.InstantCommand(lambda:self.algae.runAlgae(0.75))                          
-        # )
-        # NamedCommands.registerCommand("stopAlgae",
-        #     commands2.InstantCommand(lambda:self.algae.stopAlgae())                          
-        # )
-        # NamedCommands.registerCommand("stopMidstage",
-        #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
-        # )
-        # NamedCommands.registerCommand("setShooterAngle",
-        #     commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
-        # )
-        # NamedCommands.registerCommand("stopShooter",
-        #     commands2.InstantCommand(lambda:self.shooter.stopShooter())
-        # )
-        # NamedCommands.registerCommand("shootRing",
-        #     commands2.InstantCommand(lambda:self.shooter.runShooter())
-        # )
+        NamedCommands.registerCommand("liftCoral",
+            commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
+        )
+        NamedCommands.registerCommand("lowerCoral", #? Ofir claims it goes down by itself so this isnt needed. check and make sure
+            commands2.InstantCommand(lambda:self.coral.liftCoral(-0.75))
+        )
+        NamedCommands.registerCommand("stopLiftCoral",
+            commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
+        )
+        NamedCommands.registerCommand("openCoral",
+             commands2.InstantCommand(lambda:self.coral.startCoral(0.75)) # check if positive is open and negative is close
+        )
+        NamedCommands.registerCommand("closeCoral",
+             commands2.InstantCommand(lambda:self.coral.startCoral(-0.75))
+        )
+        NamedCommands.registerCommand("stopCoral",
+             commands2.InstantCommand(lambda:self.coral.stopCoral())
+        )
+        NamedCommands.registerCommand("liftAlgae",
+            commands2.InstantCommand(lambda:self.algae.runLiftAlgae(0.75))                          
+        )
+        NamedCommands.registerCommand("stopLiftAlgae",
+            commands2.InstantCommand(lambda:self.algae.stopLiftAlgae())                          
+        )
+        NamedCommands.registerCommand("runAlgae",
+            commands2.InstantCommand(lambda:self.algae.runAlgae(0.75))                          
+        )
+        NamedCommands.registerCommand("stopAlgae",
+            commands2.InstantCommand(lambda:self.algae.stopAlgae())                          
+        )
+        NamedCommands.registerCommand("stopMidstage",
+            commands2.InstantCommand(lambda:self.midstage.stopMidstage())
+        )
+        NamedCommands.registerCommand("setShooterAngle",
+            commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
+        )
+        NamedCommands.registerCommand("stopShooter",
+            commands2.InstantCommand(lambda:self.shooter.stopShooter())
+        )
+        NamedCommands.registerCommand("shootRing",
+            commands2.InstantCommand(lambda:self.shooter.runShooter())
+        )
 
        
         #self.driveWaypointCommand = DriveWaypoint(self.swerve)
@@ -129,37 +129,37 @@ class RobotContainer:
         # sendable chooser
         #self.chooser = wpilib.SendableChooser()
 
-        # self.autoChooser = AutoBuilder.buildAutoChooser()
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        # self.putCoralInReef = "Put Coral in Reef"
-        # self.knockOutAndScore = "Knock out and score"
-        # self.escape = "Escape"
-        # self.knockOutCoral = "Knock out Coral"
-        # self.escapeBottom = "Escape Bottom"
-        # self.pickupAlgaeandScoreB = "Pickup Algae + Score Bottom"
-        # self.pickupAlgaeandScore = "Pickup Algae + Score"
-        # # self.NewAuto = "New Auto"
+        self.putCoralInReef = "Put Coral in Reef"
+        self.knockOutAndScore = "Knock out and score"
+        self.escape = "Escape"
+        self.knockOutCoral = "Knock out Coral"
+        self.escapeBottom = "Escape Bottom"
+        self.pickupAlgaeandScoreB = "Pickup Algae + Score Bottom"
+        self.pickupAlgaeandScore = "Pickup Algae + Score"
+        # self.NewAuto = "New Auto"
 
 
-        # self.autoChooser.addOption("Put Coral in Reef", self.putCoralInReef)
-        # self.autoChooser.addOption("Knock out and score", self.knockOutAndScore)
-        # self.autoChooser.addOption("Escape", self.escape)
-        # self.autoChooser.addOption("Knock out Coral", self.knockOutCoral)
-        # self.autoChooser.addOption("Escape Bottom", self.escapeBottom)
-        # self.autoChooser.addOption("Pickup Algae + score Bottom", self.pickupAlgaeandScoreB)
-        # self.autoChooser.addOption("Pickup Algae + score", self.pickupAlgaeandScore)
+        self.autoChooser.addOption("Put Coral in Reef", self.putCoralInReef)
+        self.autoChooser.addOption("Knock out and score", self.knockOutAndScore)
+        self.autoChooser.addOption("Escape", self.escape)
+        self.autoChooser.addOption("Knock out Coral", self.knockOutCoral)
+        self.autoChooser.addOption("Escape Bottom", self.escapeBottom)
+        self.autoChooser.addOption("Pickup Algae + score Bottom", self.pickupAlgaeandScoreB)
+        self.autoChooser.addOption("Pickup Algae + score", self.pickupAlgaeandScore)
        
 
 
         # # # Put the autoChooser on the dashboard
-        # self.shuffle = wpilib.SmartDashboard
-        # self.shuffle.putData("Autonomousff", self.autoChooser)
+        self.shuffle = wpilib.SmartDashboard
+        self.shuffle.putData("Autonomousff", self.autoChooser)
 
-        # # self.network_tables = ntcore.NetworkTableInstance.getDefault()
-        # self.datatable = self.network_tables.getTable("datatable")
+        # self.network_tables = ntcore.NetworkTableInstance.getDefault()
+        #self.datatable = self.network_tables.getTable("datatable")
 
         # self.autoShooterWarmup = True
-        # self.shuffle.putData("AutoShooterWarmup", self.autoChooserWarmup
+        # self.shuffle.putData("AutoShooterWarmup", self.autoShooterWarmup)
 
         self.climberSpeed = 0.75
         self.algaeIntakeSpeed = .5
@@ -169,8 +169,8 @@ class RobotContainer:
     def getAutonomousCommand(self):
         """Returns the autonomous command to run"""
         
-        # return PathPlannerAuto("Put Coral in Reef")
-        # return PathPlannerAuto(self.chooser.getSelected())    
+        return PathPlannerAuto("Escape")
+        return PathPlannerAuto(self.chooser.getSelected())    
     
     # def runObjectDetectionPath(self):
     #     start_pose = Pose2d(0, 0, Rotation2d.fromDegrees(0))

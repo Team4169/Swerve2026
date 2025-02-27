@@ -65,10 +65,9 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderId, 
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
-        # print("####")
-        # print(wpilib.SerialPort.Port.kUSB1)
-        self.gyro = wpilib.ADXRS450_Gyro()
 
+        self.gyro = wpilib.ADXRS450_Gyro() #! test
+        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1) #! maybe this instead (definetly not both)
 
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it
@@ -181,9 +180,15 @@ class SwerveSubsystem (commands2.SubsystemBase):
                 SwerveModuleState(self.backRight.getDrivingVelocity(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
         )
 
-    def getChassisSpeeds(self):
+    def getChassisSpeeds(self): #! causing an issue
         return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
     
+    def getRobotRelativeSpeeds(self): # This is the exact same, but try it maybe
+        return RobotConstants.kDriveKinematics.toChassisSpeeds(self.frontLeft.getState(),
+                                                         self.frontRight.getState(),
+                                                         self.backLeft.getState(),
+                                                         self.backLeft.getState());
+
     def driveChassisSpeeds(self, chassisSpeeds: ChassisSpeeds):
         self.setModuleStates(
             RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)

@@ -138,7 +138,7 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
 
-        self.sd.putNumber("gyro", self.Container.swerve.gyro.getAngle()) #! AttributeError: 'SwerveSubsystem' object has no attribute 'gyro'
+        self.sd.putNumber("gyro", self.Container.swerve.gyro.getAngle())
 
            # print(self.distanceToShooter)
 
