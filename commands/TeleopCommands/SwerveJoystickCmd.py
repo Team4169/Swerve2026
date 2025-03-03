@@ -24,16 +24,12 @@ class SwerveJoystickCmd(Command):
         pass
     
     def execute(self):
-        print("joystick execute")
         #these are multiplied by the drivingSpeedLimiter which limit the speed of the robot so it doesn't go too fast
         self.xSpeed = self.driverController.getLeftX() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter#* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.driverController.getLeftY() * DrivingConstants.drivingSpeedLimiter#self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.zRotation = self.driverController.getRightX() * -1 * DrivingConstants.rotationSpeedLimiter#self.drivingLimiter
         
         # 1. Get the joystick values and apply deadzone
-        
-        # print(self.ySpeed)
-        # print(self.zRotation)
         
         self.xSpeed = wpimath.applyDeadband(self.xSpeed, OIConstants.deadzone)
         self.ySpeed = wpimath.applyDeadband(self.ySpeed, OIConstants.deadzone)

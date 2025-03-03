@@ -67,11 +67,11 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderReversed)
 
         self.gyro = wpilib.ADXRS450_Gyro() #! test
-        self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1) #! maybe this instead (definetly not both)
+        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1) #! maybe this instead (definetly not both)
 
             #the odometry class tracks the robot position over time
             #we can use the gyro in order to determnine the error from our auton path and correct it
-        self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModulePositionsOld())
+        self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModulePositions())
 
         thread = threading.Thread(target=self.zero_heading_after_delay)
 
@@ -157,21 +157,26 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.frontRight.setDesiredState(states[1])
         self.backLeft.setDesiredState(states[2])
         self.backRight.setDesiredState(states[3])
-    
-    # def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
-    #     return (
-    #             self.frontLeft.getSwerveModulePosition(),
-    #             self.frontRight.getSwerveModulePosition(),
-    #             self.backLeft.getSwerveModulePosition(),
-    #             self.backRight.getSwerveModulePosition()
-    #             )
-    def getModulePositionsOld(self) -> tuple[SwerveModulePosition, SwerveModulePosition,SwerveModulePosition,SwerveModulePosition]:
+
+    def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
+        return (
+                self.frontLeft.getSwerveModulePosition(),
+                self.frontRight.getSwerveModulePosition(),
+                self.backLeft.getSwerveModulePosition(),
+                self.backRight.getSwerveModulePosition()
+                )
+
+    def getChassisSpeeds(self):
+        return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
+
+    def getModulePositions(self) -> tuple[SwerveModulePosition, SwerveModulePosition,SwerveModulePosition,SwerveModulePosition]:
         return (
                 SwerveModulePosition(self.frontLeft.getDrivingPosition(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
                 SwerveModulePosition(self.frontRight.getDrivingPosition(), Rotation2d(self.frontRight.getAbsoluteEncoderRad())),
                 SwerveModulePosition(self.backLeft.getDrivingPosition(), Rotation2d(self.backLeft.getAbsoluteEncoderRad())),
                 SwerveModulePosition(self.backRight.getDrivingPosition(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
                 )
+
     def getModuleStates(self) -> tuple[SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState]:
         return (
             SwerveModuleState(self.frontLeft.getDrivingVelocity(), Rotation2d(self.frontLeft.getAbsoluteEncoderRad())),
@@ -180,21 +185,10 @@ class SwerveSubsystem (commands2.SubsystemBase):
                 SwerveModuleState(self.backRight.getDrivingVelocity(), Rotation2d(self.backRight.getAbsoluteEncoderRad()))
         )
 
-    def getChassisSpeeds(self): #! causing an issue
-        return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
-    
-    def getRobotRelativeSpeeds(self): # This is the exact same, but try it maybe
-        return RobotConstants.kDriveKinematics.toChassisSpeeds(self.frontLeft.getState(),
-                                                         self.frontRight.getState(),
-                                                         self.backLeft.getState(),
-                                                         self.backLeft.getState());
-
-    def driveChassisSpeeds(self, chassisSpeeds: ChassisSpeeds):
-        self.setModuleStates(
+    def driveChassisSpeeds(self, chassisSpeeds: ChassisSpeeds, feedForwards): # Check to make sure "feedForwards" should be here
+            self.setModuleStates(
             RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
         )
-    
-    
 
     def shouldFlipPath(self):
         # Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -203,7 +197,6 @@ class SwerveSubsystem (commands2.SubsystemBase):
         return DriverStation.getAlliance() == DriverStation.Alliance.kRed  #! or kBlue idk this needs testing
     ####return DriverStation.getAlliance() == DriverStation.Alliance.kRed
 
-      
     # def getAlliance(self):
     #     return True
     #     #~use FMS to find the allinace side
@@ -220,7 +213,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                             )
                             )
         
-        self.sd.putString("Robot Odometer", str(self.getModulePositionsOld()))
+        self.sd.putString("Robot Odometer", str(self.getModulePositions()))
         self.sd.putString("Robot Location, x", str(self.getPose().X()))
         self.sd.putString("Robot Location, y", str(self.getPose().Y()))
         self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))

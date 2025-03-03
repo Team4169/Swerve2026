@@ -99,7 +99,7 @@ class RobotConstants:
 
     
     #what is the fastest speed laterally our robot can go
-    kphysicalMaxSpeedMetersPerSecond = 1.165 * 2 #! Find through test, current is test based on 1/2 speeds
+    kphysicalMaxSpeedMetersPerSecond = 1.165 * 5 #! Find through test, current is test based on 1/2 speeds
     #or maybethrough the max rpm of motors 
     #what is the fastest speed  rotationally our robot can go
     kPhysicalMaxAngularSpeedRadiansPerSecond  = kphysicalMaxSpeedMetersPerSecond * 2 / kWheelDiameterMeters #! Find through Current UNKNOWN

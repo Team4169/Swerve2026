@@ -1,7 +1,7 @@
 {
   "Docking": {
     "Data": [
-      "DockNode  ID=0x00000001 Pos=374,77 Size=1125,565 Selected=0x2D9B9756"
+      "DockNode  ID=0x00000001 Pos=419,72 Size=1125,565 Selected=0x2D9B9756"
     ]
   },
   "MainWindow": {
@@ -28,13 +28,13 @@
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
       "DockId": "0x00000001,1",
-      "Pos": "374,77",
+      "Pos": "419,72",
       "Size": "1125,565"
     },
     "###FMS": {
       "Collapsed": "0",
       "Pos": "33,565",
-      "Size": "336,158"
+      "Size": "202,214"
     },
     "###Joysticks": {
       "Collapsed": "0",
@@ -44,7 +44,7 @@
     "###NetworkTables": {
       "Collapsed": "0",
       "DockId": "0x00000001,0",
-      "Pos": "374,77",
+      "Pos": "419,72",
       "Size": "1125,565"
     },
     "###NetworkTables Info": {

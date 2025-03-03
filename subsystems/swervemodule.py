@@ -133,7 +133,7 @@ class swervemodule(commands2.SubsystemBase):
 
         self.state = state
         SwerveModuleState.optimize(self.state, self.getState().angle)
-        print("speed: " + str(self.state.speed))
+        print("speed: " + str(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond))
         self.drivingMotor.set(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond)
         
         #^ from my understanding of the above code, self.state.speed is apparently supposed to be in m/s.

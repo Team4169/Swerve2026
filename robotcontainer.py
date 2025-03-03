@@ -15,9 +15,9 @@ from commands2.button import JoystickButton, CommandXboxController
 from wpilib import XboxController, Joystick
 
 from subsystems.swervesubsystem import SwerveSubsystem
-# from subsystems.algaeSubsystem import AlgaeSubsystem
-# from subsystems.climbingSubsystem import ClimbingSubsystem
-# from subsystems.coralSubsystem import CoralSubsystem
+from subsystems.algaeSubsystem import algaeSubsystem
+from subsystems.climbingSubsystem import climbingSubsystem
+from subsystems.coralSubsystem import coralSubsystem
 
 #from subsystems.armsubsystem import ArmSubsystem
 # from subsystems.intakeSubsystem import IntakeSubsystem
@@ -27,8 +27,7 @@ from subsystems.swervesubsystem import SwerveSubsystem
 import math
 # import photonvision
 
-from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder, PathPlannerPath
-# #from pathplannerlib.commands import PathfindHolonomic
+from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder, PathPlannerPath, PathConstraints
 from pathplannerlib.path import GoalEndState
 
 # from commands.testcommands.move1module import move1module
@@ -56,9 +55,9 @@ class RobotContainer:
 
         # The robot's subsystems
         self.swerve = SwerveSubsystem() #! test
-        # self.algae = AlgaeSubsystem()
-        # self.climber = ClimbingSubsystem()
-        # self.coral = CoralSubsystem()
+        self.algae = algaeSubsystem()
+        self.climber = climbingSubsystem()
+        self.coral = coralSubsystem()
 
         # self.intake = IntakeSubsystem()
         # self.midstage = MidstageSubsystem()
@@ -138,6 +137,9 @@ class RobotContainer:
         self.escapeBottom = "Escape Bottom"
         self.pickupAlgaeandScoreB = "Pickup Algae + Score Bottom"
         self.pickupAlgaeandScore = "Pickup Algae + Score"
+        self.moveForward = "Move two meters forward"
+        self.spinForward = "Spin two meters forward"
+        
         # self.NewAuto = "New Auto"
 
 
@@ -148,9 +150,11 @@ class RobotContainer:
         self.autoChooser.addOption("Escape Bottom", self.escapeBottom)
         self.autoChooser.addOption("Pickup Algae + score Bottom", self.pickupAlgaeandScoreB)
         self.autoChooser.addOption("Pickup Algae + score", self.pickupAlgaeandScore)
+        self.autoChooser.addOption("Move two meters forward", self.moveForward)
+        self.autoChooser.addOption("Spin two meters forward", self.spinForward)
+        #self.autoChooser.addOption("New Auto", self.NewAuto)
        
-
-
+       
         # # # Put the autoChooser on the dashboard
         self.shuffle = wpilib.SmartDashboard
         self.shuffle.putData("Autonomousff", self.autoChooser)
@@ -164,13 +168,7 @@ class RobotContainer:
         self.climberSpeed = 0.75
         self.algaeIntakeSpeed = .5
         self.algaeLiftSpeed = .5
-
-       
-    def getAutonomousCommand(self):
-        """Returns the autonomous command to run"""
-        
-        return PathPlannerAuto("Escape")
-        return PathPlannerAuto(self.chooser.getSelected())    
+    
     
     # def runObjectDetectionPath(self):
     #     start_pose = Pose2d(0, 0, Rotation2d.fromDegrees(0))
@@ -185,14 +183,49 @@ class RobotContainer:
     #     return AutoBuilder.followPath(path)
 
     def setSlowMode(self): #-> commands2.Command
-        DrivingConstants.drivingSpeedLimiter = 0.3
-        DrivingConstants.rotationSpeedLimiter = 0.2
+        #self.sd.putString("Slow Mode", "OFF")
+        DrivingConstants.drivingSpeedLimiter = 0.5
+        DrivingConstants.rotationSpeedLimiter = 0.5
         # return self.swerve.driveChassisSpeeds(self.drivingLimiter)
 
     def unbindSlowMode(self):
+        #self.sd.putString("Slow Mode", "ON")
         DrivingConstants.drivingSpeedLimiter = 1
         DrivingConstants.rotationSpeedLimiter = 1
+
+    def getAutonomousCommand(self):
+        """Returns the autonomous command to run"""
+        # path = self.autoChooser.getSelected()
+        path = 'Escape'
+        print(f"selected path is: {path}")
+        return PathPlannerAuto(path)
+
+    def getTeleopCommand(self):
+        auto = self.onTheFlyPathTest()
+        auto.schedule()
     
+    def onTheFlyPathTest(self):
+        print("doing on the fly path now")
+
+        waypoints = PathPlannerPath.waypointsFromPoses([
+            Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)),
+            Pose2d(0.0, 1.0, Rotation2d.fromDegrees(0))
+        ])
+        constraints = PathConstraints(0.5, 1, 0.5 * math.pi, 1 * math.pi) # The constraints for this path.
+        # constraints = PathConstraints.unlimitedConstraints(12.0) # You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
+        # Create the path using the waypoints created above
+        path = PathPlannerPath( # removed new 
+            waypoints,
+            constraints, #AutoConstats.constaints,
+            None, # The ideal starting state, this is only relevant for pre-planned paths, so can be None for on-the-fly paths.
+            GoalEndState(0.0, Rotation2d.fromDegrees(-90)) # Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        )
+
+        # Prevent the path from being flipped if the coordinates are already correct
+        path.preventFlipping = True
+        auto = AutoBuilder.pathfindThenFollowPath(path, constraints)
+        return auto
+
     # def toggleShooterMode(self):
     #     if self.autoShooterWarmup == True:
     #         self.autoShooterWarmup = False
@@ -200,7 +233,6 @@ class RobotContainer:
     #         self.autoShooterWarmup = True
         
     def configureButtonBindings(self):
-        pass
         
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
@@ -212,6 +244,10 @@ class RobotContainer:
         # Toggle Slow Mode
         # DRIVER
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
+
+        #AUTO SETUPS (using on-the-fly)
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getTeleopCommand()))
+        
 
 
 

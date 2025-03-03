@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 #TODO:
-#! -1. Spark max IDs
-#! 0. Deploy
-#! 1/2. Homework
 #! 1. Test pathplanner
+#! 1/2. Homework
 #! 2. Continue testing Slewratelimiter
 #! 3. Hear back from rest of team 
 
