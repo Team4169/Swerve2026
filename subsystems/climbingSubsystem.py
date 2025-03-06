@@ -7,7 +7,7 @@ import ntcore
 import rev
 import math
 
-class climbingSubsystem(commands2.SubsystemBase):
+class ClimbingSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
         # commands2.SubsystemBase.__init__(self)
@@ -18,15 +18,10 @@ class climbingSubsystem(commands2.SubsystemBase):
         self.ClimbingMotor1 = rev.SparkMax(RobotConstants.climbingMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
         self.ClimbingMotor2 = rev.SparkMax(RobotConstants.climbingMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
     
-    def runClimbingMotor1(self, speed: float):
+    def runClimbingMotors(self, speed: float):
         self.ClimbingMotor1.set(speed)
-
-    def stopClimbingMotor1(self):
-        self.ClimbingMotor1.set(0)
-    
-    def runClimbingMotor2(self, speed: float):
         self.ClimbingMotor2.set(speed)
 
-    def stopClimbingMotor2(self):
+    def stopClimbingMotors(self):
+        self.ClimbingMotor1.set(0)
         self.ClimbingMotor2.set(0)
-    

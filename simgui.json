@@ -61,6 +61,9 @@
       "LiveWindow": {
         "open": true
       },
+      "Shuffleboard": {
+        "open": true
+      },
       "SmartDashboard": {
         "Autonomousff": {
           "open": true,

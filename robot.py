@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 #TODO:
-#! 1. Test pathplanner
-#! 1/2. Homework
-#! 2. Continue testing Slewratelimiter
-#! 3. Hear back from rest of team 
+#! 1. Test subsystems if they are built
+#! 2. Test auto/pathplanner + on-the-fly
+#! 3. Continue with voltagelimiter! (Can do it in the Rev Client here:
+#! https://github.com/CrimsonRobotics/Current-Limiting-Spark-MAX?tab=readme-ov-file#readme
+#! 4. Hear back from rest of team 
+#! 5. Driver Practice!!
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 #* " we still have this quote" - Annie Huang 1/22/2025 (grady wrote this)
@@ -12,6 +14,7 @@
 #* "We need 6 of the same file. trust." - Adam Mokdad 1/31/2025 (ofir wrote this)
 #* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
 #* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
+#* "if only i had a log" -ofir 3/3/2025 
 
 import typing
 import wpilib
@@ -23,6 +26,7 @@ import math
 import constants
 from constants import ModuleConstants, RobotConstants, DrivingConstants, AutoConstants
 from robotcontainer import RobotContainer
+from subsystems.coralSubsystem import CoralSubsystem
 from commands2 import CommandScheduler
 from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
 import ntcore
@@ -202,6 +206,7 @@ class MyRobot(commands2.TimedCommandRobot):
         '''
             
     def autonomousPeriodic(self) -> None:
+        # print("speed: " + str(self.state.speed / RobotConstants.kphysicalMaxSpeedMetersPerSecond))
         self.swerve.frontRight.resetEncoders()
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
@@ -237,6 +242,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
     def teleopInit(self) -> None:
+
         self.ds = wpilib.DriverStation
 
         # wpilib.CameraServer.launch()
@@ -264,10 +270,24 @@ class MyRobot(commands2.TimedCommandRobot):
 
         # print("Starting teleop...")
         # self.speed = 0
-
+        self.coral = self.Container.coral
+        self.lastTimeStamp = None
         
 
     def teleopPeriodic(self):
+        #makes stopLiftCoral execute after a certain amount of time. used to make coral lift to a specific height
+        if self.coral.liftingCoral:
+            if self.lastTimeStamp:
+                deltaTime = Timer.getTimestamp() - self.lastTimeStamp
+            else:
+                deltaTime = 0
+            self.coral.liftCoralTimer -= deltaTime
+            self.lastTimeStamp = Timer.getTimestamp()
+            # print(self.coral.liftCoralTimer)
+            
+            if self.coral.liftCoralTimer <=0:
+                self.coral.stopLiftCoral()
+
         self.swerve.frontRight.resetEncoders()
         self.swerve.frontLeft.resetEncoders()
         self.swerve.backLeft.resetEncoders()
@@ -279,7 +299,9 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.sd.putNumber(voltageLimiter.calculate(self.SwerveJoystickCmd.ySpeed))
         # self.sd.putNumber(voltageLimiter.calculate(self.SwerveJoystickCmd.zRotation))
         
-
+        #Current Limiter 
+        # self.sd.putNumber("Current Motor Output", drivingmotor.getOutputCurrent())
+        
 
         self.sd.putNumber("BackLeft Turning Position", self.swerve.backLeft.getTurningPostion())
         self.sd.putNumber("BackRight Turning Position", self.swerve.backRight.getTurningPostion())

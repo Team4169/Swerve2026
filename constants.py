@@ -96,8 +96,18 @@ class RobotConstants:
     backLeftAbsoluteEncoderOffset = 0.4543435 + math.pi/2 + math.pi
     backLeftAbsoluteEncoderReversed = True
 
-
     
+    climberSpeed = 0.75
+    algaeIntakeSpeed = .5
+    algaeLiftSpeed = .5
+    coralLiftSpeed = .5
+    coralDepositSpeed = .5
+
+    coralL1Time = 3 # Time in seconds to reach L1 when the coral lift is running
+    coralL2Time = 4 #! Test these
+    coralL3Time = 5 #change value for desired time 
+
+
     #what is the fastest speed laterally our robot can go
     kphysicalMaxSpeedMetersPerSecond = 1.165 * 5 #! Find through test, current is test based on 1/2 speeds
     #or maybethrough the max rpm of motors 
@@ -162,6 +172,8 @@ class RobotConstants:
     #climbingMotorLeftLimitSwitchID = 
     # climbingMotorRightLimitSwitchID =    
 
+    coralMotorSpeed = .5
+    coralMotorLiftSpeed = .5
     #names are in relation to back of robot similar to the swerve modules
 
 # ~ Swerve Constants

@@ -16,6 +16,7 @@ class SwerveJoystickCmd(Command):
         self.driverController = driverController
         self.addRequirements(self.swerve)
         #create Slew limiter
+        #limits speed at which the robot moves
         self.xLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
         self.yLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
         self.zRotLimiter = SlewRateLimiter(RobotConstants.kTeleopDriveMaxAccelerationMetersPerSecSquared)
@@ -45,7 +46,7 @@ class SwerveJoystickCmd(Command):
         #! Not sure why this is needed, for some reason without it, the robot rotates slower 
 
         # if self.feildOriented:
-        chasisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 
                                                             self.zRotation, self.swerve.getRotation2d())
         
         # else:
@@ -53,7 +54,7 @@ class SwerveJoystickCmd(Command):
         #     chasisSpeeds = ChassisSpeeds(self.xSpeed, self.ySpeed, self.zRotation)
 
         # 3. convert chasis speeds to module states
-        moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chasisSpeeds)
+        moduleStates = RobotConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
         # self.swerve.sd.putNumber("ExpectedFL", float(moduleStates[0].angle.degrees()))
         # self.swerve.sd.putNumber("ExpectedFR", float(moduleStates[1].angle.degrees()))
         # self.swerve.sd.putNumber("ExpectedBL", float(moduleStates[2].angle.degrees()))

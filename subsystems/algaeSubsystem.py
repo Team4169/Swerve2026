@@ -8,7 +8,7 @@ import rev
 import math
 import phoenix6
 
-class algaeSubsystem(commands2.SubsystemBase):
+class AlgaeSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:
         super().__init__()
         # commands2.SubsystemBase.__init__(self)
@@ -20,6 +20,7 @@ class algaeSubsystem(commands2.SubsystemBase):
         self.algaeIntakeMotor2 = rev.SparkMax(RobotConstants.algaeIntakeMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
 
         self.algaeLiftMotor = rev.SparkMax(RobotConstants.liftMotorID, rev.SparkLowLevel.MotorType.kBrushless)
+        
 
     def runAlgae(self, speed: float):
         self.algaeIntakeMotor1.set(speed)
