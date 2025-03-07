@@ -249,12 +249,11 @@ class RobotContainer:
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.runObjectDetectionPath()))
         
         # Toggle Slow Mode
-        # DRIVER
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
 
         #AUTO SETUPS (using on-the-fly)
         #Uncomment one or the other, do not uncomment both!!
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.getTeleopCommand())).whileFalse(InstantCommand(lambda: self.stopTeleopCommand())) # hopefully terminates on the fly path
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.getTeleopCommand())).onFalse(InstantCommand(lambda: self.stopTeleopCommand())) # hopefully terminates on the fly path
         #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getTeleopCommand())) #Just accelerates robot indefinitly
     
         # OPERATOR
@@ -278,8 +277,6 @@ class RobotContainer:
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotors(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotors()))
 
         # ALGAE
-        
-        # Old Algae code
 
         #taking in Algae (running motors backwards)
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftStick).whileTrue(InstantCommand(lambda: self.algae.runAlgae(-self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))

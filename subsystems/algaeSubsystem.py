@@ -5,6 +5,7 @@ import constants
 from constants import RobotConstants
 import ntcore
 import rev
+from rev import SoftLimitConfig
 import math
 import phoenix6
 
@@ -15,11 +16,19 @@ class AlgaeSubsystem(commands2.SubsystemBase):
         # ~ smartdashboard
         self.sd = wpilib.SmartDashboard
 
+
         #* Intake motors
         self.algaeIntakeMotor1 = rev.SparkMax(RobotConstants.algaeIntakeMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
         self.algaeIntakeMotor2 = rev.SparkMax(RobotConstants.algaeIntakeMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
 
         self.algaeLiftMotor = rev.SparkMax(RobotConstants.liftMotorID, rev.SparkLowLevel.MotorType.kBrushless)
+
+        #! setup soft limits here
+        
+        # soft limit switches 
+        #self.algaeIntakeMotor1
+        #self.algaeIntakeMotor1.getForwardLimitSwitch()
+        #self.algaeIntakeMotor2.SoftLimitDirection(-1)
         
 
     def runAlgae(self, speed: float):
