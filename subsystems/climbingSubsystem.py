@@ -1,11 +1,6 @@
-import commands2
-import wpilib
+import wpilib, rev, commands2
 import wpilib.drive
-import constants
 from constants import RobotConstants
-import ntcore
-import rev
-import math
 
 class ClimbingSubsystem(commands2.SubsystemBase):
     def __init__(self) -> None:

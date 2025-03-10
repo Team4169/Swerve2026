@@ -1,19 +1,13 @@
-from .swervemodule import swervemodule
-import commands2
+import math, time, threading
+import wpilib, commands2, navx
+
+from .swervemodule import SwerveModule
 from constants import RobotConstants, AutoConstants
-import wpilib
-import navx
-import threading
-import time
-import math
 from wpimath.geometry import Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics, SwerveDrive4Odometry, SwerveModulePosition, SwerveModuleState
-from navx import AHRS
 from wpimath.geometry import Pose2d
 
 from wpilib import DriverStation
-
-# from pathplannerlib.config import HolonomicPathFollowerConfig, ReplanningConfig, PIDConstants #.config 
 
 from pathplannerlib.auto import AutoBuilder
 from pathplannerlib.controller import PPHolonomicDriveController
@@ -26,15 +20,12 @@ from wpimath.kinematics import ChassisSpeeds
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from wpimath.geometry import Rotation2d
 
-
-
-
 class SwerveSubsystem (commands2.SubsystemBase):
     def __init__(self):
         super().__init__()
         self.sd = wpilib.SmartDashboard
         
-        self.frontLeft = swervemodule(RobotConstants.frontLeftDrivingMotorID, 
+        self.frontLeft = SwerveModule(RobotConstants.frontLeftDrivingMotorID, 
                                 RobotConstants.frontLeftTurningMotorID, 
                                 RobotConstants.frontLeftDrivingMotorReversed, 
                                 RobotConstants.frontLeftTurningMotorReversed, 
@@ -42,7 +33,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.frontLeftAbsoluteEncoderOffset, 
                                 RobotConstants.frontLeftAbsoluteEncoderReversed)
         
-        self.frontRight = swervemodule(RobotConstants.frontRightDrivingMotorID, 
+        self.frontRight = SwerveModule(RobotConstants.frontRightDrivingMotorID, 
                                 RobotConstants.frontRightTurningMotorID, 
                                 RobotConstants.frontRightDrivingMotorReversed, 
                                 RobotConstants.frontRightTurningMotorReversed, 
@@ -50,7 +41,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.frontRightAbsoluteEncoderOffset, 
                                 RobotConstants.frontRightAbsoluteEncoderReversed)
         
-        self.backLeft = swervemodule(RobotConstants.backLeftDrivingMotorID, 
+        self.backLeft = SwerveModule(RobotConstants.backLeftDrivingMotorID, 
                                 RobotConstants.backLeftTurningMotorID, 
                                 RobotConstants.backLeftDrivingMotorReversed, 
                                 RobotConstants.backLeftTurningMotorReversed, 
@@ -58,7 +49,7 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backLeftAbsoluteEncoderOffset, 
                                 RobotConstants.backLeftAbsoluteEncoderReversed)
         
-        self.backRight = swervemodule(RobotConstants.backRightDrivingMotorID, 
+        self.backRight = SwerveModule(RobotConstants.backRightDrivingMotorID, 
                                 RobotConstants.backRightTurningMotorID, 
                                 RobotConstants.backRightDrivingMotorReversed, 
                                 RobotConstants.backRightTurningMotorReversed, 
@@ -69,25 +60,13 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.gyro = wpilib.ADXRS450_Gyro() #! test
         # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1) #! maybe this instead (definetly not both)
 
-            #the odometry class tracks the robot position over time
-            #we can use the gyro in order to determnine the error from our auton path and correct it
+        #the odometry class tracks the robot position over time
+        #we can use the gyro in order to determnine the error from our auton path and correct it
         self.odometer = SwerveDrive4Odometry(RobotConstants.kDriveKinematics, Rotation2d(0), self.getModulePositions())
 
         thread = threading.Thread(target=self.zero_heading_after_delay)
 
         thread.start()
-        
-        #^^Added this today (1/11)
-
-        # AutoBuilder.configureHolonomic( # 2024 config
-        #     self.getPose,
-        #     self.resetOdometry,
-        #     self.getChassisSpeeds,
-        #     self.driveChassisSpeeds,
-        #     AutoConstants.pathFollowerConfig,
-        #     self.shouldFlipPath,
-        #     self
-        # )
 
         config = RobotConfig.fromGUISettings()
 
@@ -100,9 +79,9 @@ class SwerveSubsystem (commands2.SubsystemBase):
                 PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
                 PIDConstants(5.0, 0.0, 0.0) # Rotation PID constants
             ),
-            config, # The robot configurations
+            config,
             self.shouldFlipPath, # Supplier to control path flipping based on alliance color
-            self # Reference to this subsystem to set requirements
+            self
         )
         
     #~ Gyro Commands

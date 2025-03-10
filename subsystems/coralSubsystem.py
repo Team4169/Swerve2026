@@ -1,9 +1,7 @@
-import commands2, rev, wpilib, wpilib.drive
+import wpilib, rev, commands2, wpilib.drive
 from constants import RobotConstants
 
 import phoenix6
-
-
 
 class CoralSubsystem(commands2.SubsystemBase):
     

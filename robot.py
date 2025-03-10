@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 #TODO:
-#! 1. Test subsystems if they are built
-#! 2. Test auto/pathplanner + on-the-fly
-#! 3. Continue with voltagelimiter! (Can do it in the Rev Client here:
-#! https://github.com/CrimsonRobotics/Current-Limiting-Spark-MAX?tab=readme-ov-file#readme
-#! 4. Hear back from rest of team 
-#! 5. Driver Practice!!
+#? 1. Test subsystems if they are built
+#? 2. Test auto/pathplanner + on-the-fly
+#? 3. Continue with voltagelimiter! (Can do it in the Rev Client here:
+#! IMPORTANT: alternate method for limiters using the rev hardware client https://github.com/CrimsonRobotics/Current-Limiting-Spark-MAX?tab=readme-ov-file#readme
+#? 4. Hear back from rest of team 
+#? 5. Driver Practice!!
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 #* " we still have this quote" - Annie Huang 1/22/2025 (grady wrote this)
@@ -15,6 +15,7 @@
 #* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
 #* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
 #* "if only i had a log" -ofir 3/3/2025 
+#* "maybe we put all the code on one line" - Adam Mokdad 3/10/2025 (ofir wrote this)
 
 import typing, wpilib, ntcore
 from wpimath.geometry import Pose2d

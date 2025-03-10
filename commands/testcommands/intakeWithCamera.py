@@ -4,7 +4,7 @@ from subsystems.swervesubsystem import SwerveSubsystem
 # from subsystems.intakeSubsystem import IntakeSubsystem
 
 from constants import RobotConstants
-from subsystems.swervemodule import swervemodule
+from subsystems.swervemodule import SwerveModule
 from wpimath.kinematics import SwerveModuleState
 from wpimath.geometry import Rotation2d
 import time

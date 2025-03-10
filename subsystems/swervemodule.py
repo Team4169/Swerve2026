@@ -4,13 +4,8 @@ from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
 from phoenix6.hardware import CANcoder
 
-
-#from wpilib import DutyCycleEncoder
-# import pandas 
-# from pandas import Series
-
 from constants import ModuleConstants, RobotConstants
-class swervemodule(commands2.SubsystemBase):
+class SwerveModule(commands2.SubsystemBase):
     def __init__(self, drivingMotorID: int, turningMotorID:int, drivingMotorReversed: bool, turningMotorReversed: bool, 
                  absoluteEncoderId: int, absouteEncoderOffset: float, absoluteEncoderReversed: bool) -> None:
         super().__init__()
@@ -24,8 +19,6 @@ class swervemodule(commands2.SubsystemBase):
         #self.cancoderConfig = CANcoderConfiguration
 
         self.absoluteEncoder = CANcoder(absoluteEncoderId, "")
-        
-        #self.absoluteEncoder = DutyCycleEncoder(absoluteEncoderId)
         
         #* Swerve Module Motors init and Encoders
                 # self.extendingArm = rev.CANSparkMax(RobotConstants.extendingArmID, rev.CANSparkMaxLowLevel.MotorType.kBrushless)
