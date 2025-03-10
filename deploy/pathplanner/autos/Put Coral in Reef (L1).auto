@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "liftCoral"
+            "name": "liftCoraltoL1"
           }
         },
         {
@@ -25,19 +25,19 @@
         {
           "type": "named",
           "data": {
-            "name": "openCoral"
+            "name": "depositCoral"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "stopCoral"
+            "name": "stopDepositCoral"
           }
         },
         {
@@ -49,25 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "closeCoral"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopLiftCoral"
+            "name": "lowerCoralFromL1"
           }
         }
       ]

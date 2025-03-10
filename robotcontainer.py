@@ -54,69 +54,61 @@ class RobotContainer:
         self.operatorController = wpilib.XboxController(OIConstants.kArmControllerPort)
 
         # The robot's subsystems
-        self.swerve = SwerveSubsystem() #! test #? test what
+        self.swerve = SwerveSubsystem()
         self.algae = AlgaeSubsystem()
         self.climber = ClimbingSubsystem()
         self.coral = CoralSubsystem()
-
-        # self.intake = IntakeSubsystem()
-        # self.midstage = MidstageSubsystem()
-        # self.shooter = ShooterSubsystem()
-
-      
 
         self.swerve.setDefaultCommand(SwerveJoystickCmd(
             swerve=self.swerve,
             driverController=self.driverController
         ))
         
-        #^^Added this today (1/11)
-        #commands for pathplanner
         NamedCommands.registerCommand("resetOdometry",
             commands2.InstantCommand(lambda:self.swerve.resetOdometry(self.trajectory.initialPose()))
         )
         NamedCommands.registerCommand("stopModules",
             commands2.InstantCommand(lambda:self.swerve.stopModules())
         )
-        NamedCommands.registerCommand("liftCoral",
-            commands2.InstantCommand(lambda:self.coral.liftCoral(0.75))
+        NamedCommands.registerCommand("liftCoraltoL1",
+            commands2.InstantCommand(lambda:self.coral.liftCoral(self.coralLiftSpeed, self.coralL1Time))
         )
-        NamedCommands.registerCommand("lowerCoral", #? Ofir claims it goes down by itself so this isnt needed. check and make sure
-            commands2.InstantCommand(lambda:self.coral.liftCoral(-0.75))
+        NamedCommands.registerCommand("lowerCoralFromL1",
+            commands2.InstantCommand(lambda:self.coral.liftCoral(-self.coralLiftSpeed, self.coralL1Time))
         )
-        NamedCommands.registerCommand("stopLiftCoral",
-            commands2.InstantCommand(lambda:self.coral.stopLiftCoral())
+        # NamedCommands.registerCommand("liftCoraltoL2",
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(self.coralLiftSpeed, self.coralL2Time))
+        # )
+        # NamedCommands.registerCommand("lowerCoralFromL2",
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(-self.coralLiftSpeed, self.coralL2Time))
+        # )
+        # NamedCommands.registerCommand("liftCoraltoL3",
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(self.coralLiftSpeed, self.coralL3Time))
+        # )
+        # NamedCommands.registerCommand("lowerCoralFromL3",
+        #     commands2.InstantCommand(lambda:self.coral.liftCoral(-self.coralLiftSpeed, self.coralL3Time))
+        # )
+        NamedCommands.registerCommand("depositCoral",
+             commands2.InstantCommand(lambda:self.coral.runDepositCoral(self.coralDepositSpeed))
         )
-        NamedCommands.registerCommand("openCoral",
-             commands2.InstantCommand(lambda:self.coral.runDepositCoral(0.75)) # check if positive is open and negative is close
-        )
-        NamedCommands.registerCommand("stopCoral",
+        NamedCommands.registerCommand("stopDepositCoral",
              commands2.InstantCommand(lambda:self.coral.stopDepositCoral())
         )
         NamedCommands.registerCommand("liftAlgae",
-            commands2.InstantCommand(lambda:self.algae.runLiftAlgae(0.75))                          
+            commands2.InstantCommand(lambda:self.algae.runLiftAlgae(self.algaeLiftSpeed))                          
         )
         NamedCommands.registerCommand("stopLiftAlgae",
             commands2.InstantCommand(lambda:self.algae.stopLiftAlgae())                          
         )
-        NamedCommands.registerCommand("runAlgae",
-            commands2.InstantCommand(lambda:self.algae.runAlgae(0.75))                          
+        NamedCommands.registerCommand("intakeAlgae",
+            commands2.InstantCommand(lambda:self.algae.runAlgae(-self.algaeIntakeSpeed))                          
+        )
+        NamedCommands.registerCommand("depositAlgae",
+            commands2.InstantCommand(lambda:self.algae.runAlgae(self.algaeIntakeSpeed))                          
         )
         NamedCommands.registerCommand("stopAlgae",
             commands2.InstantCommand(lambda:self.algae.stopAlgae())                          
         )
-        # NamedCommands.registerCommand("stopMidstage",
-        #     commands2.InstantCommand(lambda:self.midstage.stopMidstage())
-        # )
-        # NamedCommands.registerCommand("setShooterAngle",
-        #     commands2.InstantCommand(lambda:self.shooter.setShooterAngle(self.shooter.getShooterAngle()))
-        # )
-        # NamedCommands.registerCommand("stopShooter",
-        #     commands2.InstantCommand(lambda:self.shooter.stopShooter())
-        # )
-        # NamedCommands.registerCommand("shootRing",
-        #     commands2.InstantCommand(lambda:self.shooter.runShooter())
-        # )
 
        
         #self.driveWaypointCommand = DriveWaypoint(self.swerve)
@@ -127,7 +119,7 @@ class RobotContainer:
 
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        self.putCoralInReef = "Put Coral in Reef"
+        self.putCoralInReefL1 = "Put Coral in Reef (L1)"
         self.knockOutAndScore = "Knock out and score"
         self.escape = "Escape"
         self.knockOutCoral = "Knock out Coral"
@@ -140,16 +132,17 @@ class RobotContainer:
         # self.NewAuto = "New Auto"
 
 
-        self.autoChooser.addOption("Put Coral in Reef", self.putCoralInReef)
-        self.autoChooser.addOption("Knock out and score", self.knockOutAndScore)
-        self.autoChooser.addOption("Escape", self.escape)
-        self.autoChooser.addOption("Knock out Coral", self.knockOutCoral)
-        self.autoChooser.addOption("Escape Bottom", self.escapeBottom)
-        self.autoChooser.addOption("Pickup Algae + Score Bottom", self.pickupAlgaeandScoreB)
-        self.autoChooser.addOption("Pickup Algae + Score", self.pickupAlgaeandScore)
-        self.autoChooser.addOption("Move two meters forward", self.moveForward)
-        self.autoChooser.addOption("Spin two meters forward", self.spinForward)
-        #self.autoChooser.addOption("New Auto", self.NewAuto)
+        self.autoChooser.addOption(self.putCoralInReefL1, self.putCoralInReefL1)
+        self.autoChooser.addOption(self.knockOutAndScore, self.knockOutAndScore)
+        self.autoChooser.addOption(self.escape, self.escape)
+        self.autoChooser.addOption(self.knockOutCoral, self.knockOutCoral)
+        self.autoChooser.addOption(self.escapeBottom, self.escapeBottom)
+        self.autoChooser.addOption(self.pickupAlgaeandScoreB, self.pickupAlgaeandScoreB)
+        self.autoChooser.addOption(self.pickupAlgaeandScore, self.pickupAlgaeandScore)
+        self.autoChooser.addOption(self.moveForward, self.moveForward)
+        self.autoChooser.addOption(self.spinForward, self.spinForward)
+        
+        #self.autoChooser.addOption(self.NewAuto, self.NewAuto)
        
        
         # # # Put the autoChooser on the dashboard
