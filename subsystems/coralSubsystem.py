@@ -25,6 +25,19 @@ class CoralSubsystem(commands2.SubsystemBase):
         self.coralEntranceMotor = rev.SparkMax(RobotConstants.coralIntakeMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
         self.coralLiftMotor = rev.SparkMax(RobotConstants.coralIntakeMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
 
+        self.liftConfig = rev.SparkMaxConfig()
+
+        self.liftConfig.softLimit.forwardSoftLimit(50)
+        self.liftConfig.softLimit.forwardSoftLimitEnabled()
+        self.liftConfig.softLimit.reverseSoftLimit(0)
+        self.liftConfig.softLimit.reverseSoftLimitEnabled()
+        
+        self.coralLiftMotor.configure(
+            self.liftConfig,
+            rev.SparkBase.ResetMode.kResetSafeParameters,
+            rev.SparkBase.PersistMode.kPersistParameters
+        )
+
     def runDepositCoral(self, speed: float):
         self.coralEntranceMotor.set(speed)
 

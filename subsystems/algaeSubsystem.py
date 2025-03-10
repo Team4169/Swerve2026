@@ -20,16 +20,18 @@ class AlgaeSubsystem(commands2.SubsystemBase):
         #* Intake motors
         self.algaeIntakeMotor1 = rev.SparkMax(RobotConstants.algaeIntakeMotor1ID, rev.SparkLowLevel.MotorType.kBrushless)
         self.algaeIntakeMotor2 = rev.SparkMax(RobotConstants.algaeIntakeMotor2ID, rev.SparkLowLevel.MotorType.kBrushless)
-
         self.algaeLiftMotor = rev.SparkMax(RobotConstants.liftMotorID, rev.SparkLowLevel.MotorType.kBrushless)
 
-        #! setup soft limits here
+        self.liftConfig = rev.SparkMaxConfig()
+
+        self.liftConfig.softLimit.forwardSoftLimit(50)
+        self.liftConfig.softLimit.forwardSoftLimitEnabled()
         
-        # soft limit switches 
-        #self.algaeIntakeMotor1
-        #self.algaeIntakeMotor1.getForwardLimitSwitch()
-        #self.algaeIntakeMotor2.SoftLimitDirection(-1)
-        
+        self.algaeLiftMotor.configure(
+            self.liftConfig,
+            rev.SparkBase.ResetMode.kResetSafeParameters,
+            rev.SparkBase.PersistMode.kPersistParameters
+        )
 
     def runAlgae(self, speed: float):
         self.algaeIntakeMotor1.set(speed)
