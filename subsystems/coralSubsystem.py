@@ -1,11 +1,6 @@
-import commands2
-import wpilib
-import wpilib.drive
-import constants
+import commands2, rev, wpilib, wpilib.drive
 from constants import RobotConstants
-import ntcore
-import rev
-import math
+
 import phoenix6
 
 

@@ -16,29 +16,13 @@
 #* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
 #* "if only i had a log" -ofir 3/3/2025 
 
-import typing
-import wpilib
-#import wpilib.shuffleboard
-from wpilib import shuffleboard
-from wpimath.geometry import Rotation2d, Pose2d
+import typing, wpilib, ntcore
+from wpimath.geometry import Pose2d
 import commands2
-import math
-import constants
-from constants import ModuleConstants, RobotConstants, DrivingConstants, AutoConstants
 from robotcontainer import RobotContainer
-from subsystems.coralSubsystem import CoralSubsystem
 from commands2 import CommandScheduler
-from commands.TeleopCommands.SwerveJoystickCmd import SwerveJoystickCmd
-import ntcore
-import wpimath
-# import robotpy_apriltag
 from wpilib import Timer
-# from wpimath.kinematics import SwerveModuleStates
-from pathplannerlib.auto import NamedCommands, PathPlannerAuto, AutoBuilder
-# from pathplannerlib.commands import PathfindHolonomic
 from wpilib import Field2d
-
-from wpimath.filter import SlewRateLimiter
 
 import phoenix6
 

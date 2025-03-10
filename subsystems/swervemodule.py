@@ -1,16 +1,8 @@
-import commands2
-import rev
-import wpilib
-import math
-# import wpimath
-# import phoenix5 #.configs.cancoder_configs.CANcoderConfiguration
+import commands2, rev, wpilib, math
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 from wpimath.controller import PIDController
-#   from phoenix6.configs.cancoder_configs import CANcoderConfiguration
-import phoenix6.hardware
 from phoenix6.hardware import CANcoder
-from commands2 import CommandScheduler
 
 
 #from wpilib import DutyCycleEncoder

@@ -3,29 +3,12 @@
 # numerical or boolean RobotConstants. Don't use this for any other purpose!
 #
 
-import math
-import wpiutil
-import UtilCommands
+import math, UtilCommands
 from wpimath.kinematics import SwerveDrive4Kinematics
-from wpimath.geometry._geometry import Translation2d, Pose2d
-from wpimath.trajectory import TrapezoidProfileRadians, TrapezoidProfile
+from wpimath.geometry._geometry import Translation2d
+from wpimath.trajectory import TrapezoidProfileRadians
 from wpimath.filter import SlewRateLimiter
-
-# import phoenix6
-# from phoenix6.configs import cancoder_configs
-# from phoenix6.configs import CANcoderConfiguration
-
-# from phoenix6 import CANCoder
-
-from pathplannerlib.auto import AutoBuilder
-from pathplannerlib.controller import PPHolonomicDriveController
-from pathplannerlib.config import RobotConfig, PIDConstants
-from wpilib import DriverStation
-
-from pathplannerlib.path import PathPlannerPath, PathConstraints
-from wpimath.units import degreesToRadians
-
-
+from pathplannerlib.path import PathConstraints
 
 #~ Field Measurements/targets
 class FildConstants:
