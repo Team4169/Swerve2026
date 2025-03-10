@@ -25,7 +25,7 @@ class AlgaeSubsystem(commands2.SubsystemBase):
         self.liftConfig = rev.SparkMaxConfig()
 
         self.liftConfig.softLimit.forwardSoftLimit(50)
-        self.liftConfig.softLimit.forwardSoftLimitEnabled()
+        self.liftConfig.softLimit.forwardSoftLimitEnabled(True)
         
         self.algaeLiftMotor.configure(
             self.liftConfig,

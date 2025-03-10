@@ -28,9 +28,9 @@ class CoralSubsystem(commands2.SubsystemBase):
         self.liftConfig = rev.SparkMaxConfig()
 
         self.liftConfig.softLimit.forwardSoftLimit(50)
-        self.liftConfig.softLimit.forwardSoftLimitEnabled()
+        self.liftConfig.softLimit.forwardSoftLimitEnabled(True)
         self.liftConfig.softLimit.reverseSoftLimit(0)
-        self.liftConfig.softLimit.reverseSoftLimitEnabled()
+        self.liftConfig.softLimit.reverseSoftLimitEnabled(True)
         
         self.coralLiftMotor.configure(
             self.liftConfig,
