@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 #TODO:
-#? 1. Test subsystems if they are built
-#? 2. Test auto/pathplanner + on-the-fly
-#? 3. Continue with voltagelimiter! (Can do it in the Rev Client here:
+#? 1.FIX climb
+#? 2 test out knoking algae
+
+#? 2. Continue with voltagelimiter! (Can do it in the Rev Client here:
+#? 3. Test auto/pathplanner + on-the-fly
 #! IMPORTANT: alternate method for limiters using the rev hardware client https://github.com/CrimsonRobotics/Current-Limiting-Spark-MAX?tab=readme-ov-file#readme
-#? 4. Hear back from rest of team 
-#? 5. Driver Practice!!
+#? 4. Driver Practice!!
 
 #* "that sets that up" - Luc Sciametta 4:16pm 3/4/2024 (mikhail wrote this)
 #* " we still have this quote" - Annie Huang 1/22/2025 (grady wrote this)
@@ -14,8 +15,9 @@
 #* "We need 6 of the same file. trust." - Adam Mokdad 1/31/2025 (ofir wrote this)
 #* "lets call it floppy something." - Ofir van Creveld 1/31/2025 (adam wrote this)
 #* "Grady can never be wrong" -Annie Huang 2/4/2025 (grady wrote this)
-#* "if only i had a log" -ofir 3/3/2025 
+#* "if only i had a log" -ofir 3/3/2025 (grady wrote this)
 #* "maybe we put all the code on one line" - Adam Mokdad 3/10/2025 (ofir wrote this)
+#* "GET BACK TO WORK" - Grady May 3/10/2025 (ofir wrote this)
 
 import typing, wpilib, ntcore
 from wpimath.geometry import Pose2d
@@ -24,6 +26,7 @@ from robotcontainer import RobotContainer
 from commands2 import CommandScheduler
 from wpilib import Timer
 from wpilib import Field2d
+from wpilib.cameraserver import CameraServer
 
 import phoenix6
 
@@ -61,6 +64,9 @@ class MyRobot(commands2.TimedCommandRobot):
         # self.drive = self.Container.drive
         self.swerve = self.Container.swerve
         CommandScheduler.getInstance().registerSubsystem(self.swerve)
+
+        # Init the camera server
+        CameraServer().launch()
 
         #~ LED commands and variables
         # self.LEDserver = wpilib.I2C(wpilib.I2C.Port.kMXP, 100)
@@ -124,8 +130,6 @@ class MyRobot(commands2.TimedCommandRobot):
         #     self.yDistance = RobotConstants.speakerYPosition - self.yAve #1.45m
         #     self.distanceToOurSpeaker = math.sqrt(self.xDistance**2 + self.yDistance**2)
             # print(self.distanceToShooter)
-
-        self.sd.putNumber("gyro", self.Container.swerve.gyro.getAngle())
 
            # print(self.distanceToShooter)
 
@@ -229,6 +233,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
 
         self.ds = wpilib.DriverStation
+ 
 
         # wpilib.CameraServer.launch()
         self.isRedAlliance = self.ds.getAlliance() == self.ds.Alliance.kRed
@@ -256,11 +261,24 @@ class MyRobot(commands2.TimedCommandRobot):
         # print("Starting teleop...")
         # self.speed = 0
         self.coral = self.Container.coral
+        self.algae = self.Container.algae
         self.lastTimeStamp = None
-        
+
+        self.algae.algaeLiftMotor.getEncoder().setPosition(0)
 
     def teleopPeriodic(self):
+        #print("algae height:", self.algae.algaeLiftMotor.getEncoder().getPosition()) #max should be 19.2 (its actually 14.33)
+
         #makes stopLiftCoral execute after a certain amount of time. used to make coral lift to a specific height
+        if self.coral.out == True:
+            self.algae.canRun = False
+        if self.coral.out == False:
+            self.algae.canRun = True
+        if self.algae.out == True:
+            self.coral.canRun = False
+        if self.algae.out == False:
+            self.coral.canRun = True
+
         if self.coral.liftingCoral:
             if self.lastTimeStamp:
                 deltaTime = Timer.getTimestamp() - self.lastTimeStamp

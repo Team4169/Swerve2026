@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "liftCoral"
+            "name": "simpleLiftCoral"
           }
         },
         {
@@ -25,7 +25,55 @@
         {
           "type": "named",
           "data": {
-            "name": "stopLiftCoral"
+            "name": "stopSimpleLiftCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "knokAlgae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "retractKnokAlgae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopKnokAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "simpleLiftDownCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSimpleLiftCoral"
           }
         }
       ]

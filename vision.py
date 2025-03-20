@@ -4,10 +4,6 @@
 # # is put on the image and sent to the dashboard. OpenCV has many methods
 # # for different types of processing.
 # #
-# # NOTE: This code runs in its own process, so we cannot access the robot here,
-# #       nor can we create/use/see wpilib objects
-# #
-# # To try this code out locally (if you have robotpy-cscore installed), you
 # # can execute `python3 -m cscore vision.py:main`
 #
 #

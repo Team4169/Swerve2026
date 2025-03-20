@@ -70,27 +70,41 @@ class RobotContainer:
         # NamedCommands.registerCommand("lowerCoralFromL3",
         #     commands2.InstantCommand(lambda:self.coral.liftCoral(-self.coralLiftSpeed, self.coralL3Time))
         # )
-        NamedCommands.registerCommand("depositCoral",
-             commands2.InstantCommand(lambda:self.coral.runDepositCoral(self.coralDepositSpeed))
+        NamedCommands.registerCommand("knokAlgae",
+             commands2.InstantCommand(lambda:self.coral.runDepositCoral(RobotConstants.coralDepositSpeed))
         )
-        NamedCommands.registerCommand("stopDepositCoral",
+        NamedCommands.registerCommand("retractKnokAlgae",
+             commands2.InstantCommand(lambda:self.coral.runDepositCoral(-RobotConstants.coralDepositSpeed))
+        )
+        NamedCommands.registerCommand("stopKnokAlgae",
              commands2.InstantCommand(lambda:self.coral.stopDepositCoral())
         )
         NamedCommands.registerCommand("liftAlgae",
-            commands2.InstantCommand(lambda:self.algae.runLiftAlgae(self.algaeLiftSpeed))                          
+            commands2.InstantCommand(lambda:self.algae.runLiftAlgae(RobotConstants.algaeLiftSpeed))                          
         )
         NamedCommands.registerCommand("stopLiftAlgae",
             commands2.InstantCommand(lambda:self.algae.stopLiftAlgae())                          
         )
         NamedCommands.registerCommand("intakeAlgae",
-            commands2.InstantCommand(lambda:self.algae.runAlgae(-self.algaeIntakeSpeed))                          
+            commands2.InstantCommand(lambda:self.algae.runAlgae(-RobotConstants.algaeIntakeSpeed))                          
         )
         NamedCommands.registerCommand("depositAlgae",
-            commands2.InstantCommand(lambda:self.algae.runAlgae(self.algaeIntakeSpeed))                          
+            commands2.InstantCommand(lambda:self.algae.runAlgae(RobotConstants.algaeIntakeSpeed))                          
         )
         NamedCommands.registerCommand("stopAlgae",
             commands2.InstantCommand(lambda:self.algae.stopAlgae())                          
         )
+        NamedCommands.registerCommand("simpleLiftCoral",
+            commands2.InstantCommand(lambda:self.coral.SimpleliftCoral(RobotConstants.coralLiftSpeed))
+        )    
+        NamedCommands.registerCommand("simpleLiftDownCoral",
+            commands2.InstantCommand(lambda:self.coral.SimpleliftCoral(-RobotConstants.coralLiftSpeed))
+        )   
+        NamedCommands.registerCommand("stopSimpleLiftCoral",
+            commands2.InstantCommand(lambda:self.coral.SimpleliftCoral())
+        )     
+
+
 
        
         #self.driveWaypointCommand = DriveWaypoint(self.swerve)
@@ -139,7 +153,8 @@ class RobotContainer:
         
         self.climberSpeed = RobotConstants.climberSpeed
         self.algaeIntakeSpeed = RobotConstants.algaeIntakeSpeed
-        self.algaeLiftSpeed = RobotConstants.algaeLiftSpeed
+        self.algaeLiftDownSpeed = RobotConstants.algaeLiftDownSpeed
+        self.algaeLiftUpSpeed = RobotConstants.algaeLiftUpSpeed
         self.coralLiftSpeed = RobotConstants.coralLiftSpeed
         self.coralDepositSpeed = RobotConstants.coralDepositSpeed
         self.coralL1Time = RobotConstants.coralL1Time
@@ -157,9 +172,13 @@ class RobotContainer:
     #         GoalEndState(0, Rotation2d.fromDegrees(0))
     #     )
     #     return AutoBuilder.followPath(path)
+    def brakeSwerve(self):
+        DrivingConstants.drivingSpeedLimiter = 1.0
+        DrivingConstants.rotationSpeedLimiter = 1.0
+
 
     def setSlowMode(self): #-> commands2.Command
-        self.sd.putString("Slow Mode", "ON")
+        self.sd.putString("Slow Mode", "ONsetSlowMode")
         DrivingConstants.drivingSpeedLimiter = 0.5
         DrivingConstants.rotationSpeedLimiter = 0.5
 
@@ -212,38 +231,52 @@ class RobotContainer:
         auto = AutoBuilder.pathfindThenFollowPath(path, constraints)
         return auto
 
-        
+    # def setBreakMode(self):
+    #     pass
+
+
+
     def configureButtonBindings(self):
         
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kStart).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kLeftStick).onTrue(InstantCommand(lambda: self.swerve.zeroHeading()))
+        # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kBack).whileTrue(InstantCommand(lambda: self.swerve.lockWheels())).onFalse(lambda: self.swerve.unlockWheels())
         
         # # Engage Object Detection
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(self.driveWaypointCommand)
         # commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.runObjectDetectionPath()))
         
         # Toggle Slow Mode
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.setSlowMode())).onFalse(InstantCommand(lambda: self.unbindSlowMode()))
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kB).onTrue(InstantCommand(lambda: self.setSlowMode()))
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kX).onTrue(InstantCommand(lambda: self.unbindSlowMode()))
+
+        #Brake
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightStick).whileTrue(InstantCommand(lambda: self.brakeSwerve())).onFalse(InstantCommand(lambda: self.unbindSlowMode))
+
+
 
         #AUTO SETUPS (using on-the-fly)
         #Uncomment one or the other, do not uncomment both!!
-        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.getTeleopCommand())).onFalse(InstantCommand(lambda: self.stopTeleopCommand())) # hopefully terminates on the fly path
+        #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.getTeleopCommand())).onFalse(InstantCommand(lambda: self.stopTeleopCommand())) # hopefully terminates on the fly path
         #commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kA).onTrue(InstantCommand(lambda: self.getTeleopCommand())) #Just accelerates robot indefinitly
     
         # -- OPERATOR --
 
         # CORAL
         #lifting coral 
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).onTrue(InstantCommand(lambda: self.coral.liftCoral(self.coralLiftSpeed, self.coralL1Time)))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).onTrue(InstantCommand(lambda: self.coral.liftCoral(self.coralLiftSpeed, self.coralL2Time)))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).onTrue(InstantCommand(lambda: self.coral.liftCoral(self.coralLiftSpeed, self.coralL3Time)))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).whileTrue(InstantCommand(lambda: self.coral.SimpleliftCoral(self.coralLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral()))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kY).onTrue(InstantCommand(lambda: self.coral.testServo())).onFalse(InstantCommand(lambda: self.coral.testServo2()))
+
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).onTrue(InstantCommand(lambda: self.coral.liftCoral(self.coralLiftSpeed, self.coralL2Time)))
+        # commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).onTrue(InstantCommand(lambda: self.coral.liftCoral(self.coralLiftSpeed, self.coralL3Time)))
         #descending coral
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.coral.liftCoral(-self.coralLiftSpeed, 0))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral())) 
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kA).whileTrue(InstantCommand(lambda: self.coral.SimpleliftCoral(-self.coralLiftSpeed))).onFalse(InstantCommand(lambda: self.coral.stopLiftCoral())) 
         #depositing coral
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.coral.runDepositCoral(self.coralDepositSpeed))).onFalse(InstantCommand(lambda: self.coral.stopDepositCoral())) 
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kB).whileTrue(InstantCommand(lambda: self.coral.runDepositCoral(self.coralDepositSpeed))).onFalse(InstantCommand(lambda: self.coral.stopDepositCoral())) 
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kX).whileTrue(InstantCommand(lambda: self.coral.runDepositCoral(-self.coralDepositSpeed))).onFalse(InstantCommand(lambda: self.coral.stopDepositCoral())) 
 
         # CLIMBER
         commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotors(self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotors()))
+        commands2.button.JoystickButton(self.driverController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.climber.runClimbingMotors(-self.climberSpeed))).onFalse(InstantCommand(lambda: self.climber.stopClimbingMotors()))
 
         # ALGAE
         #taking in Algae (running motors backwards)
@@ -251,5 +284,7 @@ class RobotContainer:
         #spitting the algae out
         commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightStick).whileTrue(InstantCommand(lambda: self.algae.runAlgae(self.algaeIntakeSpeed))).onFalse(InstantCommand(lambda: self.algae.stopAlgae()))
         #Lift algae
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae()))
-        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(-self.algaeLiftSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae()))
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kRightBumper).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(self.algaeLiftDownSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae())) # down
+        commands2.button.JoystickButton(self.operatorController, wpilib.XboxController.Button.kLeftBumper).whileTrue(InstantCommand(lambda: self.algae.runLiftAlgae(-self.algaeLiftUpSpeed))).onFalse(InstantCommand(lambda: self.algae.stopLiftAlgae())) # up
+
+

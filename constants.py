@@ -9,6 +9,7 @@ from wpimath.geometry._geometry import Translation2d
 from wpimath.trajectory import TrapezoidProfileRadians
 from wpimath.filter import SlewRateLimiter
 from pathplannerlib.path import PathConstraints
+import wpilib
 
 #~ Field Measurements/targets
 class FildConstants:
@@ -19,7 +20,7 @@ class FildConstants:
 class OIConstants:
     kDriverControllerPort = 0
     kArmControllerPort = 1
-    deadzone = 0.2
+    deadzone = 0.3
 #~ driving constants
 class DrivingConstants:
     drivingSpeedLimiter = 1
@@ -30,9 +31,9 @@ class DrivingConstants:
 class RobotConstants:
     kWheelDiameterMeters = UtilCommands.inchesToMeters(4) #^ wheele listed as "Wheel, Billet, 4"OD x 1.5"W (MK4/4i)"" I think that's what the 4 OD means
 
-    kTrackWidth = UtilCommands.inchesToMeters(22) #found with measuring tape
+    kTrackWidth = UtilCommands.inchesToMeters(24.5)
         # ? Distance between the right and left wheels
-    kWheelBase = UtilCommands.inchesToMeters(17.5) 
+    kWheelBase = UtilCommands.inchesToMeters(24.5)
         # ? Distance between the front and back wheels
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(-kTrackWidth / 2, -kWheelBase / 2), #Front Left       
@@ -47,117 +48,81 @@ class RobotConstants:
     kBackLeftWheelPosition = Translation2d(kTrackWidth / 2, -kWheelBase / 2)
     kBackRightWheelPosition = Translation2d(-kTrackWidth / 2, -kWheelBase / 2)
 
-    frontLeftDrivingMotorID = 8
-    frontLeftTurningMotorID = 9
+
+    #! check IDs 7 and 50
+
+    frontLeftDrivingMotorID = 8 #done
+    frontLeftTurningMotorID = 9 #done
     frontLeftDrivingMotorReversed = True
     frontLeftTurningMotorReversed = False
     frontLeftAbsoluteEncoderId = 14 #Front Left #DIO port ID
     frontLeftAbsoluteEncoderOffset = -(math.pi/2 - 1.628) + math.pi # (.5 * math.pi) -.728 + (0.25*math.pi) #0.505#  This should be 1.628
     frontLeftAbsoluteEncoderReversed = True
 
-    frontRightDrivingMotorID = 4
-    frontRightTurningMotorID = 6
+    frontRightDrivingMotorID = 4 #done
+    frontRightTurningMotorID = 6 #check
     frontRightDrivingMotorReversed = False
     frontRightTurningMotorReversed = False
     frontRightAbsoluteEncoderId = 12 #Front Right
     frontRightAbsoluteEncoderOffset = math.pi/6 - 0.01587 #(0.421-0.5*math.pi) - math.pi/6 # 0.770 + (0.5*math.pi)# = 2.340
     frontRightAbsoluteEncoderReversed = True
 
-    backRightDrivingMotorID = 2
-    backRightTurningMotorID = 3
+    backRightDrivingMotorID = 51 #done 
+    backRightTurningMotorID = 2 #done
     backRightDrivingMotorReversed = True
     backRightTurningMotorReversed = False
     backRightAbsoluteEncoderId = 15 #Back Right
     backRightAbsoluteEncoderOffset = 2*math.pi/6 + math.pi/4 + math.pi #math.pi/2 - 0.379
     backRightAbsoluteEncoderReversed = True
     
-    backLeftDrivingMotorID = 7
-    backLeftTurningMotorID = 5
-    backLeftDrivingMotorReversed = True #False
+    backLeftDrivingMotorID = 5 # done
+    backLeftTurningMotorID = 50 #done
+    backLeftDrivingMotorReversed = True
     backLeftTurningMotorReversed = False
     backLeftAbsoluteEncoderId = 13 # Back Left
     backLeftAbsoluteEncoderOffset = 0.4543435 + math.pi/2 + math.pi
     backLeftAbsoluteEncoderReversed = True
 
-    
-    climberSpeed = 0.75
-    algaeIntakeSpeed = .5
-    algaeLiftSpeed = .5
-    coralLiftSpeed = .5
-    coralDepositSpeed = .5
+    # Other motor IDs
+    coralLiftMotorID = 10 #done
+    coralIntakeMotorID = 33 #!ceck
+    algaeIntakeMotorLID = 3 # done 16
+    algaeIntakeMotorRID = 20 # check
+    algaeLiftMotorID = 21 #done
+
+    climbingMotorFrontID = 18 #done
+    climbingMotorBackID = 19 #done
+
+    #Speed constants
+    coralMotorSpeed = .2
+    coralMotorLiftSpeed = .2
+
+    climberSpeed = 0.5
+    algaeIntakeSpeed = .6
+    algaeLiftDownSpeed = .08
+    algaeLiftUpSpeed = .2
+    coralLiftSpeed = .25
+    coralDepositSpeed = .2
 
     coralL1Time = 3 # Time in seconds to reach L1 when the coral lift is running
-    coralL2Time = 4 #! Test these
-    coralL3Time = 5 #change value for desired time 
+    coralL2Time = 4 #! Test these times
+    coralL3Time = 5 # change value for desired time 
 
 
     #what is the fastest speed laterally our robot can go
-    kphysicalMaxSpeedMetersPerSecond = 1.165 * 5 #! Find through test, current is test based on 1/2 speeds
+    kphysicalMaxSpeedMetersPerSecond = 1.165 * 4  #! Find through test, current is test based on 1/2 speeds
     #or maybethrough the max rpm of motors 
     #what is the fastest speed  rotationally our robot can go
-    kPhysicalMaxAngularSpeedRadiansPerSecond  = kphysicalMaxSpeedMetersPerSecond * 2 / kWheelDiameterMeters #! Find through Current UNKNOWN
+    kPhysicalMaxAngularSpeedRadiansPerSecond  = kphysicalMaxSpeedMetersPerSecond / (kWheelDiameterMeters * 10 * 0.418480) #! Find through Current UNKNOWN
     
-    kTeleopDriveMaxAccelerationMetersPerSecSquared = 3 #* Found through .5 test, should be the same no matter the power
-    kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared * 2 / kWheelDiameterMeters
+    kTeleopDriveMaxAccelerationMetersPerSecSquared = 1 #* after Found through .5 test, should be the same no matter the power
+    kTeleopDriveMaxAngularAccelerationRadiansPerSecSquared = kTeleopDriveMaxAccelerationMetersPerSecSquared / kWheelDiameterMeters
 
     #what is the max speed we allow teleop driver to move laterally
     kTeleopDriveMaxSpeedMetersPerSecond = kphysicalMaxSpeedMetersPerSecond *1 # the /2 is the restriction we want to put on speed
     kTeleopDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond * (3/4)
 
-    # ~ Intake Constants (minicim)
-    coralIntakeMotor1ID = 49 #! change to actual values
-    coralIntakeMotor2ID = 50
-    algaeIntakeMotor1ID = 51 #! change to actual values (all of these 49-55)
-    algaeIntakeMotor2ID = 52
-    liftMotorID = 53
-    climbingMotor1ID = 54
-    climbingMotor2ID = 55
-
-
-    # # ~ Midstage Constants (minicim)
-    # midstageMotor1ID = 59
-
-    # # ~ Outtake Constants (NEO)
-    # shooterMotor1ID = 55 
-    # shooterMotor2ID = 56
-    # rotatingMotorID = 63 #! not used delete!!
-    # rotatingMotorRevPerArmDegree = 1 #! must be found once shooter is made
-    # kPShooterAngle = .1
-
-    # shooterMaxLimitSwitchID = 5
-    # shooterMinLimitSwitchID = 6
-    
-    # subwooferDistance = 0.92 + 0.29 #subwoofer distance + pivot-bumper distance
-    # #height of the speaker - height of the outtake
-    # speakerHeight = 2.1082 - 0.3 #! the 2.1082 might be 1.98 also. there are 2 values (look at speaker video)
-    #                              #! to get the most accurate result, we need the 
-    #                              #! length of shooter * sin(launch angle). this is
-    #                              #! a bit difficult to get bc we don't know the launch angle.
-    # #radius of the fly wheels 6ft 6in. ~198 cm
-    # flyWheelRadius = 0.051 
-
-    # flyWheelPower1 = -1 #from 0-1. like what you'd do for a motor
-    # flyWheelPower2 = -0.75
-    # gravityConstant = 9.8
-    # #time it takes for one full rotation of the fly wheels
-    # period = 60/(5676 * flyWheelPower1)
-    
-    # ringInitialVelocity = (2 * math.pi * flyWheelRadius) / period #in m/s
-
-    # backupShooterAngle = math.atan(speakerHeight / subwooferDistance)
-
-    # speakerXPosition = 8.3 #length in meters
-    # speakerYPosition = 1.45 #length in meters
-    # # ~ Climber Constants (NEO)
-    # climbingMotorID1 = 57 #Gotta change these
-    # climbingMotorID2 = 57
-    #climbingMotorRightID = 58
-    #climbingMotorLeftLimitSwitchID = 
-    # climbingMotorRightLimitSwitchID =    
-
-    coralMotorSpeed = .5
-    coralMotorLiftSpeed = .5
-    #names are in relation to back of robot similar to the swerve modules
+   
 
 # ~ Swerve Constants
 

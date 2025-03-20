@@ -57,8 +57,10 @@ class SwerveSubsystem (commands2.SubsystemBase):
                                 RobotConstants.backRightAbsoluteEncoderOffset, 
                                 RobotConstants.backRightAbsoluteEncoderReversed)
 
-        self.gyro = wpilib.ADXRS450_Gyro() #! test
-        # self.gyro = navx.AHRS(wpilib.SerialPort.Port.kUSB1) #! maybe this instead (definetly not both)
+
+        #SPI for fast communiation, calibrate gyro based on mount direction . calibration docs: https://docs.yagsl.com/devices/gyroscope/navx
+        self.gyro = navx.AHRS(navx.AHRS.NavXComType.kMXP_SPI)
+        # self.gyro.BoardAxis(1)
 
         #the odometry class tracks the robot position over time
         #we can use the gyro in order to determnine the error from our auton path and correct it
@@ -137,13 +139,13 @@ class SwerveSubsystem (commands2.SubsystemBase):
         self.backLeft.setDesiredState(states[2])
         self.backRight.setDesiredState(states[3])
 
-    def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
-        return (
-                self.frontLeft.getSwerveModulePosition(),
-                self.frontRight.getSwerveModulePosition(),
-                self.backLeft.getSwerveModulePosition(),
-                self.backRight.getSwerveModulePosition()
-                )
+    # def getModuleStates(self) -> tuple[SwerveModulePosition, SwerveModulePosition, SwerveModulePosition, SwerveModulePosition]:
+    #     return (
+    #             self.frontLeft.getSwerveModulePosition(),
+    #             self.frontRight.getSwerveModulePosition(),
+    #             self.backLeft.getSwerveModulePosition(),
+    #             self.backRight.getSwerveModulePosition()
+    #             )
 
     def getChassisSpeeds(self):
         return RobotConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
@@ -192,10 +194,6 @@ class SwerveSubsystem (commands2.SubsystemBase):
                             )
                             )
         
-        self.sd.putString("Robot Odometer", str(self.getModulePositions()))
-        self.sd.putString("Robot Location, x", str(self.getPose().X()))
-        self.sd.putString("Robot Location, y", str(self.getPose().Y()))
-        self.sd.putString("Robot Location, rotation", str(self.getPose().rotation().degrees()))
         # pass
         #~ Camera Pose Updating
         # self.robotR.get()

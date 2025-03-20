@@ -26,7 +26,7 @@ class SwerveJoystickCmd(Command):
         #these are multiplied by the drivingSpeedLimiter which limit the speed of the robot so it doesn't go too fast
         self.xSpeed = self.driverController.getLeftX() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.driverController.getLeftY() * DrivingConstants.drivingSpeedLimiter #self.drivingLimiter #* RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.driverController.getRightX() * -1 * DrivingConstants.rotationSpeedLimiter #self.drivingLimiter
+        self.zRotation = self.driverController.getRightX() * DrivingConstants.rotationSpeedLimiter #self.drivingLimiter
         
         # 1. Get the joystick values and apply deadzone
         
@@ -37,10 +37,10 @@ class SwerveJoystickCmd(Command):
         # # 2. Add rateLimiter to smooth the joystick values
         self.xSpeed = self.xLimiter.calculate(self.xSpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
         self.ySpeed = self.yLimiter.calculate(self.ySpeed) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond
-        self.zRotation = self.zRotLimiter.calculate(self.zRotation) * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond * RobotConstants.kTeleopDriveMaxSpeedMetersPerSecond / 0.418480
+        self.zRotation = self.zRotLimiter.calculate(self.zRotation) * RobotConstants.kTeleopDriveMaxAngularSpeedRadiansPerSecond
         #! Not sure why this is needed, for some reason without it, the robot rotates slower 
 
-        # if self.feildOriented:
+        # if self.fieldOriented:
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(self.xSpeed, self.ySpeed, 
                                                             self.zRotation, self.swerve.getRotation2d())
         
