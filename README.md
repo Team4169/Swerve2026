@@ -1,2 +1,2 @@
-# 2025
-Warrior Robotics code for 2025 FRC season
+# 2026
+Warrior Robotics code for 2026 FRC season, forked from Swerve2025
